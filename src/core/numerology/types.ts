@@ -3,6 +3,7 @@ export interface NumberResult {
   masterNumber: boolean;   // Is it a Master Number?
   karmicDebt: boolean;     // Is it a Karmic Debt number?
   reductionPath: string;   // Reduction process: "29 → 2+9 → 11"
+  steps: number[];         // Numeric reduction steps: [29, 11]
 }
 
 export interface PinnacleResult {

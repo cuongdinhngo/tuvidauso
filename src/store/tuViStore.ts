@@ -60,29 +60,32 @@ export const useTuViStore = create<TuViStore>((set) => ({
 
   calculate: (info: BirthInfo) => {
     try {
-      const chart = buildTuViChart(info);
+      const name = info.name?.trim() || '';
+      const normalizedInfo = { ...info, name: name || undefined };
+
+      const chart = buildTuViChart(normalizedInfo);
 
       const now = new Date();
       const numChart = calculateNumerology(
-        info.name || '',
-        info.solarDate.day,
-        info.solarDate.month,
-        info.solarDate.year,
+        name,
+        normalizedInfo.solarDate.day,
+        normalizedInfo.solarDate.month,
+        normalizedInfo.solarDate.year,
         now.getFullYear(),
         now.getMonth() + 1,
       );
 
       saveHistory({
-        name: info.name,
-        solarDate: info.solarDate,
-        hour: info.hour,
-        gender: info.gender,
+        name: normalizedInfo.name,
+        solarDate: normalizedInfo.solarDate,
+        hour: normalizedInfo.hour,
+        gender: normalizedInfo.gender,
         yearCanChi: `${chart.lunarDate.yearCan} ${chart.lunarDate.yearChi}`,
         napAm: chart.lunarDate.napAm,
         timestamp: Date.now(),
       });
 
-      set({ birthInfo: info, lunarDate: chart.lunarDate, fourPillars: chart.fourPillars, tuViChart: chart, numerologyChart: numChart, error: null });
+      set({ birthInfo: normalizedInfo, lunarDate: chart.lunarDate, fourPillars: chart.fourPillars, tuViChart: chart, numerologyChart: numChart, error: null });
     } catch (e) {
       set({ error: (e as Error).message, tuViChart: null, numerologyChart: null });
     }

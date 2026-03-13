@@ -49,6 +49,24 @@ describe('Numerology Calculator', () => {
     });
   });
 
+  describe('Karmic Debt detection', () => {
+    it('should NOT have false positive karmic debt 13 for year 2013', () => {
+      // Year 2013: 2+0+1+3=6. No step produces 13.
+      const chart = calculateNumerology('Test', 1, 1, 2013, 2026, 3);
+      expect(chart.karmicDebt).not.toContain(13);
+    });
+
+    it('should detect karmic debt 13 when it appears in reduction steps', () => {
+      // Expression for a name that sums to 13: e.g. total=13 → 1+3=4
+      // "dm" → d=4, m=4 = 8... need to find a name that totals to 13
+      // "ah" → a=1, h=8 = 9... "dj" → d=4, j=1 = 5... "me" → m=4, e=5 = 9
+      // "my" → m=4, y=7 = 11... "bk" → b=2, k=2 = 4
+      // "dk" → d=4, k=2 = 6... "di" → d=4, i=9 = 13!
+      const chart = calculateNumerology('di', 1, 1, 2000, 2026, 3);
+      expect(chart.karmicDebt).toContain(13);
+    });
+  });
+
   describe('Expression number', () => {
     it('should calculate Expression = 5 for "Ngô Đình Cường"', () => {
       // After removing diacritics: "Ngo Dinh Cuong"

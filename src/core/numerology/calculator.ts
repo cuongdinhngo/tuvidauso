@@ -22,6 +22,7 @@ function reduceNumber(n: number, keepMaster: boolean = true): NumberResult {
     masterNumber: [11, 22, 33].includes(current),
     karmicDebt: path.some(p => [13, 14, 16, 19].includes(p)),
     reductionPath: path.join(' → '),
+    steps: path,
   };
 }
 
@@ -58,6 +59,7 @@ function calcLifePath(day: number, month: number, year: number): NumberResult {
   return {
     ...result,
     reductionPath: `${day}/${month}/${year} → ${d.value} + ${m.value} + ${y.value} = ${total} → ${result.value}`,
+    steps: [total, ...result.steps],
   };
 }
 
@@ -74,7 +76,7 @@ function calcAttitude(day: number, month: number): NumberResult {
 /** EXPRESSION/DESTINY NUMBER — Sum of all letters in full name */
 function calcExpression(fullName: string): NumberResult {
   const clean = removeVietnameseDiacritics(fullName).toLowerCase().replace(/[^a-z]/g, '');
-  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0' };
+  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0', steps: [0] };
   const total = clean.split('').reduce((sum, ch) => sum + (LETTER_MAP[ch] || 0), 0);
   return reduceNumber(total, true);
 }
@@ -82,7 +84,7 @@ function calcExpression(fullName: string): NumberResult {
 /** SOUL URGE / HEART'S DESIRE — Sum of VOWELS in name */
 function calcSoulUrge(fullName: string): NumberResult {
   const clean = removeVietnameseDiacritics(fullName).toLowerCase().replace(/[^a-z]/g, '');
-  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0' };
+  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0', steps: [0] };
   const total = clean.split('')
     .filter(ch => VOWELS.includes(ch))
     .reduce((sum, ch) => sum + (LETTER_MAP[ch] || 0), 0);
@@ -92,7 +94,7 @@ function calcSoulUrge(fullName: string): NumberResult {
 /** PERSONALITY NUMBER — Sum of CONSONANTS in name */
 function calcPersonality(fullName: string): NumberResult {
   const clean = removeVietnameseDiacritics(fullName).toLowerCase().replace(/[^a-z]/g, '');
-  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0' };
+  if (!clean) return { value: 0, masterNumber: false, karmicDebt: false, reductionPath: '0', steps: [0] };
   const total = clean.split('')
     .filter(ch => !VOWELS.includes(ch))
     .reduce((sum, ch) => sum + (LETTER_MAP[ch] || 0), 0);
@@ -241,6 +243,10 @@ export function calculateNumerology(
   const inclusionChart = calcInclusionChart(fullName);
   const personalYear = calcPersonalYear(day, month, currentYear);
 
+  const expression = calcExpression(fullName);
+  const soulUrge = calcSoulUrge(fullName);
+  const personality = calcPersonality(fullName);
+
   // Use the base value (not master) for pinnacle age calculation
   const lifePathBase = lifePath.masterNumber
     ? reduceNumber(lifePath.value, false).value
@@ -250,16 +256,23 @@ export function calculateNumerology(
     lifePath,
     birthday: calcBirthday(day),
     attitude: calcAttitude(day, month),
-    expression: calcExpression(fullName),
-    soulUrge: calcSoulUrge(fullName),
-    personality: calcPersonality(fullName),
+    expression,
+    soulUrge,
+    personality,
     personalYear,
     personalMonth: calcPersonalMonth(personalYear.value, currentMonth),
     pinnacles: calcPinnacles(day, month, year, lifePathBase),
     challenges: calcChallenges(day, month, year, lifePathBase),
-    karmicDebt: [13, 14, 16, 19].filter(n => {
-      return lifePath.reductionPath.includes(String(n));
-    }),
+    karmicDebt: (() => {
+      const KARMIC_NUMBERS = [13, 14, 16, 19];
+      const allSteps = [
+        ...lifePath.steps,
+        ...expression.steps,
+        ...soulUrge.steps,
+        ...personality.steps,
+      ];
+      return KARMIC_NUMBERS.filter(n => allSteps.includes(n));
+    })(),
     karmicLesson: calcKarmicLessons(inclusionChart),
     hiddenPassion: calcHiddenPassion(inclusionChart),
     birthChart: calcBirthPyramid(day, month, year),

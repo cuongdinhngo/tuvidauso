@@ -260,9 +260,11 @@ function NumberCard({ label, sublabel, result, disabled }: {
   }
 
   return (
-    <div
-      className="bg-gray-900/80 border border-gray-800 rounded-lg p-3 cursor-pointer hover:border-purple-700/50 transition-colors"
+    <button
+      type="button"
+      aria-expanded={open}
       onClick={() => setOpen(!open)}
+      className="w-full text-left bg-gray-900/80 border border-gray-800 rounded-lg p-3 hover:border-purple-700/50 transition-colors"
     >
       <div className="text-xs text-gray-500">{label}</div>
       <div className="flex items-baseline gap-2 mt-1">
@@ -279,7 +281,7 @@ function NumberCard({ label, sublabel, result, disabled }: {
         <p className="text-xs text-gray-400 mt-2 border-t border-gray-800 pt-2">{meaning.brief}</p>
       )}
       <div className="text-[10px] text-gray-600 mt-1">{result.reductionPath}</div>
-    </div>
+    </button>
   );
 }
 

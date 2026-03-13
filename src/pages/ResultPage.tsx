@@ -243,7 +243,7 @@ export default function ResultPage() {
           chart={numerologyChart}
           birthInfo={birthInfo}
           tuViChart={chart}
-          hasName={!!birthInfo.name}
+          hasName={!!birthInfo.name?.trim()}
         />
       ) : null,
     },
