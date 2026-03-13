@@ -75,7 +75,7 @@ export default function InputPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            placeholder="Nhập họ tên..."
+            placeholder="Nhập họ tên đầy đủ để xem Thần Số Học"
           />
         </div>
 

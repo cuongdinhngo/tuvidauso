@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { BirthInfo, LunarDate, FourPillars, TuViChart } from '../core/types';
+import type { NumerologyChart } from '../core/numerology/types';
 import { buildTuViChart } from '../core/compare/buildProfile';
+import { calculateNumerology } from '../core/numerology/calculator';
 
 export interface ChartHistoryEntry {
   name?: string;
@@ -42,6 +44,7 @@ interface TuViStore {
   lunarDate: LunarDate | null;
   fourPillars: FourPillars | null;
   tuViChart: TuViChart | null;
+  numerologyChart: NumerologyChart | null;
   error: string | null;
   calculate: (info: BirthInfo) => void;
   reset: () => void;
@@ -52,11 +55,22 @@ export const useTuViStore = create<TuViStore>((set) => ({
   lunarDate: null,
   fourPillars: null,
   tuViChart: null,
+  numerologyChart: null,
   error: null,
 
   calculate: (info: BirthInfo) => {
     try {
       const chart = buildTuViChart(info);
+
+      const now = new Date();
+      const numChart = calculateNumerology(
+        info.name || '',
+        info.solarDate.day,
+        info.solarDate.month,
+        info.solarDate.year,
+        now.getFullYear(),
+        now.getMonth() + 1,
+      );
 
       saveHistory({
         name: info.name,
@@ -68,11 +82,11 @@ export const useTuViStore = create<TuViStore>((set) => ({
         timestamp: Date.now(),
       });
 
-      set({ birthInfo: info, lunarDate: chart.lunarDate, fourPillars: chart.fourPillars, tuViChart: chart, error: null });
+      set({ birthInfo: info, lunarDate: chart.lunarDate, fourPillars: chart.fourPillars, tuViChart: chart, numerologyChart: numChart, error: null });
     } catch (e) {
-      set({ error: (e as Error).message, tuViChart: null });
+      set({ error: (e as Error).message, tuViChart: null, numerologyChart: null });
     }
   },
 
-  reset: () => set({ birthInfo: null, lunarDate: null, fourPillars: null, tuViChart: null, error: null }),
+  reset: () => set({ birthInfo: null, lunarDate: null, fourPillars: null, tuViChart: null, numerologyChart: null, error: null }),
 }));

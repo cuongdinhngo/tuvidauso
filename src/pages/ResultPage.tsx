@@ -13,6 +13,7 @@ import TieuHanCards from '../components/tuvi/TieuHanCards';
 import LuanGiaiTab from '../components/tuvi/LuanGiaiTab';
 import YearlyDetailPanel from '../components/tuvi/YearlyDetailPanel';
 import BatTuTab from '../components/battu/BatTuTab';
+import NumerologyTab from '../components/numerology/NumerologyTab';
 
 const CON_GIAP: Record<string, string> = {
   'Tý': 'Chuột', 'Sửu': 'Trâu', 'Dần': 'Hổ', 'Mão': 'Mèo',
@@ -25,6 +26,7 @@ export default function ResultPage() {
   const chart = useTuViStore((s) => s.tuViChart);
   const lunarDate = useTuViStore((s) => s.lunarDate);
   const fourPillars = useTuViStore((s) => s.fourPillars);
+  const numerologyChart = useTuViStore((s) => s.numerologyChart);
 
   useEffect(() => {
     if (!chart) navigate('/input');
@@ -233,6 +235,17 @@ export default function ResultPage() {
           hourIndex={birthInfo.hour}
         />
       ),
+    },
+    {
+      label: 'Thần Số Học',
+      content: numerologyChart ? (
+        <NumerologyTab
+          chart={numerologyChart}
+          birthInfo={birthInfo}
+          tuViChart={chart}
+          hasName={!!birthInfo.name}
+        />
+      ) : null,
     },
   ];
 
