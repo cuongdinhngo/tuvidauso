@@ -32,8 +32,9 @@ export const RISING_SIGN_DESCRIPTIONS: Record<ZodiacSign, string> = {
   pisces: "Ấn tượng đầu tiên: dịu dàng, mơ mộng, nhạy cảm. Bạn có đôi mắt sâu, vẻ ngoài thanh thoát. Người khác cảm thấy bạn dễ gần và đầy cảm thông.",
 };
 
-// Phân tích kết hợp nguyên tố Big 3
-// Key: "sun_element-moon_element" hoặc "sun-moon-rising"
+// Phân tích kết hợp nguyên tố Sun + Moon
+// Key: "${sunElement}-${moonElement}" (e.g., "fire-water")
+// Rising được xử lý riêng trong getBig3Analysis()
 export const ELEMENT_COMBO_ANALYSIS: Record<string, string> = {
   // Sun + Moon cùng nguyên tố
   "fire-fire": "Đôi Hỏa: Bạn sống rất mãnh liệt — bên ngoài và bên trong đều tràn đầy năng lượng, đam mê. Có thể thiếu sự cân bằng cảm xúc.",

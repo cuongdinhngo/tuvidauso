@@ -51,11 +51,11 @@ function isDateInRange(month: number, day: number, range: DateRange): boolean {
          (month > range.startMonth && month < range.endMonth);
 }
 
-/** Day-of-year using Date (handles leap years automatically) */
+/** Day-of-year using Date.UTC (handles leap years, avoids DST issues) */
 function getDayOfYear(year: number, month: number, day: number): number {
-  const date = new Date(year, month - 1, day);
-  const jan1 = new Date(year, 0, 1);
-  return Math.floor((date.getTime() - jan1.getTime()) / 86400000) + 1;
+  const date = Date.UTC(year, month - 1, day);
+  const jan1 = Date.UTC(year, 0, 1);
+  return Math.floor((date - jan1) / 86400000) + 1;
 }
 
 function getDaysInYear(year: number): number {

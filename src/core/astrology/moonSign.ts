@@ -101,11 +101,12 @@ export function getMoonSign(
   const startLong = approximateMoonLongitude(utcYear, utcMonth, utcDay);
 
   // 3. Longitude Mặt Trăng ngày tiếp theo (0h UTC)
-  const nextDate = new Date(utcYear, utcMonth - 1, utcDay + 1);
+  const nextMs = Date.UTC(utcYear, utcMonth - 1, utcDay + 1);
+  const nextDate = new Date(nextMs);
   const endLong = approximateMoonLongitude(
-    nextDate.getFullYear(),
-    nextDate.getMonth() + 1,
-    nextDate.getDate(),
+    nextDate.getUTCFullYear(),
+    nextDate.getUTCMonth() + 1,
+    nextDate.getUTCDate(),
   );
 
   // 4. Xử lý trường hợp longitude vượt 360° (Pisces → Aries)

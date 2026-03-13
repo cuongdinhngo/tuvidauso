@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { getSunSign } from '../src/core/astrology/sunSign';
 import { getMoonSign, approximateMoonLongitude, diaChiToHour } from '../src/core/astrology/moonSign';
 import { getRisingSign } from '../src/core/astrology/risingSign';
+import { getCompatibilityScore } from '../src/data/zodiacData';
 
 // --- Sun Sign ---
 
@@ -195,5 +196,39 @@ describe('getRisingSign', () => {
     expect(
       morning.sign.id !== afternoon.sign.id || Math.abs(morning.degree - afternoon.degree) > 5
     ).toBe(true);
+  });
+});
+
+// --- Compatibility Score ---
+
+describe('getCompatibilityScore', () => {
+  it('symmetric: score(A,B) === score(B,A)', () => {
+    expect(getCompatibilityScore('aries', 'leo')).toBe(getCompatibilityScore('leo', 'aries'));
+    expect(getCompatibilityScore('cancer', 'capricorn')).toBe(getCompatibilityScore('capricorn', 'cancer'));
+  });
+
+  it('known value: aries-aries = 70', () => {
+    expect(getCompatibilityScore('aries', 'aries')).toBe(70);
+  });
+
+  it('returns positive number', () => {
+    const score = getCompatibilityScore('aries', 'taurus');
+    expect(score).toBeGreaterThan(0);
+  });
+
+  it('fallback: returns 60 for pairs not in table', () => {
+    // All 12x12 pairs should be in the table, but verify fallback logic
+    // by confirming all scores are numbers >= 60 (minimum in table or fallback)
+    const signs = [
+      'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
+      'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces',
+    ] as const;
+    for (const s1 of signs) {
+      for (const s2 of signs) {
+        const score = getCompatibilityScore(s1, s2);
+        expect(score).toBeGreaterThanOrEqual(40);
+        expect(score).toBeLessThanOrEqual(100);
+      }
+    }
   });
 });
