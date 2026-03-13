@@ -97,7 +97,9 @@ export function analyzeRelatedPalaces(
     name: `Cung ${palaceMap.label}`,
     score,
     rating: scoreToRating(score),
-    analysis: `Phân tích ${palaceMap.label}: ${details.slice(0, 3).join('. ')}.`,
+    analysis: details.length > 0
+      ? `Phân tích ${palaceMap.label}: ${details.slice(0, 3).join('. ')}.`
+      : `Không có tương tác đặc biệt tại cung ${palaceMap.label}.`,
     details,
   };
 }

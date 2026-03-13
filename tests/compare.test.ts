@@ -4,6 +4,10 @@ import { calculateCompatibility } from '../src/core/compare/compatibility';
 import { analyzeNapAm } from '../src/core/compare/analyzeNapAm';
 import { analyzeZodiac } from '../src/core/compare/analyzeZodiac';
 import { analyzeBatTu } from '../src/core/compare/analyzeBatTu';
+import { analyzeMenhCung } from '../src/core/compare/analyzeMenhCung';
+import { analyzeRelatedPalaces } from '../src/core/compare/analyzeRelatedPalaces';
+import { analyzeTuHoa } from '../src/core/compare/analyzeTuHoa';
+import { analyzeTuanTriet } from '../src/core/compare/analyzeTuanTriet';
 import type { BirthInfo } from '../src/core/types';
 
 // Test persons with known zodiac relations
@@ -108,6 +112,89 @@ describe('analyzeBatTu', () => {
   });
 });
 
+describe('analyzeMenhCung', () => {
+  it('returns valid score and non-empty analysis', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    const result = analyzeMenhCung(p1, p2);
+    expect(result.score).toBeGreaterThanOrEqual(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.name).toBe('Cung Mệnh');
+    expect(result.analysis).toBeTruthy();
+    expect(result.analysis.length).toBeGreaterThan(5);
+  });
+});
+
+describe('analyzeRelatedPalaces', () => {
+  it('returns valid score for lover relation type', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    const result = analyzeRelatedPalaces(p1, p2, 'lover');
+    expect(result.score).toBeGreaterThanOrEqual(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.analysis).toBeTruthy();
+  });
+
+  it('returns valid score for business relation type', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    const result = analyzeRelatedPalaces(p1, p2, 'business');
+    expect(result.score).toBeGreaterThanOrEqual(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.analysis).toBeTruthy();
+  });
+
+  it('never produces awkward empty analysis string', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    for (const rel of ['lover', 'business', 'child', 'parent', 'sibling', 'friend'] as const) {
+      const result = analyzeRelatedPalaces(p1, p2, rel);
+      expect(result.analysis).not.toMatch(/: \.$/);
+      expect(result.analysis.length).toBeGreaterThan(5);
+    }
+  });
+});
+
+describe('analyzeTuHoa', () => {
+  it('returns valid score and analysis', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    const result = analyzeTuHoa(p1, p2, 'lover');
+    expect(result.score).toBeGreaterThanOrEqual(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.name).toBe('Tứ Hóa Chéo');
+    expect(result.analysis).toBeTruthy();
+  });
+
+  it('gives fallback when same person (no special cross-interaction)', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('A copy', personA_info);
+    const result = analyzeTuHoa(p1, p2, 'lover');
+    expect(result.analysis).toBeTruthy();
+    expect(result.analysis.length).toBeGreaterThan(5);
+  });
+});
+
+describe('analyzeTuanTriet', () => {
+  it('returns valid score and analysis', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    const result = analyzeTuanTriet(p1, p2, 'lover');
+    expect(result.score).toBeGreaterThanOrEqual(0);
+    expect(result.score).toBeLessThanOrEqual(100);
+    expect(result.name).toBe('Tuần Triệt');
+    expect(result.analysis).toBeTruthy();
+  });
+
+  it('gives positive fallback when no cross-influence', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('A copy', personA_info);
+    const result = analyzeTuanTriet(p1, p2, 'friend');
+    expect(result.analysis).toBeTruthy();
+    expect(result.analysis.length).toBeGreaterThan(5);
+  });
+});
+
 describe('calculateCompatibility', () => {
   it('returns full result with 7 categories', () => {
     const p1 = buildPersonProfile('A', personA_info);
@@ -152,5 +239,31 @@ describe('calculateCompatibility', () => {
     const lucXungResult = calculateCompatibility(pTy, pNgo, 'lover');  // Ty-Ngo luc xung
 
     expect(tamHopResult.overallScore).toBeGreaterThan(lucXungResult.overallScore);
+  });
+
+  it.each(['business', 'child', 'parent', 'sibling'] as const)(
+    'produces valid 7-category result for %s relation type',
+    (relationType) => {
+      const p1 = buildPersonProfile('A', personA_info);
+      const p2 = buildPersonProfile('B', personB_info);
+      const result = calculateCompatibility(p1, p2, relationType);
+      expect(result.categories).toHaveLength(7);
+      expect(result.overallScore).toBeGreaterThanOrEqual(0);
+      expect(result.overallScore).toBeLessThanOrEqual(100);
+      expect(result.overallRating).toBeGreaterThanOrEqual(1);
+      expect(result.overallRating).toBeLessThanOrEqual(5);
+    }
+  );
+
+  it('all categories have non-empty analysis strings', () => {
+    const p1 = buildPersonProfile('A', personA_info);
+    const p2 = buildPersonProfile('B', personB_info);
+    for (const rel of ['lover', 'business', 'child', 'parent', 'sibling', 'friend'] as const) {
+      const result = calculateCompatibility(p1, p2, rel);
+      for (const cat of result.categories) {
+        expect(cat.analysis, `Empty analysis in "${cat.name}" for relation "${rel}"`).toBeTruthy();
+        expect(cat.analysis.length, `Short analysis in "${cat.name}" for relation "${rel}"`).toBeGreaterThan(5);
+      }
+    }
   });
 });
