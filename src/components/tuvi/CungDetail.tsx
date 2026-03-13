@@ -5,6 +5,7 @@ import { PALACE_DATABASE } from '../../data/palaceDatabase';
 import { STAR_DATABASE } from '../../data/starDatabase';
 import { getStarInterpretation, CHIEU_TEMPLATES } from '../../data/interpretationRules';
 import { ratePalace } from '../../core/tuvi/palaceRating';
+import AIPalaceAnalysis from './AIPalaceAnalysis';
 
 interface CungDetailProps {
   palace: Palace;
@@ -265,6 +266,9 @@ export default function CungDetail({ palace, isMenh, isThan, onClose, influence,
             </ul>
           </details>
         )}
+
+        {/* AI Palace Analysis */}
+        <AIPalaceAnalysis palaceName={palace.name} />
       </div>
     </div>
   );

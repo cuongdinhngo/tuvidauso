@@ -13,6 +13,7 @@ import {
 } from '../../data/interpretationRules';
 import { getTamHopPositions, getDoiCung } from '../../core/tuvi/palaceRelations';
 import { countElements } from '../../core/battu/fiveElements';
+import AILuanGiai from './AILuanGiai';
 
 interface LuanGiaiTabProps {
   chart: TuViChart;
@@ -457,13 +458,8 @@ function AdviceSection({ chart, findPalace }: { chart: TuViChart; findPalace: (n
         );
       })}
 
-      {/* AI placeholder */}
-      <button
-        disabled
-        className="w-full bg-gray-900/50 border border-purple-900/30 rounded-lg p-4 text-center opacity-60 cursor-not-allowed"
-      >
-        <span className="text-purple-400 text-sm">✨ AI Luận Giải — Sắp ra mắt</span>
-      </button>
+      {/* AI Luận Giải */}
+      <AILuanGiai chart={chart} />
     </div>
   );
 }

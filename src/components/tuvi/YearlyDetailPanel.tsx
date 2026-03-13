@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import type { TuViChart } from '../../core/types';
 import { analyzeYear } from '../../core/tuvi/layeredAnalysis';
 import type { PeriodTransforms } from '../../core/tuvi/periodTransforms';
+import AIYearlyForecast from './AIYearlyForecast';
 
 interface YearlyDetailPanelProps {
   chart: TuViChart;
@@ -143,6 +144,9 @@ export default function YearlyDetailPanel({ chart, currentYear }: YearlyDetailPa
           </div>
         </div>
       )}
+
+      {/* AI Yearly Analysis */}
+      <AIYearlyForecast chart={chart} year={year} />
     </div>
   );
 }
