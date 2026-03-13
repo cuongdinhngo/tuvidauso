@@ -59,7 +59,7 @@ function calcLifePath(day: number, month: number, year: number): NumberResult {
   return {
     ...result,
     reductionPath: `${day}/${month}/${year} → ${d.value} + ${m.value} + ${y.value} = ${total} → ${result.value}`,
-    steps: [total, ...result.steps],
+    steps: [...d.steps, ...m.steps, ...y.steps, total, ...result.steps],
   };
 }
 

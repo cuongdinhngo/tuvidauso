@@ -56,6 +56,11 @@ describe('Numerology Calculator', () => {
       expect(chart.karmicDebt).not.toContain(13);
     });
 
+    it('should detect karmic debt 19 from birth day reduction', () => {
+      const chart = calculateNumerology('Test', 19, 1, 2000, 2026, 3);
+      expect(chart.karmicDebt).toContain(19);
+    });
+
     it('should detect karmic debt 13 when it appears in reduction steps', () => {
       // Expression for a name that sums to 13: e.g. total=13 → 1+3=4
       // "dm" → d=4, m=4 = 8... need to find a name that totals to 13
