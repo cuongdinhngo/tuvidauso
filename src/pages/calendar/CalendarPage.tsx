@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { CalendarDays, Search, Sun } from 'lucide-react';
+import { useCalendarStore } from '../../store/calendarStore';
 import MonthlyCalendar from '../../components/calendar/MonthlyCalendar';
 import GoodDayPicker from '../../components/calendar/GoodDayPicker';
 import TodayDigest from '../../components/calendar/TodayDigest';
@@ -13,7 +13,8 @@ const TABS: { id: Tab; label: string; icon: typeof CalendarDays }[] = [
 ];
 
 export default function CalendarPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('calendar');
+  const activeTab = useCalendarStore((s) => s.activeTab);
+  const setActiveTab = useCalendarStore((s) => s.setActiveTab);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">

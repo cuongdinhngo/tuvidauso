@@ -19,7 +19,8 @@ export default function TodayDigest() {
   const userYearChi = tuViChart?.lunarDate.yearChi ?? null;
 
   const now = new Date();
-  const info = useMemo(() => getDailyInfo(now.getFullYear(), now.getMonth() + 1, now.getDate()), []);
+  const dateKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  const info = useMemo(() => getDailyInfo(now.getFullYear(), now.getMonth() + 1, now.getDate()), [dateKey]);
 
   const personalized = useMemo(() => {
     if (!userYearChi) return null;

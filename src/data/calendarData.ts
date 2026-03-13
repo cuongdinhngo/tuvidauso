@@ -68,9 +68,9 @@ export const TRUC_DATA: TrucInfo[] = [
 // ── 28 Sao (Nhị Thập Bát Tú) ──
 // Cycle: (JDN + offset) % 28
 // Offset calibrated: JDN of 01/01/2000 (2451545) → Sao Hư (index 10)
-// So offset = (10 - 2451545 % 28 + 28) % 28
+// 2451545 % 28 = 5, so offset = (10 - 5 + 28) % 28 = 5
 
-export const SAO28_JDN_OFFSET = 17;
+export const SAO28_JDN_OFFSET = 5;
 
 export const SAO28_DATA: Sao28Info[] = [
   { name: 'Giác', element: 'Mộc', rating: 3, goodFor: ['Cưới hỏi', 'Khai trương', 'Khởi công'], badFor: [] },
@@ -141,7 +141,7 @@ export const THO_TU: Record<number, string> = {
   9: 'Dần', 10: 'Thân', 11: 'Mão', 12: 'Dậu',
 };
 
-// Thiên Đức: lunar month → day Can that has Thiên Đức
+// Thiên Đức: lunar month → day Can or Chi that has Thiên Đức
 export const THIEN_DUC: Record<number, string> = {
   1: 'Đinh', 2: 'Thân', 3: 'Nhâm', 4: 'Tân',
   5: 'Hợi', 6: 'Giáp', 7: 'Quý', 8: 'Dần',

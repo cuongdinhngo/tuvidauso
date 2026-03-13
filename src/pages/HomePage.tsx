@@ -78,7 +78,7 @@ export default function HomePage() {
       </div>
 
       {/* Feature cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl w-full">
         {FEATURES.map(({ title, desc, icon: Icon, link }) => {
           const card = (
             <div

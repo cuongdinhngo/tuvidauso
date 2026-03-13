@@ -52,6 +52,11 @@ export function findGoodDays(
     // Scoring
     let score = 50;
 
+    // requiredGoodStars: penalty if none match (soft filter since getDailyStars only generates Thiên Đức/Nguyệt Đức)
+    if (filter.requiredGoodStars.length > 0 && !filter.requiredGoodStars.some(s => info.goodStars.includes(s))) {
+      score -= 10;
+    }
+
     // Trực bonus
     if (['Thành', 'Khai'].includes(info.truc.name)) score += 20;
     else if (['Định', 'Mãn'].includes(info.truc.name)) score += 15;

@@ -21,9 +21,10 @@ export function isThoTu(lunarMonth: number, dayChi: string): boolean {
   return THO_TU[lunarMonth] === dayChi;
 }
 
-/** Thiên Đức — Can ngày đặc biệt theo tháng */
-export function hasThienDuc(lunarMonth: number, dayCan: string): boolean {
-  return THIEN_DUC[lunarMonth] === dayCan;
+/** Thiên Đức — Can hoặc Chi ngày đặc biệt theo tháng */
+export function hasThienDuc(lunarMonth: number, dayCan: string, dayChi: string): boolean {
+  const val = THIEN_DUC[lunarMonth];
+  return val === dayCan || val === dayChi;
 }
 
 /** Nguyệt Đức — Can ngày đặc biệt theo tháng */
@@ -45,7 +46,7 @@ export function getDailyStars(
   const specialDays: SpecialDay[] = [];
 
   // Sao tốt
-  if (hasThienDuc(lunarMonth, dayCan)) {
+  if (hasThienDuc(lunarMonth, dayCan, dayChi)) {
     goodStars.push('Thiên Đức');
     specialDays.push({ name: 'Thiên Đức', type: 'good', description: 'Ngày có Thiên Đức, giải được nhiều hung sát' });
   }
