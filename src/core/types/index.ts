@@ -90,3 +90,103 @@ export const PALACE_NAMES = [
   'Mệnh', 'Huynh Đệ', 'Phu Thê', 'Tử Tức', 'Tài Bạch', 'Tật Ách',
   'Thiên Di', 'Nô Bộc', 'Quan Lộc', 'Điền Trạch', 'Phúc Đức', 'Phụ Mẫu',
 ] as const;
+
+// ── Calendar / Good Day Picker types ──
+
+export interface TrucInfo {
+  name: string;
+  meaning: string;
+  rating: 1 | 2 | 3; // 1=xấu, 2=bình, 3=tốt
+  goodFor: string[];
+  badFor: string[];
+}
+
+export interface Sao28Info {
+  name: string;
+  element: string;
+  rating: 1 | 2 | 3;
+  goodFor: string[];
+  badFor: string[];
+}
+
+export interface HourInfo {
+  chi: string;
+  timeRange: string;
+  starName: string;
+  isHoangDao: boolean;
+}
+
+export interface SpecialDay {
+  name: string;
+  type: 'good' | 'bad';
+  description: string;
+}
+
+export interface DailyInfo {
+  solar: { year: number; month: number; day: number; dayOfWeek: number };
+  lunar: LunarDate;
+  canChiDay: CanChi;
+  canChiMonth: CanChi;
+  canChiYear: CanChi;
+  napAmDay: string;
+  truc: TrucInfo;
+  sao28: Sao28Info;
+  hoangDaoHours: HourInfo[];
+  goodStars: string[];
+  badStars: string[];
+  specialDays: SpecialDay[];
+  overallRating: 1 | 2 | 3 | 4 | 5;
+  goodFor: string[];
+  badFor: string[];
+}
+
+export type Purpose =
+  | 'cuoi_hoi'
+  | 'khai_truong'
+  | 'dong_tho'
+  | 'nhap_trach'
+  | 'xuat_hanh'
+  | 'ky_ket'
+  | 'khai_nghiep'
+  | 'mua_xe'
+  | 'mua_nha'
+  | 'nhap_hoc'
+  | 'chuyen_viec'
+  | 'kham_benh'
+  | 'tang_le'
+  | 'cau_phuc';
+
+export interface PurposeFilter {
+  label: string;
+  requiredTruc: string[];
+  forbiddenTruc: string[];
+  requiredGoodStars: string[];
+  forbiddenBadStars: string[];
+  forbiddenSpecial: string[];
+  preferHoangDao: boolean;
+}
+
+export interface GoodDayResult {
+  date: { year: number; month: number; day: number };
+  lunar: LunarDate;
+  canChiDay: CanChi;
+  truc: TrucInfo;
+  sao28: Sao28Info;
+  score: number;
+  rating: 1 | 2 | 3 | 4 | 5;
+  goodStars: string[];
+  badStars: string[];
+  hoangDaoHours: HourInfo[];
+  goodFor: string[];
+  badFor: string[];
+  bestHours: string[];
+}
+
+export interface PersonalizedDayInfo {
+  chiClash: boolean;
+  chiClashNote: string;
+  chiHarmony: boolean;
+  chiHarmonyNote: string;
+  personalScore: number;
+  personalAdvice: string;
+}
