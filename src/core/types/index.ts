@@ -14,6 +14,7 @@ export interface BirthInfo {
   name?: string;
   solarDate: { year: number; month: number; day: number };
   hour: number; // 0-11: Ty=0, Suu=1, Dan=2, ..., Hoi=11
+  unknownHour?: boolean; // true when user doesn't know birth hour
   gender: 'male' | 'female';
   birthplace?: { name: string; lat: number; lng: number };
 }

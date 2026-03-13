@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Big3Result, ZodiacSign } from '../../core/astrology/types';
 import { ZODIAC_SIGNS, getCompatibilityScore } from '../../data/zodiacData';
 import Big3Card from './Big3Card';
@@ -173,7 +173,7 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
 
 function ExpandableSection({ title, children, defaultOpen = false }: {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);

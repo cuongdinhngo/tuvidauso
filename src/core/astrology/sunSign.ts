@@ -51,34 +51,47 @@ function isDateInRange(month: number, day: number, range: DateRange): boolean {
          (month > range.startMonth && month < range.endMonth);
 }
 
+/** Day-of-year using Date (handles leap years automatically) */
+function getDayOfYear(year: number, month: number, day: number): number {
+  const date = new Date(year, month - 1, day);
+  const jan1 = new Date(year, 0, 1);
+  return Math.floor((date.getTime() - jan1.getTime()) / 86400000) + 1;
+}
+
+function getDaysInYear(year: number): number {
+  return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 366 : 365;
+}
+
 /**
  * Tính vị trí (degree) trong cung, từ 0 đến ~30°.
  * Sử dụng nội suy tuyến tính dựa trên ngày trong khoảng date range.
  */
-function calculateDegree(month: number, day: number, range: DateRange): number {
-  // Tính số ngày từ đầu cung
-  const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+function calculateDegree(year: number, month: number, day: number, range: DateRange): number {
+  const totalDaysInYear = getDaysInYear(year);
+  const doy = getDayOfYear(year, month, day);
 
-  let dayOfYear = 0;
-  for (let m = 1; m < month; m++) dayOfYear += daysInMonth[m];
-  dayOfYear += day;
+  // For cross-year signs (Capricorn), use the appropriate year for start date
+  const startYear = range.startMonth > range.endMonth && month <= range.endMonth ? year - 1 : year;
+  const startDoy = getDayOfYear(startYear, range.startMonth, range.startDay);
 
-  let startDayOfYear = 0;
-  for (let m = 1; m < range.startMonth; m++) startDayOfYear += daysInMonth[m];
-  startDayOfYear += range.startDay;
+  let diff: number;
+  if (startYear < year) {
+    // Cross-year: days from start to end of startYear + days into current year
+    diff = (getDaysInYear(startYear) - startDoy) + doy;
+  } else {
+    diff = doy - startDoy;
+    if (diff < 0) diff += totalDaysInYear;
+  }
 
-  let diff = dayOfYear - startDayOfYear;
-  if (diff < 0) diff += 365; // Capricorn cross-year
-
-  // Mỗi cung khoảng 30 ngày ≈ 30°
-  const totalDays = range.startMonth > range.endMonth
-    ? (365 - startDayOfYear) + (daysInMonth.slice(1, range.endMonth).reduce((a, b) => a + b, 0) + range.endDay)
-    : (() => {
-        let endDayOfYear = 0;
-        for (let m = 1; m < range.endMonth; m++) endDayOfYear += daysInMonth[m];
-        endDayOfYear += range.endDay;
-        return endDayOfYear - startDayOfYear;
-      })();
+  // Total days in sign range
+  const endYear = range.startMonth > range.endMonth ? startYear + 1 : startYear;
+  const endDoy = getDayOfYear(endYear, range.endMonth, range.endDay);
+  let totalDays: number;
+  if (range.startMonth > range.endMonth) {
+    totalDays = (getDaysInYear(startYear) - startDoy) + endDoy;
+  } else {
+    totalDays = endDoy - startDoy;
+  }
 
   return Math.min((diff / totalDays) * 30, 29.99);
 }
@@ -97,7 +110,7 @@ function isCuspDate(month: number, day: number): boolean {
   return false;
 }
 
-export function getSunSign(month: number, day: number): SunSignResult {
+export function getSunSign(year: number, month: number, day: number): SunSignResult {
   // 1. Tìm cung
   let matchedRange = ZODIAC_DATE_RANGES[0];
   for (const range of ZODIAC_DATE_RANGES) {
@@ -109,7 +122,7 @@ export function getSunSign(month: number, day: number): SunSignResult {
   const sign = matchedRange.sign;
 
   // 2. Tính degree (vị trí trong cung, 0-30°)
-  const degree = calculateDegree(month, day, matchedRange);
+  const degree = calculateDegree(year, month, day, matchedRange);
 
   // 3. Tính Decan
   const decan: 1 | 2 | 3 = degree < 10 ? 1 : degree < 20 ? 2 : 3;

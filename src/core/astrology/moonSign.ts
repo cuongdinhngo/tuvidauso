@@ -86,21 +86,27 @@ export function getMoonSign(
   hour: number, minute: number,
   timezone: number,
 ): MoonSignResult {
-  // 1. Longitude Mặt Trăng đầu ngày (0h UTC)
-  const startLong = approximateMoonLongitude(year, month, day);
+  // 1. Convert local time to actual UTC date/time (handles day rollover)
+  // Use Date.UTC to avoid dependency on JS runtime timezone
+  const utcHourRaw = hour - timezone + minute / 60;
+  const utcMs = Date.UTC(year, month - 1, day) + utcHourRaw * 3600000;
+  const utcDate = new Date(utcMs);
 
-  // 2. Longitude Mặt Trăng ngày tiếp theo (0h UTC)
-  // Handle month/year overflow for last day of month
-  const nextDate = new Date(year, month - 1, day + 1);
+  const utcYear = utcDate.getUTCFullYear();
+  const utcMonth = utcDate.getUTCMonth() + 1;
+  const utcDay = utcDate.getUTCDate();
+  const fraction = (utcDate.getUTCHours() + utcDate.getUTCMinutes() / 60) / 24;
+
+  // 2. Longitude Mặt Trăng đầu ngày UTC
+  const startLong = approximateMoonLongitude(utcYear, utcMonth, utcDay);
+
+  // 3. Longitude Mặt Trăng ngày tiếp theo (0h UTC)
+  const nextDate = new Date(utcYear, utcMonth - 1, utcDay + 1);
   const endLong = approximateMoonLongitude(
     nextDate.getFullYear(),
     nextDate.getMonth() + 1,
     nextDate.getDate(),
   );
-
-  // 3. Nội suy theo giờ sinh (convert sang UTC trước)
-  const utcHour = hour - timezone + minute / 60;
-  const fraction = ((utcHour % 24) + 24) % 24 / 24;
 
   // 4. Xử lý trường hợp longitude vượt 360° (Pisces → Aries)
   let longitude: number;

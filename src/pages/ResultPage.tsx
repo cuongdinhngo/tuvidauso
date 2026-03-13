@@ -45,13 +45,13 @@ export default function ResultPage() {
 
   const interpretation = interpretChart(chart);
   const currentYear = new Date().getFullYear();
-  const sunSign = getSunSign(birthInfo.solarDate.month, birthInfo.solarDate.day);
+  const sunSign = getSunSign(birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day);
   const birthHour = diaChiToHour(birthInfo.hour);
-  const moonSign = getMoonSign(
+  const moonSign = birthInfo.unknownHour ? null : getMoonSign(
     birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day,
     birthHour, 0, 7,
   );
-  const risingSign = birthInfo.birthplace
+  const risingSign = (!birthInfo.unknownHour && birthInfo.birthplace)
     ? getRisingSign(
         birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day,
         birthHour, 0, 7, birthInfo.birthplace.lat, birthInfo.birthplace.lng,

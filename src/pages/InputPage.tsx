@@ -55,6 +55,7 @@ export default function InputPage() {
       name: name || undefined,
       solarDate: { year: year as number, month: month as number, day: day as number },
       hour: unknownHour ? 0 : hour as number,
+      unknownHour: unknownHour || undefined,
       gender,
       birthplace: selectedCity ? { name: selectedCity.name, lat: selectedCity.lat, lng: selectedCity.lng } : undefined,
     };
