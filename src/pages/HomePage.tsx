@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Star, Clock, Columns3, Grid3X3, BookOpen, TrendingUp, Trash2, Heart } from 'lucide-react';
+import { Sparkles, Star, Clock, Columns3, Grid3X3, BookOpen, TrendingUp, Trash2, Heart, CalendarDays } from 'lucide-react';
 import { useTuViStore, type ChartHistoryEntry } from '../store/tuViStore';
 import { DIA_CHI_HOURS } from '../core/types';
 
@@ -10,6 +10,7 @@ const FEATURES = [
   { title: 'Luận Giải', desc: '210 quy tắc luận giải, tam hợp chiếu, đánh giá ⭐', icon: BookOpen },
   { title: 'Vận Hạn', desc: 'Đại hạn, tiểu hạn, lưu niên Tứ Hóa 3 tầng', icon: TrendingUp },
   { title: 'Hợp Duyên', desc: 'So sánh tương hợp, 7 tiêu chí phân tích, xếp hạng', icon: Heart, link: '/compare' },
+  { title: 'Xem Ngày', desc: 'Lịch Vạn Niên, chọn ngày tốt, giờ Hoàng Đạo', icon: CalendarDays, link: '/calendar' },
 ];
 
 const STATS = [
@@ -77,7 +78,7 @@ export default function HomePage() {
       </div>
 
       {/* Feature cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-5xl w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl w-full">
         {FEATURES.map(({ title, desc, icon: Icon, link }) => {
           const card = (
             <div

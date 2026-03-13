@@ -19,6 +19,7 @@ export default function Header() {
         <nav className="flex gap-4 text-sm">
           <Link to="/" className={linkClass(pathname === '/')}>Trang chủ</Link>
           <Link to="/input" className={linkClass(pathname === '/input' || pathname === '/result')}>Lập lá số</Link>
+          <Link to="/calendar" className={linkClass(pathname.startsWith('/calendar'))}>Xem Ngày</Link>
           <Link to="/compare" className={linkClass(pathname.startsWith('/compare'))}>Hợp Duyên</Link>
         </nav>
       </div>
