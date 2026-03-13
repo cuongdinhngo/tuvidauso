@@ -14,6 +14,11 @@ import LuanGiaiTab from '../components/tuvi/LuanGiaiTab';
 import YearlyDetailPanel from '../components/tuvi/YearlyDetailPanel';
 import BatTuTab from '../components/battu/BatTuTab';
 import NumerologyTab from '../components/numerology/NumerologyTab';
+import ZodiacTab from '../components/astrology/ZodiacTab';
+import { getSunSign } from '../core/astrology/sunSign';
+import { getMoonSign, diaChiToHour } from '../core/astrology/moonSign';
+import { getRisingSign } from '../core/astrology/risingSign';
+import type { Big3Result } from '../core/astrology/types';
 
 const CON_GIAP: Record<string, string> = {
   'Tý': 'Chuột', 'Sửu': 'Trâu', 'Dần': 'Hổ', 'Mão': 'Mèo',
@@ -40,6 +45,19 @@ export default function ResultPage() {
 
   const interpretation = interpretChart(chart);
   const currentYear = new Date().getFullYear();
+  const sunSign = getSunSign(birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day);
+  const birthHour = diaChiToHour(birthInfo.hour);
+  const moonSign = birthInfo.unknownHour ? null : getMoonSign(
+    birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day,
+    birthHour, 0, 7,
+  );
+  const risingSign = (!birthInfo.unknownHour && birthInfo.birthplace)
+    ? getRisingSign(
+        birthInfo.solarDate.year, birthInfo.solarDate.month, birthInfo.solarDate.day,
+        birthHour, 0, 7, birthInfo.birthplace.lat, birthInfo.birthplace.lng,
+      )
+    : null;
+  const big3: Big3Result = { sun: sunSign, moon: moonSign, rising: risingSign };
 
   const tabs = [
     {
@@ -246,6 +264,10 @@ export default function ResultPage() {
           hasName={!!birthInfo.name?.trim()}
         />
       ) : null,
+    },
+    {
+      label: 'Hoàng Đạo ♈',
+      content: <ZodiacTab big3={big3} />,
     },
   ];
 

@@ -5,6 +5,7 @@ import { useTuViStore } from '../store/tuViStore';
 import { solarToLunar } from '../core/calendar/solarToLunar';
 import { DIA_CHI_HOURS } from '../core/types';
 import type { BirthInfo } from '../core/types';
+import { VIETNAM_CITIES } from '../data/vietnamCities';
 
 export default function InputPage() {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ export default function InputPage() {
   const [hour, setHour] = useState<number | ''>('');
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [unknownHour, setUnknownHour] = useState(false);
+  const [birthplaceIndex, setBirthplaceIndex] = useState<number | ''>('');
+  const [unknownBirthplace, setUnknownBirthplace] = useState(true);
 
   // Real-time lunar preview
   const preview = useMemo(() => {
@@ -47,11 +50,14 @@ export default function InputPage() {
 
   function handleSubmit() {
     if (!isComplete) return;
+    const selectedCity = !unknownBirthplace && birthplaceIndex !== '' ? VIETNAM_CITIES[birthplaceIndex] : undefined;
     const info: BirthInfo = {
       name: name || undefined,
       solarDate: { year: year as number, month: month as number, day: day as number },
       hour: unknownHour ? 0 : hour as number,
+      unknownHour: unknownHour || undefined,
       gender,
+      birthplace: selectedCity ? { name: selectedCity.name, lat: selectedCity.lat, lng: selectedCity.lng } : undefined,
     };
     calculate(info);
     navigate('/result');
@@ -159,6 +165,32 @@ export default function InputPage() {
               </label>
             ))}
           </div>
+        </div>
+
+        {/* Birthplace */}
+        <div>
+          <label className="block text-sm text-gray-400 mb-1">Nơi sinh (cho Rising Sign)</label>
+          {!unknownBirthplace && (
+            <select
+              value={birthplaceIndex}
+              onChange={(e) => setBirthplaceIndex(Number(e.target.value))}
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
+            >
+              <option value="" disabled>Chọn tỉnh/thành</option>
+              {VIETNAM_CITIES.map((city, i) => (
+                <option key={city.name} value={i}>{city.name}</option>
+              ))}
+            </select>
+          )}
+          <label className="flex items-center gap-2 mt-2 text-sm text-gray-400 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={unknownBirthplace}
+              onChange={(e) => setUnknownBirthplace(e.target.checked)}
+              className="rounded border-gray-600"
+            />
+            Không biết / không cần Rising Sign
+          </label>
         </div>
 
         {/* Preview */}
