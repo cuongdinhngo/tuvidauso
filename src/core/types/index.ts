@@ -15,6 +15,7 @@ export interface BirthInfo {
   solarDate: { year: number; month: number; day: number };
   hour: number; // 0-11: Ty=0, Suu=1, Dan=2, ..., Hoi=11
   gender: 'male' | 'female';
+  birthplace?: { name: string; lat: number; lng: number };
 }
 
 export interface CanChi {
