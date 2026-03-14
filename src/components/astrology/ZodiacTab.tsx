@@ -189,7 +189,6 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
       {/* AI Analysis */}
       <AIAnalysisSection
         title="AI Phân Tích Chiêm Tinh"
-        description="Phân tích kết hợp Big 3 + Decan bằng AI — sâu hơn template có sẵn"
         quickQuestions={ASTROLOGY_QUICK_QUESTIONS}
         onAnalyze={handleAnalyze}
         onAskQuestion={handleAskQuestion}

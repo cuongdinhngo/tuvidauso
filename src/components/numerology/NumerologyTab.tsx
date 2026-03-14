@@ -95,7 +95,6 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
       {/* AI Analysis */}
       <AIAnalysisSection
         title="AI Phân Tích Thần Số Học"
-        description="Phân tích chuyên sâu bộ số của bạn bằng AI — kết hợp tất cả các số thay vì xem riêng lẻ"
         quickQuestions={NUMEROLOGY_QUICK_QUESTIONS}
         onAnalyze={handleAnalyze}
         onAskQuestion={handleAskQuestion}

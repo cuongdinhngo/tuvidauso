@@ -97,7 +97,7 @@ export function useAIAnalysis(tabId?: string) {
         return null;
       }
 
-      // Optimistic update: add user message to history immediately
+      // Optimistic update: add user message to history immediately (with trim)
       const userMsg = prompt.messages[prompt.messages.length - 1];
       setState((s) => ({
         ...s,
@@ -106,7 +106,7 @@ export function useAIAnalysis(tabId?: string) {
         conversationHistory: [
           ...s.conversationHistory,
           { role: 'user' as const, content: userMsg.content, displayContent: displayQuestion || userMsg.content },
-        ],
+        ].slice(-MAX_HISTORY_TURNS * 2),
       }));
 
       try {
@@ -131,7 +131,13 @@ export function useAIAnalysis(tabId?: string) {
         return response.content;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Lỗi không xác định';
-        setState((s) => ({ ...s, loading: false, error: msg }));
+        // Rollback optimistic user message on error
+        setState((s) => ({
+          ...s,
+          loading: false,
+          error: msg,
+          conversationHistory: s.conversationHistory.slice(0, -1),
+        }));
         return null;
       }
     },

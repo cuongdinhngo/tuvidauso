@@ -142,7 +142,6 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
       {numerologyChart && (
         <AIAnalysisSection
           title="AI Phân Tích Kết Hợp Đông-Tây"
-          description="Kết hợp Tử Vi Đẩu Số + Thần Số Học + Cung Hoàng Đạo để phân tích toàn diện nhất"
           quickQuestions={COMBINED_QUICK_QUESTIONS}
           onAnalyze={handleAnalyze}
           onAskQuestion={handleAskQuestion}

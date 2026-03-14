@@ -1,10 +1,9 @@
-import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { useState, useRef, useEffect, type ReactNode, type RefObject, type KeyboardEvent } from 'react';
 import { Sparkles, Send, AlertCircle, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import type { AIMessage } from '../../core/ai/types';
 
 interface AIAnalysisSectionProps {
   title: string;
-  description: string;
   quickQuestions: string[];
   onAnalyze: () => void;
   onAskQuestion: (question: string) => void;
@@ -45,30 +44,54 @@ function extractRating(text: string): number | undefined {
 
 function normalizeSystemLines(rawLines: string[]): string[] {
   const SYSTEM_TAG_RE = /(?:\*\*)?(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)(?:\*\*)?\s*:/g;
-  const SPLIT_RE = /(?<=\.\s*|!\s*|\?\s*|;\s*)(?=(?:\*\*)?(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)(?:\*\*)?\s*:)/g;
+  // Match system tag positions for manual splitting (avoids variable-length lookbehind)
+  const TAG_POS_RE = /(?:\*\*)?(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)(?:\*\*)?\s*:/g;
 
   const result: string[] = [];
   for (const line of rawLines) {
     const trimmed = line.trim();
     const matches = trimmed.match(SYSTEM_TAG_RE);
     if (matches && matches.length >= 2) {
-      const parts = trimmed.split(SPLIT_RE).filter(Boolean);
-      for (const part of parts) {
-        let normalized = part.trim();
-        normalized = normalized
-          .replace(/^\*\*(Tử [Vv]i)\*\*\s*:/, '[$1]:')
-          .replace(/^\*\*(Thần [Ss]ố)\*\*\s*:/, '[$1]:')
-          .replace(/^\*\*(Hoàng [Đđ]ạo)\*\*\s*:/, '[$1]:')
-          .replace(/^(Tử [Vv]i)\s*:/, '[$1]:')
-          .replace(/^(Thần [Ss]ố)\s*:/, '[$1]:')
-          .replace(/^(Hoàng [Đđ]ạo)\s*:/, '[$1]:');
-        result.push(normalized);
+      // Find split points: where a system tag starts after sentence-ending punctuation
+      const splitPoints: number[] = [];
+      let m: RegExpExecArray | null;
+      TAG_POS_RE.lastIndex = 0;
+      while ((m = TAG_POS_RE.exec(trimmed)) !== null) {
+        if (m.index > 0) {
+          const before = trimmed.slice(0, m.index).trimEnd();
+          if (/[.!?;]$/.test(before)) {
+            splitPoints.push(m.index);
+          }
+        }
+      }
+
+      if (splitPoints.length > 0) {
+        let prev = 0;
+        for (const pos of splitPoints) {
+          const chunk = trimmed.slice(prev, pos).trim();
+          if (chunk) result.push(normalizeTag(chunk));
+          prev = pos;
+        }
+        const last = trimmed.slice(prev).trim();
+        if (last) result.push(normalizeTag(last));
+      } else {
+        result.push(trimmed);
       }
     } else {
       result.push(trimmed);
     }
   }
   return result;
+}
+
+function normalizeTag(text: string): string {
+  return text
+    .replace(/^\*\*(Tử [Vv]i)\*\*\s*:/, '[$1]:')
+    .replace(/^\*\*(Thần [Ss]ố)\*\*\s*:/, '[$1]:')
+    .replace(/^\*\*(Hoàng [Đđ]ạo)\*\*\s*:/, '[$1]:')
+    .replace(/^(Tử [Vv]i)\s*:/, '[$1]:')
+    .replace(/^(Thần [Ss]ố)\s*:/, '[$1]:')
+    .replace(/^(Hoàng [Đđ]ạo)\s*:/, '[$1]:');
 }
 
 function parseIntoSections(raw: string): Section[] {
@@ -516,9 +539,9 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
   onChange: (v: string) => void;
   onSend: (v: string) => void;
   isLoading: boolean;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: RefObject<HTMLInputElement | null>;
 }) {
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (value.trim() && !isLoading) onSend(value.trim());
@@ -557,7 +580,6 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
 
 export default function AIAnalysisSection({
   title,
-  description: _description,
   quickQuestions,
   onAnalyze,
   onAskQuestion,
