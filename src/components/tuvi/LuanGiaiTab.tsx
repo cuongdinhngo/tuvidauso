@@ -27,7 +27,7 @@ interface LuanGiaiTabProps {
 }
 
 interface Section {
-  id: string;
+  id: LuanGiaiSectionId;
   label: string;
 }
 
@@ -43,7 +43,7 @@ const SECTIONS: Section[] = [
   { id: 'loi-khuyen', label: 'Lời Khuyên' },
 ];
 
-const SECTION_ID_TO_NAME: Record<string, string> = {
+const SECTION_ID_TO_NAME: Partial<Record<LuanGiaiSectionId, string>> = {
   'tinh-cach': 'Tính Cách',
   'su-nghiep': 'Sự Nghiệp',
   'tai-loc': 'Tài Lộc',
@@ -291,7 +291,7 @@ function LuanGiaiAIWrapper({
 }
 
 export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps) {
-  const [activeSection, setActiveSection] = useState('tong-quan');
+  const [activeSection, setActiveSection] = useState<LuanGiaiSectionId>('tong-quan');
 
   const findPalace = (name: string) => chart.palaces.find(p => p.name === name);
 
@@ -397,7 +397,7 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
         const sectionName = SECTION_ID_TO_NAME[section.id];
         if (!sectionName) return null;
         return (
-          <LuanGiaiAIWrapper sectionId={section.id as LuanGiaiSectionId} sectionTitle={section.label} chart={chart}>
+          <LuanGiaiAIWrapper sectionId={section.id} sectionTitle={section.label} chart={chart}>
             {renderPalaceSection(sectionName)}
           </LuanGiaiAIWrapper>
         );

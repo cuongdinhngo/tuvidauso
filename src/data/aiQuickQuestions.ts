@@ -1,4 +1,5 @@
 import type { RelationType } from '../core/types/compare';
+import type { LuanGiaiSectionId } from '../core/ai/prompts/luanGiaiPrompts';
 
 export const NUMEROLOGY_QUICK_QUESTIONS = [
   'Phân tích kết hợp tất cả các số của tôi',
@@ -61,7 +62,7 @@ export const COMPARE_QUICK_QUESTIONS: Record<RelationType, string[]> = {
   ],
 };
 
-export const LUAN_GIAI_QUICK_QUESTIONS: Record<string, string[]> = {
+export const LUAN_GIAI_QUICK_QUESTIONS: Record<LuanGiaiSectionId, string[]> = {
   'tong-quan': [
     'Lá số này có gì đặc biệt nhất?',
     'Điểm yếu lớn nhất cần lưu ý?',
