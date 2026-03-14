@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 interface TabsProps {
-  tabs: { label: string; content: React.ReactNode }[];
+  tabs: { label: string; content: ReactNode }[];
   defaultIndex?: number;
 }
 

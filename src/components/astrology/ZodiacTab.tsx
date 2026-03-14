@@ -1,7 +1,12 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import type { Big3Result, ZodiacSign } from '../../core/astrology/types';
 import { ZODIAC_SIGNS, getCompatibilityScore } from '../../data/zodiacData';
 import Big3Card from './Big3Card';
+import { useAIAnalysis } from '../../hooks/useAIAnalysis';
+import { buildAstrologyAIPrompt } from '../../core/ai/prompts/astrologyPrompt';
+import { buildUnifiedQuestionPrompt } from '../../core/ai/prompts/combinedPrompt';
+import AIAnalysisSection from '../shared/AIAnalysisSection';
+import { ASTROLOGY_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
 
 const ELEMENT_LABELS: Record<string, { name: string; icon: string; color: string }> = {
   fire:  { name: 'Hỏa', icon: '🔥', color: 'text-red-400' },
@@ -38,6 +43,17 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
   const element = ELEMENT_LABELS[sign.element];
   const planet = PLANET_LABELS[sign.rulingPlanet];
   const decanPlanet = PLANET_LABELS[decanRuler];
+  const ai = useAIAnalysis();
+
+  const handleAnalyze = useCallback(() => {
+    const prompt = buildAstrologyAIPrompt(big3);
+    ai.analyze(prompt);
+  }, [big3, ai]);
+
+  const handleAskQuestion = useCallback((question: string) => {
+    const prompt = buildUnifiedQuestionPrompt(question, null, null, big3, '', ai.conversationHistory);
+    ai.askQuestion(prompt);
+  }, [big3, ai]);
 
   return (
     <div className="space-y-6">
@@ -136,6 +152,19 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
         <CompatibilityList currentSign={sign.id} label="Hợp" signs={sign.goodMatch} colorClass="text-blue-400" barColor="bg-blue-500" />
         <CompatibilityList currentSign={sign.id} label="Thử thách" signs={sign.challengeMatch} colorClass="text-orange-400" barColor="bg-orange-500" />
       </div>
+
+      {/* AI Analysis */}
+      <AIAnalysisSection
+        title="AI Phân Tích Chiêm Tinh"
+        description="Phân tích kết hợp Big 3 + Decan bằng AI — sâu hơn template có sẵn"
+        quickQuestions={ASTROLOGY_QUICK_QUESTIONS}
+        onAnalyze={handleAnalyze}
+        onAskQuestion={handleAskQuestion}
+        result={ai.result}
+        loading={ai.loading}
+        error={ai.error}
+        conversationHistory={ai.conversationHistory}
+      />
 
       {/* Lucky info */}
       <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4">
