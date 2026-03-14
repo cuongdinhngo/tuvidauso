@@ -96,10 +96,11 @@ src/
 │   │   ├── providerData.ts      # Provider configurations
 │   │   ├── types.ts             # AI message and response types
 │   │   ├── prompts/
-│   │   │   ├── systemPrompts.ts     # System-level prompts
+│   │   │   ├── systemPrompts.ts     # System-level prompts + anti-hallucination rules + per-system prompts
 │   │   │   ├── astrologyPrompt.ts   # Western astrology prompts
 │   │   │   ├── numerologyPrompt.ts  # Numerology prompts
-│   │   │   └── combinedPrompt.ts    # Cross-system unified prompts
+│   │   │   ├── combinedPrompt.ts    # Cross-system unified prompts
+│   │   │   └── suggestionInstruction.ts # AI follow-up suggestion instruction template
 │   │   └── providers/
 │   │       ├── anthropic.ts     # Claude/Anthropic integration
 │   │       ├── google.ts        # Google Gemini integration
@@ -168,9 +169,11 @@ src/
 │       ├── ErrorBoundary.tsx    # React error boundary
 │       ├── AIAnalysisSection.tsx # AI analysis display with markdown support
 │       └── AISettingsModal.tsx  # AI provider settings modal
+├── utils/
+│   └── parseSuggestions.ts      # Parse AI [SUGGESTIONS] blocks into {content, suggestions[]}
 ├── hooks/
 │   ├── useStarFilter.ts         # Star filter state (all/chinh/chinh_cat_sat/custom)
-│   └── useAIAnalysis.ts         # AI analysis execution + conversation history
+│   └── useAIAnalysis.ts         # AI analysis execution + conversation history + suggestions
 ├── store/
 │   ├── tuViStore.ts             # Zustand store (calculation pipeline + chart history)
 │   ├── aiStore.ts               # AI provider config, API keys, cache
@@ -217,7 +220,8 @@ tests/
 - **Numerology:** Life Path, Expression, Personal Year numbers. East-West bridge integrates numerology with Tử Vi/Bát Tự insights.
 - **Calendar & Good Day Picker:** Hoàng Đạo hours, 28 Lunar Mansions (Sao 28), 12 Trực (daily stages), 15 life purpose filters (wedding, business opening, moving, etc.), personalized day ratings based on birth chart.
 - **Compatibility Comparison:** Multi-person matching across 8 dimensions (zodiac, Bát Tự, Mệnh cung, Nạp Âm, Tứ Hóa, Tuần/Triệt, palace relations). Supports ranking multiple people.
-- **AI Analysis:** Multi-provider (OpenAI, Google Gemini, Anthropic Claude, Groq). Conversation threading up to 10 turns. Prompt caching with hash. Pre-built quick questions per tab. Settings modal for provider/model/key config.
+- **AI Analysis:** Multi-provider (OpenAI, Google Gemini, Anthropic Claude, Groq). Conversation threading up to 10 turns. Prompt caching with hash. Pre-built quick questions per tab. Settings modal for provider/model/key config. Anti-hallucination rules in system prompts.
+- **AI Suggestions:** AI responses include structured `[SUGGESTIONS]...[/SUGGESTIONS]` blocks with 3 follow-up questions. Parsed by `parseSuggestions.ts`, displayed as clickable buttons in `AIAnalysisSection.tsx`. Fallback suggestions generated dynamically if AI doesn't provide them.
 - **Lazy loading:** Calendar and Compare pages use React.lazy + Suspense for code splitting.
 - **Base URL** is `/tuvidauso/` for GitHub Pages deployment.
 - **All UI text is in Vietnamese.** Star names, palace names, interpretations — everything uses Vietnamese with diacritics.
@@ -243,7 +247,7 @@ tests/
 
 ## Testing
 
-182 tests across 12 files. Run with `npm test`. Key validation cases:
+188 tests across 12 files. Run with `npm test`. Key validation cases:
 - 15/04/1988 → Lunar 29/02 Mậu Thìn, Đại Lâm Mộc
 - 25/01/2020 → Lunar 01/01 Canh Tý (Tết)
 - Every chart produces exactly 14 main stars and 12 unique palaces

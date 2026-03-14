@@ -48,6 +48,7 @@
 ### Phân Tích AI
 - **Đa nhà cung cấp** — OpenAI, Google Gemini, Anthropic Claude, Groq
 - **Hội thoại** — Chat tới 10 lượt hỏi đáp
+- **Gợi ý follow-up** — AI tự đề xuất 3 câu hỏi tiếp theo, hiển thị dạng nút bấm
 - **Câu hỏi nhanh** — Câu hỏi gợi ý cho từng mục phân tích
 - **Phân tích kết hợp** — AI tổng hợp Tử Vi + Bát Tự + Chiêm Tinh + Thần Số Học
 
@@ -104,8 +105,8 @@ src/
 │   ├── astrology/  # Chiêm tinh phương Tây: Sun/Moon/Rising sign
 │   ├── numerology/ # Thần Số Học: Life Path, Expression, Personal Year
 │   ├── compare/    # Hợp duyên: So sánh đa chiều, xếp hạng
-│   ├── ai/         # AI: Multi-provider, prompts, conversation
-│   │   ├── prompts/    # Prompt templates (system, astrology, numerology, combined)
+│   ├── ai/         # AI: Multi-provider, prompts, conversation, suggestions
+│   │   ├── prompts/    # Prompt templates (system, astrology, numerology, combined, suggestion instruction)
 │   │   └── providers/  # Provider implementations (OpenAI, Google, Anthropic, Groq)
 │   └── types/      # TypeScript types & constants
 ├── data/           # Star database, palace meanings, 25 cách cục,
@@ -130,11 +131,12 @@ src/
 │   │               # ScoreGauge, RelationBadge
 │   ├── layout/     # Header, Layout
 │   └── shared/     # Tabs, ErrorBoundary, AIAnalysisSection, AISettingsModal
+├── utils/          # parseSuggestions (AI response parsing)
 ├── hooks/          # useStarFilter, useAIAnalysis
 ├── store/          # tuViStore, aiStore, calendarStore, compareStore
 └── App.tsx         # Router setup (8 routes)
 
-tests/              # 182 tests across 12 files (calendar, bát tự, tử vi,
+tests/              # 188 tests across 12 files (calendar, bát tự, tử vi,
                     # tuần triệt, palace relations, integration, astrology,
                     # numerology, compare, AI prompts, provider routing)
 ```
@@ -162,7 +164,7 @@ Ngoài ra có các trang riêng:
 |---|---|
 | `npm run dev` | Dev server (hot reload) |
 | `npm run build` | TypeScript check + Vite build |
-| `npm test` | Chạy 182 tests |
+| `npm test` | Chạy 188 tests |
 | `npm run preview` | Preview bản build |
 | `npm run deploy` | Build + deploy GitHub Pages |
 | `npm run lint` | ESLint |
