@@ -29,9 +29,9 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
   const fullName = birthInfo.name || '';
 
   const handleAnalyze = useCallback(() => {
-    const prompt = buildNumerologyAIPrompt(chart, fullName, currentYear);
+    const prompt = buildNumerologyAIPrompt(chart, fullName, currentYear, birthInfo.solarDate.year);
     ai.analyze(prompt);
-  }, [chart, fullName, currentYear, ai]);
+  }, [chart, fullName, currentYear, birthInfo.solarDate.year, ai]);
 
   const handleAskQuestion = useCallback((question: string) => {
     const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory);

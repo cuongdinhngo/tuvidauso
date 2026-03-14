@@ -1,3 +1,14 @@
+/**
+ * Client-side Claude API service.
+ *
+ * Security model:
+ * - This app has NO backend. API calls go directly from the browser to Anthropic.
+ * - The `anthropic-dangerous-direct-browser-access` header is required for browser requests.
+ * - The user's API key is stored in sessionStorage (cleared when the tab closes).
+ * - Risk: XSS or malicious extensions could read the key from sessionStorage or intercept
+ *   network requests. For production deployments, a backend proxy is recommended so the
+ *   API key never reaches the client.
+ */
 import type { AIConfig, AIRequest, AIResponse } from './types';
 
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';

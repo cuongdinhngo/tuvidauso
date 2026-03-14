@@ -29,8 +29,8 @@ Năm Cá Nhân hiện tại: ${chart.personalYear.value}
 Tháng Cá Nhân hiện tại: ${chart.personalMonth.value}`;
 }
 
-function getCurrentPinnacle(chart: NumerologyChart): number {
-  const currentAge = new Date().getFullYear() - 1990; // approximate
+function getCurrentPinnacle(chart: NumerologyChart, birthYear: number): number {
+  const currentAge = new Date().getFullYear() - birthYear;
   for (let i = 0; i < chart.pinnacles.length; i++) {
     const p = chart.pinnacles[i];
     if (p.endAge === null || p.endAge === undefined || currentAge <= p.endAge) {
@@ -44,6 +44,7 @@ export function buildNumerologyAIPrompt(
   chart: NumerologyChart,
   fullName: string,
   currentYear: number,
+  birthYear: number,
 ): { system: string; user: string } {
   const numDesc = buildNumerologyDescription(chart, fullName);
 
@@ -88,7 +89,7 @@ Giải thích bài học cụ thể, cách vượt qua, KHÔNG gây hoang mang.
 
 ## 📅 Năm ${currentYear} — Năm Cá Nhân ${chart.personalYear.value}
 Chủ đề năm này là gì? Nên tập trung vào điều gì?
-Kết hợp với Pinnacle hiện tại (Đỉnh ${getCurrentPinnacle(chart)}): giai đoạn này đang ở đâu trong cuộc đời?
+Kết hợp với Pinnacle hiện tại (Đỉnh ${getCurrentPinnacle(chart, birthYear)}): giai đoạn này đang ở đâu trong cuộc đời?
 (4-6 câu, lời khuyên cụ thể theo quý)
 
 ## 📊 Biểu Đồ Inclusion — Năng Lượng Dư/Thiếu

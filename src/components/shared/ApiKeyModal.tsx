@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Eye, EyeOff, Check, Loader2 } from 'lucide-react';
 import { useAIStore } from '../../store/aiStore';
 import { callClaude } from '../../core/ai/claudeService';
@@ -16,6 +16,29 @@ export default function ApiKeyModal() {
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
   const [testError, setTestError] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const previousFocusRef = useRef<Element | null>(null);
+
+  useEffect(() => {
+    if (!showApiKeyModal) return;
+
+    previousFocusRef.current = document.activeElement;
+    // Auto-focus input after render
+    requestAnimationFrame(() => inputRef.current?.focus());
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowApiKeyModal(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      // Restore focus on close
+      if (previousFocusRef.current instanceof HTMLElement) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [showApiKeyModal, setShowApiKeyModal]);
 
   if (!showApiKeyModal) return null;
 
@@ -52,20 +75,28 @@ export default function ApiKeyModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowApiKeyModal(false)}>
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ai-settings-title"
+      onClick={() => setShowApiKeyModal(false)}
+    >
       <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-md mx-4 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-purple-300">Cài đặt AI</h2>
-          <button onClick={() => setShowApiKeyModal(false)} className="text-gray-500 hover:text-gray-300 transition-colors">
+          <h2 id="ai-settings-title" className="text-lg font-semibold text-purple-300">Cài đặt AI</h2>
+          <button onClick={() => setShowApiKeyModal(false)} className="text-gray-500 hover:text-gray-300 transition-colors" aria-label="Đóng">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">API Key (Anthropic)</label>
+            <label htmlFor="ai-api-key" className="block text-sm text-gray-400 mb-1">API Key (Anthropic)</label>
             <div className="relative">
               <input
+                ref={inputRef}
+                id="ai-api-key"
                 type={showKey ? 'text' : 'password'}
                 value={key}
                 onChange={(e) => { setKey(e.target.value); setTestResult(null); }}
@@ -75,18 +106,20 @@ export default function ApiKeyModal() {
               <button
                 onClick={() => setShowKey(!showKey)}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                aria-label={showKey ? 'Ẩn API key' : 'Hiện API key'}
               >
                 {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             <p className="text-[10px] text-gray-600 mt-1">
-              Key được lưu trong trình duyệt. Không gửi đến server nào ngoài Anthropic.
+              Key chỉ lưu trong phiên hiện tại (đóng tab sẽ xóa). API call gửi trực tiếp từ trình duyệt đến Anthropic — không qua server trung gian.
             </p>
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Model</label>
+            <label htmlFor="ai-model" className="block text-sm text-gray-400 mb-1">Model</label>
             <select
+              id="ai-model"
               value={model}
               onChange={(e) => setModel(e.target.value)}
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-purple-500"

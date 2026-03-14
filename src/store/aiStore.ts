@@ -4,6 +4,30 @@ const API_KEY_STORAGE = 'tuvi_ai_apikey';
 const MODEL_STORAGE = 'tuvi_ai_model';
 const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 
+function safeGetItem(key: string): string | null {
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): void {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {
+    // sessionStorage full or unavailable — silently ignore
+  }
+}
+
+function safeRemoveItem(key: string): void {
+  try {
+    sessionStorage.removeItem(key);
+  } catch {
+    // sessionStorage unavailable — silently ignore
+  }
+}
+
 interface AIStore {
   apiKey: string | null;
   model: string;
@@ -19,23 +43,23 @@ interface AIStore {
 }
 
 export const useAIStore = create<AIStore>((set, get) => ({
-  apiKey: localStorage.getItem(API_KEY_STORAGE),
-  model: localStorage.getItem(MODEL_STORAGE) || DEFAULT_MODEL,
+  apiKey: safeGetItem(API_KEY_STORAGE),
+  model: safeGetItem(MODEL_STORAGE) || DEFAULT_MODEL,
   cache: {},
   showApiKeyModal: false,
 
   setApiKey: (key: string) => {
-    localStorage.setItem(API_KEY_STORAGE, key);
+    safeSetItem(API_KEY_STORAGE, key);
     set({ apiKey: key });
   },
 
   clearApiKey: () => {
-    localStorage.removeItem(API_KEY_STORAGE);
+    safeRemoveItem(API_KEY_STORAGE);
     set({ apiKey: null });
   },
 
   setModel: (model: string) => {
-    localStorage.setItem(MODEL_STORAGE, model);
+    safeSetItem(MODEL_STORAGE, model);
     set({ model });
   },
 

@@ -14,47 +14,65 @@ interface AIAnalysisSectionProps {
   conversationHistory?: AIMessage[];
 }
 
+type ListType = 'ul' | 'ol';
+
 function FormatAIResponse({ text }: { text: string }) {
   const lines = text.split('\n');
   const elements: React.ReactNode[] = [];
+  let listItems: React.ReactNode[] = [];
+  let listType: ListType | null = null;
+  let listKey = 0;
+
+  const flushList = () => {
+    if (listItems.length === 0) return;
+    const Tag = listType === 'ol' ? 'ol' : 'ul';
+    const cls = listType === 'ol' ? 'list-decimal' : 'list-disc';
+    elements.push(
+      <Tag key={`list-${listKey}`} className={`space-y-1 ml-4 ${cls} text-sm text-gray-300 leading-relaxed`}>
+        {listItems}
+      </Tag>,
+    );
+    listItems = [];
+    listType = null;
+  };
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const isBullet = line.startsWith('- ') || line.startsWith('* ');
+    const isNumbered = /^\d+\.\s/.test(line);
 
-    if (line.startsWith('## ')) {
-      elements.push(
-        <h3 key={i} className="text-base font-semibold text-purple-300 mt-5 mb-2">
-          {line.slice(3)}
-        </h3>,
-      );
-    } else if (line.startsWith('### ')) {
-      elements.push(
-        <h4 key={i} className="text-sm font-semibold text-purple-200 mt-3 mb-1">
-          {line.slice(4)}
-        </h4>,
-      );
-    } else if (line.startsWith('- ') || line.startsWith('* ')) {
-      elements.push(
-        <li key={i} className="text-sm text-gray-300 ml-4 list-disc leading-relaxed">
-          {formatInline(line.slice(2))}
-        </li>,
-      );
-    } else if (/^\d+\.\s/.test(line)) {
-      elements.push(
-        <li key={i} className="text-sm text-gray-300 ml-4 list-decimal leading-relaxed">
-          {formatInline(line.replace(/^\d+\.\s/, ''))}
-        </li>,
-      );
-    } else if (line.trim() === '') {
-      elements.push(<div key={i} className="h-2" />);
+    if (isBullet) {
+      if (listType !== 'ul') { flushList(); listType = 'ul'; listKey = i; }
+      listItems.push(<li key={i}>{formatInline(line.slice(2))}</li>);
+    } else if (isNumbered) {
+      if (listType !== 'ol') { flushList(); listType = 'ol'; listKey = i; }
+      listItems.push(<li key={i}>{formatInline(line.replace(/^\d+\.\s/, ''))}</li>);
     } else {
-      elements.push(
-        <p key={i} className="text-sm text-gray-300 leading-relaxed">
-          {formatInline(line)}
-        </p>,
-      );
+      flushList();
+      if (line.startsWith('## ')) {
+        elements.push(
+          <h3 key={i} className="text-base font-semibold text-purple-300 mt-5 mb-2">
+            {line.slice(3)}
+          </h3>,
+        );
+      } else if (line.startsWith('### ')) {
+        elements.push(
+          <h4 key={i} className="text-sm font-semibold text-purple-200 mt-3 mb-1">
+            {line.slice(4)}
+          </h4>,
+        );
+      } else if (line.trim() === '') {
+        elements.push(<div key={i} className="h-2" />);
+      } else {
+        elements.push(
+          <p key={i} className="text-sm text-gray-300 leading-relaxed">
+            {formatInline(line)}
+          </p>,
+        );
+      }
     }
   }
+  flushList();
 
   return <div>{elements}</div>;
 }
