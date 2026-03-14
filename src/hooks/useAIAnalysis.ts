@@ -10,6 +10,8 @@ interface AIAnalysisState {
   conversationHistory: AIMessage[];
 }
 
+const MAX_HISTORY_TURNS = 10;
+
 function hashPrompt(text: string): string {
   let h = 0;
   for (let i = 0; i < text.length; i++) {
@@ -85,16 +87,19 @@ export function useAIAnalysis() {
           },
         );
         const userMsg = prompt.messages[prompt.messages.length - 1];
-        setState((s) => ({
-          ...s,
-          loading: false,
-          result: response.content,
-          conversationHistory: [
+        setState((s) => {
+          const updated = [
             ...s.conversationHistory,
             { role: 'user' as const, content: userMsg.content },
             { role: 'assistant' as const, content: response.content },
-          ],
-        }));
+          ];
+          return {
+            ...s,
+            loading: false,
+            result: response.content,
+            conversationHistory: updated.slice(-MAX_HISTORY_TURNS * 2),
+          };
+        });
         return response.content;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Lỗi không xác định';

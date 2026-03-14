@@ -3,6 +3,7 @@ import { create } from 'zustand';
 const API_KEY_STORAGE = 'tuvi_ai_apikey';
 const MODEL_STORAGE = 'tuvi_ai_model';
 const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const MAX_CACHE_SIZE = 50;
 
 function safeGetItem(key: string): string | null {
   try {
@@ -55,18 +56,25 @@ export const useAIStore = create<AIStore>((set, get) => ({
 
   clearApiKey: () => {
     safeRemoveItem(API_KEY_STORAGE);
-    set({ apiKey: null });
+    set({ apiKey: null, cache: {} });
   },
 
   setModel: (model: string) => {
     safeSetItem(MODEL_STORAGE, model);
-    set({ model });
+    set({ model, cache: {} });
   },
 
   getCached: (key: string) => get().cache[key],
 
   setCache: (key: string, value: string) => {
-    set((s) => ({ cache: { ...s.cache, [key]: value } }));
+    set((s) => {
+      const newCache = { ...s.cache, [key]: value };
+      const keys = Object.keys(newCache);
+      if (keys.length > MAX_CACHE_SIZE) {
+        delete newCache[keys[0]];
+      }
+      return { cache: newCache };
+    });
   },
 
   setShowApiKeyModal: (show: boolean) => set({ showApiKeyModal: show }),

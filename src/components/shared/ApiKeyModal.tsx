@@ -19,6 +19,16 @@ export default function ApiKeyModal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const previousFocusRef = useRef<Element | null>(null);
 
+  // Reset local state when modal opens to sync with store
+  useEffect(() => {
+    if (showApiKeyModal) {
+      setKey(apiKey || '');
+      setShowKey(false);
+      setTestResult(null);
+      setTestError('');
+    }
+  }, [showApiKeyModal, apiKey]);
+
   useEffect(() => {
     if (!showApiKeyModal) return;
 
