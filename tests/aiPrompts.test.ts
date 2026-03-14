@@ -168,6 +168,12 @@ describe('buildCombinedAIPrompt', () => {
     expect(prompt.user).toContain('Năm nay tôi nên làm gì?');
     expect(prompt.user).not.toContain('HÃY PHÂN TÍCH KẾT HỢP CẢ 3 HỆ THỐNG');
   });
+
+  it('with null moon: marks Moon as unknown instead of using Sun sign', () => {
+    const prompt = buildCombinedAIPrompt(tuViChart, numChart, big3SunOnly, 'Test', 2026);
+    expect(prompt.user).toContain('chưa có dữ liệu');
+    expect(prompt.user).not.toContain(`Moon ${sunSign.sign.nameEn} → cảm xúc yêu`);
+  });
 });
 
 describe('buildUnifiedQuestionPrompt', () => {

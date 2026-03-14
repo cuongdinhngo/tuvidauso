@@ -40,7 +40,7 @@ export function buildCombinedAIPrompt(
   const astroDesc = buildAstrologyDescription(big3);
 
   const sunName = big3.sun.sign.nameEn;
-  const moonName = big3.moon ? big3.moon.sign.nameEn : big3.sun.sign.nameEn;
+  const moonName = big3.moon ? big3.moon.sign.nameEn : null;
 
   return {
     system: SYSTEM_PROMPT_COMBINED,
@@ -79,7 +79,7 @@ Trả lời dựa trên CẢ 3 hệ thống. Mỗi hệ thống nói gì? Đồn
 ## 💑 Tình Yêu — 3 Góc Nhìn
 [Tử Vi]: Cung Phu Thê → kiểu hôn nhân
 [Thần Số]: Soul Urge ${numerologyChart.soulUrge.value} → cần gì trong tình yêu
-[Hoàng Đạo]: Moon ${moonName} → cảm xúc yêu
+${moonName ? `[Hoàng Đạo]: Moon ${moonName} → cảm xúc yêu` : '[Hoàng Đạo]: Moon Sign chưa có dữ liệu (không biết giờ sinh)'}
 → Kiểu người phù hợp nhất theo CẢ 3 hệ thống?
 (4-5 câu)
 
