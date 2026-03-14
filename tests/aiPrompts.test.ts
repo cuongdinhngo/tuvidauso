@@ -18,8 +18,11 @@ import type { Big3Result } from '../src/core/astrology/types';
 import { buildNumerologyDescription, buildNumerologyAIPrompt } from '../src/core/ai/prompts/numerologyPrompt';
 import { buildAstrologyDescription, buildAstrologyAIPrompt } from '../src/core/ai/prompts/astrologyPrompt';
 import { buildCombinedAIPrompt, buildUnifiedQuestionPrompt } from '../src/core/ai/prompts/combinedPrompt';
-import { SYSTEM_PROMPT_NUMEROLOGY, SYSTEM_PROMPT_ASTROLOGY, SYSTEM_PROMPT_COMBINED } from '../src/core/ai/prompts/systemPrompts';
+import { SYSTEM_PROMPT_NUMEROLOGY, SYSTEM_PROMPT_ASTROLOGY, SYSTEM_PROMPT_COMBINED, ANTI_HALLUCINATION_RULE } from '../src/core/ai/prompts/systemPrompts';
+import { buildLuanGiaiPrompt, buildLuanGiaiQuestionPrompt } from '../src/core/ai/prompts/luanGiaiPrompts';
+import { SUGGESTION_INSTRUCTION } from '../src/core/ai/prompts/suggestionInstruction';
 import { calculateMajorPeriods } from '../src/core/tuvi/majorPeriod';
+import { calculateTuanTriet } from '../src/core/tuvi/tuanTriet';
 
 // --- Test data setup ---
 
@@ -64,8 +67,10 @@ function buildTestChart(solarYear: number, solarMonth: number, solarDay: number,
     }
   }
 
+  const tuanTriet = calculateTuanTriet(lunarDate.yearCan, lunarDate.yearChi);
+
   return {
-    birthInfo, lunarDate, fourPillars, menh, than, cuc, palaces,
+    birthInfo, lunarDate, fourPillars, menh, than, cuc, palaces, tuanTriet,
     menhPalaceName: 'Mệnh', thanPalaceName: palaces.find(p => p.position === than)?.name || '',
   };
 }
@@ -272,5 +277,109 @@ describe('buildUnifiedQuestionPrompt', () => {
     const result = buildUnifiedQuestionPrompt('Tôi hợp nghề gì?', tuViChart, numChart, big3Full, 'Test', []);
     const lastMsg = result.messages[result.messages.length - 1];
     expect(lastMsg.content).not.toContain('VẬN HẠN');
+  });
+});
+
+// --- Luan Giai prompt tests ---
+
+describe('buildLuanGiaiPrompt', () => {
+  it('system prompt contains ANTI_HALLUCINATION_RULE', () => {
+    const prompt = buildLuanGiaiPrompt('tong-quan', tuViChart);
+    expect(prompt.system).toContain(ANTI_HALLUCINATION_RULE);
+  });
+
+  it('system prompt contains Tu Vi expert rules', () => {
+    const prompt = buildLuanGiaiPrompt('tinh-cach', tuViChart);
+    expect(prompt.system).toContain('TÊN SAO');
+    expect(prompt.system).toContain('TAM HỢP CHIẾU');
+    expect(prompt.system).toContain('Tứ Hóa');
+  });
+
+  it('user prompt contains section-specific instruction', () => {
+    const prompt = buildLuanGiaiPrompt('su-nghiep', tuViChart);
+    expect(prompt.user).toContain('Quan Lộc');
+    expect(prompt.user).toContain('Rating');
+  });
+
+  it('user prompt contains chart data', () => {
+    const prompt = buildLuanGiaiPrompt('tong-quan', tuViChart);
+    expect(prompt.user).toContain('Mệnh:');
+    expect(prompt.user).toContain('Tuần:');
+    expect(prompt.user).toContain('Triệt:');
+  });
+
+  it('user prompt contains SUGGESTION_INSTRUCTION', () => {
+    const prompt = buildLuanGiaiPrompt('tinh-cach', tuViChart);
+    expect(prompt.user).toContain('[SUGGESTIONS]');
+  });
+
+  it('suc-khoe section includes Nhat Chu data', () => {
+    const prompt = buildLuanGiaiPrompt('suc-khoe', tuViChart);
+    expect(prompt.user).toContain('Nhật Chủ:');
+  });
+
+  it('su-nghiep section does NOT include Nhat Chu data', () => {
+    const prompt = buildLuanGiaiPrompt('su-nghiep', tuViChart);
+    expect(prompt.user).not.toContain('Nhật Chủ:');
+  });
+
+  it('all 9 sections produce valid prompts', () => {
+    const sections = [
+      'tong-quan', 'tinh-cach', 'su-nghiep', 'tai-loc',
+      'tinh-duyen', 'suc-khoe', 'gia-dinh', 'cach-cuc', 'loi-khuyen',
+    ] as const;
+    for (const section of sections) {
+      const prompt = buildLuanGiaiPrompt(section, tuViChart);
+      expect(prompt.system.length).toBeGreaterThan(0);
+      expect(prompt.user.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('buildLuanGiaiQuestionPrompt', () => {
+  it('system prompt matches buildLuanGiaiPrompt system', () => {
+    const initial = buildLuanGiaiPrompt('tinh-cach', tuViChart);
+    const followUp = buildLuanGiaiQuestionPrompt('Tại sao?', 'tinh-cach', tuViChart, []);
+    expect(followUp.system).toBe(initial.system);
+  });
+
+  it('messages starts with context and ends with user question', () => {
+    const result = buildLuanGiaiQuestionPrompt('Chi tiết hơn?', 'su-nghiep', tuViChart, []);
+    expect(result.messages[0].role).toBe('user');
+    expect(result.messages[0].content).toContain('Quan Lộc');
+    const last = result.messages[result.messages.length - 1];
+    expect(last.role).toBe('user');
+    expect(last.content).toContain('Chi tiết hơn?');
+  });
+
+  it('question message contains section title prefix', () => {
+    const result = buildLuanGiaiQuestionPrompt('Nghề gì?', 'su-nghiep', tuViChart, []);
+    const last = result.messages[result.messages.length - 1];
+    expect(last.content).toContain('Về Sự Nghiệp:');
+  });
+
+  it('includes conversation history between context and question', () => {
+    const history = [
+      { role: 'user' as const, content: 'Câu hỏi 1' },
+      { role: 'assistant' as const, content: 'Trả lời 1' },
+    ];
+    const result = buildLuanGiaiQuestionPrompt('Câu hỏi 2', 'tinh-cach', tuViChart, history);
+    // context + 2 history + new question = 4
+    expect(result.messages.length).toBe(4);
+    expect(result.messages[1].content).toBe('Câu hỏi 1');
+    expect(result.messages[2].content).toBe('Trả lời 1');
+    expect(result.messages[3].content).toContain('Câu hỏi 2');
+  });
+
+  it('tier=lite trims history', () => {
+    const history = Array.from({ length: 6 }, (_, i) => ({
+      role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+      content: `msg-${i}`,
+    }));
+    const result = buildLuanGiaiQuestionPrompt('Câu mới', 'tinh-cach', tuViChart, history, 'lite');
+    // context (1) + trimmed history (2 for lite) + new question (1) = 4
+    expect(result.messages.length).toBe(4);
+    expect(result.messages[1].content).toBe('msg-4');
+    expect(result.messages[2].content).toBe('msg-5');
   });
 });

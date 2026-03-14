@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import type { TuViChart, Palace, TuanTriet } from '../../core/types';
 import type { InterpretationResult } from '../../core/tuvi/interpretation';
 import { interpretPalace } from '../../core/tuvi/interpretation';
@@ -13,6 +13,13 @@ import {
 } from '../../data/interpretationRules';
 import { getTamHopPositions, getDoiCung } from '../../core/tuvi/palaceRelations';
 import { countElements } from '../../core/battu/fiveElements';
+import { useAIAnalysis } from '../../hooks/useAIAnalysis';
+import { buildLuanGiaiPrompt, buildLuanGiaiQuestionPrompt } from '../../core/ai/prompts/luanGiaiPrompts';
+import type { LuanGiaiSectionId } from '../../core/ai/prompts/luanGiaiPrompts';
+import AIAnalysisSection from '../shared/AIAnalysisSection';
+import { LUAN_GIAI_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
+import { useAIStore } from '../../store/aiStore';
+import { getModelTier } from '../../core/ai/types';
 
 interface LuanGiaiTabProps {
   chart: TuViChart;
@@ -20,7 +27,7 @@ interface LuanGiaiTabProps {
 }
 
 interface Section {
-  id: string;
+  id: LuanGiaiSectionId;
   label: string;
 }
 
@@ -36,7 +43,7 @@ const SECTIONS: Section[] = [
   { id: 'loi-khuyen', label: 'Lời Khuyên' },
 ];
 
-const SECTION_ID_TO_NAME: Record<string, string> = {
+const SECTION_ID_TO_NAME: Partial<Record<LuanGiaiSectionId, string>> = {
   'tinh-cach': 'Tính Cách',
   'su-nghiep': 'Sự Nghiệp',
   'tai-loc': 'Tài Lộc',
@@ -238,8 +245,53 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
   );
 }
 
+/** Wraps rule-based content with per-section AI analysis */
+function LuanGiaiAIWrapper({
+  sectionId,
+  sectionTitle,
+  chart,
+  children,
+}: {
+  sectionId: LuanGiaiSectionId;
+  sectionTitle: string;
+  chart: TuViChart;
+  children: ReactNode;
+}) {
+  const ai = useAIAnalysis(`luangiai-${sectionId}`);
+
+  const handleAnalyze = useCallback(() => {
+    const prompt = buildLuanGiaiPrompt(sectionId, chart);
+    ai.analyze(prompt);
+  }, [sectionId, chart, ai]);
+
+  const handleAskQuestion = useCallback((question: string) => {
+    const config = useAIStore.getState().providerConfig;
+    const tier = config ? getModelTier(config.type, config.model) : 'strong';
+    const prompt = buildLuanGiaiQuestionPrompt(question, sectionId, chart, ai.conversationHistory, tier);
+    ai.askQuestion(prompt, question);
+  }, [sectionId, chart, ai]);
+
+  return (
+    <div className="space-y-4">
+      {children}
+      <AIAnalysisSection
+        title={`AI Phân Tích ${sectionTitle}`}
+        quickQuestions={LUAN_GIAI_QUICK_QUESTIONS[sectionId] || []}
+        onAnalyze={handleAnalyze}
+        onAskQuestion={handleAskQuestion}
+        result={ai.result}
+        initialResult={ai.initialResult}
+        initialSuggestions={ai.initialSuggestions}
+        loading={ai.loading}
+        error={ai.error}
+        conversationHistory={ai.conversationHistory}
+      />
+    </div>
+  );
+}
+
 export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps) {
-  const [activeSection, setActiveSection] = useState('tong-quan');
+  const [activeSection, setActiveSection] = useState<LuanGiaiSectionId>('tong-quan');
 
   const findPalace = (name: string) => chart.palaces.find(p => p.name === name);
 
@@ -285,58 +337,70 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
     switch (section.id) {
       case 'tong-quan':
         return (
-          <div className="space-y-4">
-            <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-purple-300 mb-2">Tổng Quan Lá Số</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">{interpretation.overview}</p>
+          <LuanGiaiAIWrapper sectionId="tong-quan" sectionTitle="Tổng Quan" chart={chart}>
+            <div className="space-y-4">
+              <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-purple-300 mb-2">Tổng Quan Lá Số</h3>
+                <p className="text-sm text-gray-300 leading-relaxed">{interpretation.overview}</p>
+              </div>
+              {interpretation.strengths.length > 0 && (
+                <div className="bg-green-900/10 border border-green-900/30 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-green-400 mb-2">Điểm mạnh</h3>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    {interpretation.strengths.map((s, i) => <li key={i}>• {s}</li>)}
+                  </ul>
+                </div>
+              )}
+              {interpretation.weaknesses.length > 0 && (
+                <div className="bg-red-900/10 border border-red-900/30 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-red-400 mb-2">Điểm cần lưu ý</h3>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    {interpretation.weaknesses.map((s, i) => <li key={i}>• {s}</li>)}
+                  </ul>
+                </div>
+              )}
             </div>
-            {interpretation.strengths.length > 0 && (
-              <div className="bg-green-900/10 border border-green-900/30 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-green-400 mb-2">Điểm mạnh</h3>
-                <ul className="text-sm text-gray-300 space-y-1">
-                  {interpretation.strengths.map((s, i) => <li key={i}>• {s}</li>)}
-                </ul>
-              </div>
-            )}
-            {interpretation.weaknesses.length > 0 && (
-              <div className="bg-red-900/10 border border-red-900/30 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-red-400 mb-2">Điểm cần lưu ý</h3>
-                <ul className="text-sm text-gray-300 space-y-1">
-                  {interpretation.weaknesses.map((s, i) => <li key={i}>• {s}</li>)}
-                </ul>
-              </div>
-            )}
-          </div>
+          </LuanGiaiAIWrapper>
         );
 
       case 'cach-cuc':
         return (
-          <div className="space-y-4">
-            {interpretation.specialPatterns.length > 0 ? (
-              interpretation.specialPatterns.map((p, i) => (
-                <div key={i} className="bg-yellow-900/10 border border-yellow-900/30 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-yellow-300 font-medium">{p.name}</span>
-                    <RatingStars score={p.rating} />
+          <LuanGiaiAIWrapper sectionId="cach-cuc" sectionTitle="Cách Cục" chart={chart}>
+            <div className="space-y-4">
+              {interpretation.specialPatterns.length > 0 ? (
+                interpretation.specialPatterns.map((p, i) => (
+                  <div key={i} className="bg-yellow-900/10 border border-yellow-900/30 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm text-yellow-300 font-medium">{p.name}</span>
+                      <RatingStars score={p.rating} />
+                    </div>
+                    <p className="text-sm text-gray-300">{p.description}</p>
                   </div>
-                  <p className="text-sm text-gray-300">{p.description}</p>
+                ))
+              ) : (
+                <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+                  <p className="text-sm text-gray-400">Không phát hiện cách cục đặc biệt nào trong lá số.</p>
                 </div>
-              ))
-            ) : (
-              <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-                <p className="text-sm text-gray-400">Không phát hiện cách cục đặc biệt nào trong lá số.</p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          </LuanGiaiAIWrapper>
         );
 
       case 'loi-khuyen':
-        return <AdviceSection chart={chart} findPalace={findPalace} />;
+        return (
+          <LuanGiaiAIWrapper sectionId="loi-khuyen" sectionTitle="Lời Khuyên" chart={chart}>
+            <AdviceSection chart={chart} findPalace={findPalace} />
+          </LuanGiaiAIWrapper>
+        );
 
       default: {
         const sectionName = SECTION_ID_TO_NAME[section.id];
         if (!sectionName) return null;
-        return renderPalaceSection(sectionName);
+        return (
+          <LuanGiaiAIWrapper sectionId={section.id} sectionTitle={section.label} chart={chart}>
+            {renderPalaceSection(sectionName)}
+          </LuanGiaiAIWrapper>
+        );
       }
     }
   };
@@ -457,13 +521,6 @@ function AdviceSection({ chart, findPalace }: { chart: TuViChart; findPalace: (n
         );
       })}
 
-      {/* AI placeholder */}
-      <button
-        disabled
-        className="w-full bg-gray-900/50 border border-purple-900/30 rounded-lg p-4 text-center opacity-60 cursor-not-allowed"
-      >
-        <span className="text-purple-400 text-sm">✨ AI Luận Giải — Sắp ra mắt</span>
-      </button>
     </div>
   );
 }

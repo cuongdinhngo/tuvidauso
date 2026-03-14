@@ -1,4 +1,5 @@
 import type { RelationType } from '../core/types/compare';
+import type { LuanGiaiSectionId } from '../core/ai/prompts/luanGiaiPrompts';
 
 export const NUMEROLOGY_QUICK_QUESTIONS = [
   'Phân tích kết hợp tất cả các số của tôi',
@@ -58,6 +59,63 @@ export const COMPARE_QUICK_QUESTIONS: Record<RelationType, string[]> = {
     'Điểm cần tránh khi làm việc chung?',
     'Tại sao 2 người thu hút nhau?',
     'Cách giữ tình bạn bền lâu?',
+  ],
+};
+
+export const LUAN_GIAI_QUICK_QUESTIONS: Record<LuanGiaiSectionId, string[]> = {
+  'tong-quan': [
+    'Lá số này có gì đặc biệt nhất?',
+    'Điểm yếu lớn nhất cần lưu ý?',
+    'Giai đoạn nào tốt nhất trong đời?',
+    'Mệnh và Thân hỗ trợ nhau không?',
+  ],
+  'tinh-cach': [
+    'Tính cách nổi bật nhất là gì?',
+    'Điểm mạnh bẩm sinh nên phát huy?',
+    'Người khác nhìn tôi thế nào?',
+    'Tại sao tôi hay mâu thuẫn nội tâm?',
+  ],
+  'su-nghiep': [
+    'Nghề nào phù hợp nhất với tôi?',
+    'Phong cách làm việc lý tưởng?',
+    'Nên làm chủ hay làm thuê?',
+    'Giai đoạn sự nghiệp phát triển nhất?',
+  ],
+  'tai-loc': [
+    'Cách kiếm tiền phù hợp nhất?',
+    'Kênh đầu tư nào nên thử?',
+    'Cạm bẫy tài chính cần tránh?',
+    'Chiến lược tài chính dài hạn?',
+  ],
+  'tinh-duyen': [
+    'Kiểu hôn nhân của tôi thế nào?',
+    'Mẫu người phù hợp nhất?',
+    'Thử thách lớn nhất trong tình cảm?',
+    'Thời điểm thuận lợi cho tình duyên?',
+  ],
+  'suc-khoe': [
+    'Bộ phận nào cần lưu ý nhất?',
+    'Xu hướng bệnh tật cần phòng?',
+    'Lời khuyên phòng ngừa cụ thể?',
+    'Ngũ hành ảnh hưởng sức khỏe sao?',
+  ],
+  'gia-dinh': [
+    'Quan hệ với cha mẹ thế nào?',
+    'Anh chị em hỗ trợ được không?',
+    'Triển vọng con cái ra sao?',
+    'Cách cải thiện quan hệ gia đình?',
+  ],
+  'cach-cuc': [
+    'Cách cục nào đặc biệt nhất?',
+    'Cách phát huy cách cục tốt?',
+    'Cách hóa giải cách cục xấu?',
+    'Tiềm năng ẩn chưa khai thác?',
+  ],
+  'loi-khuyen': [
+    'Lời khuyên cấp bách nhất cho tôi?',
+    'Chiến lược tài chính nên theo?',
+    'Hướng/màu nào phù hợp nhất?',
+    'Điều gì cần tránh tuyệt đối?',
   ],
 };
 
