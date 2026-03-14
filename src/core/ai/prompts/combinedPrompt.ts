@@ -55,13 +55,14 @@ function buildYearlyContext(
   currentYear: number,
 ): string {
   const birthYear = tuViChart.birthInfo.solarDate.year;
-  const currentAge = currentYear - birthYear;
+  const tuViAge = currentYear - birthYear + 1; // Vietnamese age (tuổi âm lịch)
+  const westernAge = currentYear - birthYear;   // Western age for numerology pinnacles
 
   let ctx = `\nDỮ LIỆU VẬN HẠN NĂM ${currentYear} (ĐÃ TÍNH SẴN — KHÔNG ĐƯỢC BỊA THÊM):\n`;
 
-  // Đại Hạn: find from palaces
+  // Đại Hạn: find from palaces (uses Vietnamese age)
   const currentMajorPeriod = tuViChart.palaces.find(
-    p => p.majorPeriod && currentAge >= p.majorPeriod.startAge && currentAge <= p.majorPeriod.endAge
+    p => p.majorPeriod && tuViAge >= p.majorPeriod.startAge && tuViAge <= p.majorPeriod.endAge
   );
   if (currentMajorPeriod?.majorPeriod) {
     const mp = currentMajorPeriod.majorPeriod;
@@ -105,7 +106,7 @@ function buildYearlyContext(
     ctx += `[Thần Số] Tháng Cá Nhân hiện tại: ${numerologyChart.personalMonth.value}\n`;
 
     const currentPinnacle = numerologyChart.pinnacles.find(
-      p => currentAge >= p.startAge && (p.endAge === null || p.endAge === undefined || currentAge <= p.endAge)
+      p => westernAge >= p.startAge && (p.endAge === null || p.endAge === undefined || westernAge <= p.endAge)
     );
     if (currentPinnacle) {
       ctx += `[Thần Số] Đỉnh Cao hiện tại: Số ${currentPinnacle.number} (${currentPinnacle.startAge}-${currentPinnacle.endAge || '∞'} tuổi)\n`;
