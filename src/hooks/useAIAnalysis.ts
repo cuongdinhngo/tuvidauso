@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { AIMessage } from '../core/ai/types';
-import { callClaude } from '../core/ai/claudeService';
+import { callProvider } from '../core/ai/callProvider';
 import { useAIStore } from '../store/aiStore';
 
 interface AIAnalysisState {
@@ -30,15 +30,15 @@ export function useAIAnalysis() {
 
   const analyze = useCallback(
     async (prompt: { system: string; user: string }) => {
-      const { apiKey, model, getCached, setCache, setShowApiKeyModal } =
+      const { providerConfig, getCached, setCache, setShowSettingsModal } =
         useAIStore.getState();
 
-      if (!apiKey) {
-        setShowApiKeyModal(true);
+      if (!providerConfig) {
+        setShowSettingsModal(true);
         return null;
       }
 
-      const cacheKey = hashPrompt(model + prompt.system + prompt.user);
+      const cacheKey = hashPrompt([providerConfig.type, providerConfig.model, prompt.system, prompt.user].join('\0'));
       const cached = getCached(cacheKey);
       if (cached) {
         setState((s) => ({ ...s, loading: false, result: cached, error: null, conversationHistory: [] }));
@@ -47,8 +47,8 @@ export function useAIAnalysis() {
 
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
-        const response = await callClaude(
-          { apiKey, model },
+        const response = await callProvider(
+          providerConfig,
           {
             system: prompt.system,
             messages: [{ role: 'user', content: prompt.user }],
@@ -69,17 +69,17 @@ export function useAIAnalysis() {
 
   const askQuestion = useCallback(
     async (prompt: { system: string; messages: AIMessage[] }) => {
-      const { apiKey, model, setShowApiKeyModal } = useAIStore.getState();
+      const { providerConfig, setShowSettingsModal } = useAIStore.getState();
 
-      if (!apiKey) {
-        setShowApiKeyModal(true);
+      if (!providerConfig) {
+        setShowSettingsModal(true);
         return null;
       }
 
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
-        const response = await callClaude(
-          { apiKey, model },
+        const response = await callProvider(
+          providerConfig,
           {
             system: prompt.system,
             messages: prompt.messages,
