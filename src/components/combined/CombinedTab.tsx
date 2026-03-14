@@ -52,7 +52,7 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
     const prompt = buildUnifiedQuestionPrompt(
       question, tuViChart, numerologyChart, big3, fullName, ai.conversationHistory, tier,
     );
-    ai.askQuestion(prompt);
+    ai.askQuestion(prompt, question);
   }, [tuViChart, numerologyChart, big3, fullName, ai]);
 
   return (
@@ -142,11 +142,11 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
       {numerologyChart && (
         <AIAnalysisSection
           title="AI Phân Tích Kết Hợp Đông-Tây"
-          description="Kết hợp Tử Vi Đẩu Số + Thần Số Học + Cung Hoàng Đạo để phân tích toàn diện nhất"
           quickQuestions={COMBINED_QUICK_QUESTIONS}
           onAnalyze={handleAnalyze}
           onAskQuestion={handleAskQuestion}
           result={ai.result}
+          initialResult={ai.initialResult}
           loading={ai.loading}
           error={ai.error}
           conversationHistory={ai.conversationHistory}

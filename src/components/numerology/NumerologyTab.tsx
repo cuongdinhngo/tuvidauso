@@ -39,7 +39,7 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
     const config = useAIStore.getState().providerConfig;
     const tier = config ? getModelTier(config.type, config.model) : 'strong';
     const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory, tier);
-    ai.askQuestion(prompt);
+    ai.askQuestion(prompt, question);
   }, [chart, tuViChart, fullName, ai]);
 
   return (
@@ -95,11 +95,11 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
       {/* AI Analysis */}
       <AIAnalysisSection
         title="AI Phân Tích Thần Số Học"
-        description="Phân tích chuyên sâu bộ số của bạn bằng AI — kết hợp tất cả các số thay vì xem riêng lẻ"
         quickQuestions={NUMEROLOGY_QUICK_QUESTIONS}
         onAnalyze={handleAnalyze}
         onAskQuestion={handleAskQuestion}
         result={ai.result}
+        initialResult={ai.initialResult}
         loading={ai.loading}
         error={ai.error}
         conversationHistory={ai.conversationHistory}
