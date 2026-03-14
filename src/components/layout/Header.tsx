@@ -1,16 +1,19 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Sparkles, Settings } from 'lucide-react';
 import { useAIStore } from '../../store/aiStore';
+import { PROVIDER_INFO } from '../../core/ai/providerData';
 
 export default function Header() {
   const { pathname } = useLocation();
-  const apiKey = useAIStore((s) => s.apiKey);
-  const setShowApiKeyModal = useAIStore((s) => s.setShowApiKeyModal);
+  const providerConfig = useAIStore((s) => s.providerConfig);
+  const setShowSettingsModal = useAIStore((s) => s.setShowSettingsModal);
 
   const linkClass = (active: boolean) =>
     active
       ? 'text-purple-300 font-medium transition-colors'
       : 'text-gray-400 hover:text-purple-300 transition-colors';
+
+  const info = providerConfig ? PROVIDER_INFO[providerConfig.type] : null;
 
   return (
     <header className="border-b border-purple-900/50 bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
@@ -27,13 +30,21 @@ export default function Header() {
             <Link to="/compare" className={linkClass(pathname.startsWith('/compare'))}>Hợp Duyên</Link>
           </nav>
           <button
-            onClick={() => setShowApiKeyModal(true)}
-            className="relative text-gray-500 hover:text-purple-300 transition-colors"
+            onClick={() => setShowSettingsModal(true)}
+            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-purple-300 transition-colors"
             title="Cài đặt AI"
           >
-            <Settings className="w-4 h-4" />
-            {apiKey && (
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full" />
+            {info ? (
+              <>
+                <span>{info.icon}</span>
+                <span className="hidden sm:inline">{info.name.split('(')[0].trim()}</span>
+                <span className="text-green-500">✓</span>
+              </>
+            ) : (
+              <>
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">Cài đặt AI</span>
+              </>
             )}
           </button>
         </div>
