@@ -86,6 +86,7 @@ function loadProviderConfig(): AIProviderConfig | null {
 
 interface TabAIState {
   result: string | null;
+  initialResult?: string | null;
   conversationHistory: AIMessage[];
 }
 
@@ -102,6 +103,7 @@ interface AIStore {
   setShowSettingsModal: (show: boolean) => void;
   getTabResult: (tabId: string) => TabAIState | undefined;
   setTabResult: (tabId: string, state: TabAIState) => void;
+  clearAllTabResults: () => void;
 }
 
 export const useAIStore = create<AIStore>((set, get) => ({
@@ -158,6 +160,8 @@ export const useAIStore = create<AIStore>((set, get) => ({
       return { tabResults: newMap };
     });
   },
+
+  clearAllTabResults: () => set({ tabResults: new Map() }),
 }));
 
 /** Get default model for a provider type */

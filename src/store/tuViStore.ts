@@ -3,6 +3,7 @@ import type { BirthInfo, LunarDate, FourPillars, TuViChart } from '../core/types
 import type { NumerologyChart } from '../core/numerology/types';
 import { buildTuViChart } from '../core/compare/buildProfile';
 import { calculateNumerology } from '../core/numerology/calculator';
+import { useAIStore } from './aiStore';
 
 export interface ChartHistoryEntry {
   name?: string;
@@ -85,6 +86,7 @@ export const useTuViStore = create<TuViStore>((set) => ({
         timestamp: Date.now(),
       });
 
+      useAIStore.getState().clearAllTabResults();
       set({ birthInfo: normalizedInfo, lunarDate: chart.lunarDate, fourPillars: chart.fourPillars, tuViChart: chart, numerologyChart: numChart, error: null });
     } catch (e) {
       set({ error: (e as Error).message, tuViChart: null, numerologyChart: null });

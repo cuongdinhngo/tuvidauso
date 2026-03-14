@@ -39,7 +39,7 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
     const config = useAIStore.getState().providerConfig;
     const tier = config ? getModelTier(config.type, config.model) : 'strong';
     const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory, tier);
-    ai.askQuestion(prompt);
+    ai.askQuestion(prompt, question);
   }, [chart, tuViChart, fullName, ai]);
 
   return (
@@ -100,6 +100,7 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
         onAnalyze={handleAnalyze}
         onAskQuestion={handleAskQuestion}
         result={ai.result}
+        initialResult={ai.initialResult}
         loading={ai.loading}
         error={ai.error}
         conversationHistory={ai.conversationHistory}

@@ -1,5 +1,5 @@
-import { useState, useRef, type ReactNode } from 'react';
-import { Sparkles, Send, Loader2, AlertCircle, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { Sparkles, Send, AlertCircle, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import type { AIMessage } from '../../core/ai/types';
 
 interface AIAnalysisSectionProps {
@@ -9,6 +9,7 @@ interface AIAnalysisSectionProps {
   onAnalyze: () => void;
   onAskQuestion: (question: string) => void;
   result: string | null;
+  initialResult?: string | null;
   loading: boolean;
   error: string | null;
   conversationHistory?: AIMessage[];
@@ -42,8 +43,37 @@ function extractRating(text: string): number | undefined {
   return stars[0].length;
 }
 
+function normalizeSystemLines(rawLines: string[]): string[] {
+  const SYSTEM_TAG_RE = /(?:\*\*)?(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)(?:\*\*)?\s*:/g;
+  const SPLIT_RE = /(?<=\.\s*|!\s*|\?\s*|;\s*)(?=(?:\*\*)?(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)(?:\*\*)?\s*:)/g;
+
+  const result: string[] = [];
+  for (const line of rawLines) {
+    const trimmed = line.trim();
+    const matches = trimmed.match(SYSTEM_TAG_RE);
+    if (matches && matches.length >= 2) {
+      const parts = trimmed.split(SPLIT_RE).filter(Boolean);
+      for (const part of parts) {
+        let normalized = part.trim();
+        normalized = normalized
+          .replace(/^\*\*(Tử [Vv]i)\*\*\s*:/, '[$1]:')
+          .replace(/^\*\*(Thần [Ss]ố)\*\*\s*:/, '[$1]:')
+          .replace(/^\*\*(Hoàng [Đđ]ạo)\*\*\s*:/, '[$1]:')
+          .replace(/^(Tử [Vv]i)\s*:/, '[$1]:')
+          .replace(/^(Thần [Ss]ố)\s*:/, '[$1]:')
+          .replace(/^(Hoàng [Đđ]ạo)\s*:/, '[$1]:');
+        result.push(normalized);
+      }
+    } else {
+      result.push(trimmed);
+    }
+  }
+  return result;
+}
+
 function parseIntoSections(raw: string): Section[] {
-  const lines = raw.split('\n');
+  const rawLines = raw.split('\n');
+  const lines = normalizeSystemLines(rawLines);
   const sections: Section[] = [];
   let current: Section = { blocks: [] };
   let listItems: string[] = [];
@@ -81,26 +111,26 @@ function parseIntoSections(raw: string): Section[] {
       continue;
     }
 
-    // [Tử Vi]: ...
-    if (trimmed.startsWith('[Tử Vi]') || trimmed.startsWith('[Tử vi]')) {
+    // [Tử Vi]: ... or **Tử Vi**: ... or Tử Vi: ...
+    if (/^(?:\[Tử [Vv]i\]|\*\*Tử [Vv]i\*\*|Tử [Vv]i)\s*:/.test(trimmed)) {
       flushList();
-      const text = trimmed.replace(/^\[Tử [Vv]i\]:?\s*/, '');
+      const text = trimmed.replace(/^(?:\[Tử [Vv]i\]|\*\*Tử [Vv]i\*\*|Tử [Vv]i)\s*:\s*/, '');
       current.blocks.push({ type: 'system-insight', system: 'tuvi', text });
       continue;
     }
 
-    // [Thần Số]: ...
-    if (trimmed.startsWith('[Thần Số]') || trimmed.startsWith('[Thần số]')) {
+    // [Thần Số]: ... or **Thần Số**: ... or Thần Số: ...
+    if (/^(?:\[Thần [Ss]ố\]|\*\*Thần [Ss]ố\*\*|Thần [Ss]ố)\s*:/.test(trimmed)) {
       flushList();
-      const text = trimmed.replace(/^\[Thần [Ss]ố\]:?\s*/, '');
+      const text = trimmed.replace(/^(?:\[Thần [Ss]ố\]|\*\*Thần [Ss]ố\*\*|Thần [Ss]ố)\s*:\s*/, '');
       current.blocks.push({ type: 'system-insight', system: 'thanso', text });
       continue;
     }
 
-    // [Hoàng Đạo]: ...
-    if (trimmed.startsWith('[Hoàng Đạo]') || trimmed.startsWith('[Hoàng đạo]')) {
+    // [Hoàng Đạo]: ... or **Hoàng Đạo**: ... or Hoàng Đạo: ...
+    if (/^(?:\[Hoàng [Đđ]ạo\]|\*\*Hoàng [Đđ]ạo\*\*|Hoàng [Đđ]ạo)\s*:/.test(trimmed)) {
       flushList();
-      const text = trimmed.replace(/^\[Hoàng [Đđ]ạo\]:?\s*/, '');
+      const text = trimmed.replace(/^(?:\[Hoàng [Đđ]ạo\]|\*\*Hoàng [Đđ]ạo\*\*|Hoàng [Đđ]ạo)\s*:\s*/, '');
       current.blocks.push({ type: 'system-insight', system: 'hoangdao', text });
       continue;
     }
@@ -156,11 +186,29 @@ function parseIntoSections(raw: string): Section[] {
   return sections;
 }
 
+const INLINE_SYSTEM_STYLES: Record<string, { label: string; color: string }> = {
+  'Tử Vi': { label: 'Tử Vi', color: 'text-purple-400' },
+  'Tử vi': { label: 'Tử Vi', color: 'text-purple-400' },
+  'Thần Số': { label: 'Thần Số', color: 'text-amber-400' },
+  'Thần số': { label: 'Thần Số', color: 'text-amber-400' },
+  'Hoàng Đạo': { label: 'Hoàng Đạo', color: 'text-blue-400' },
+  'Hoàng đạo': { label: 'Hoàng Đạo', color: 'text-blue-400' },
+};
+
 function formatInline(text: string): ReactNode {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  // Split on **bold** and [System] inline references
+  const parts = text.split(/(\*\*[^*]+\*\*|\[(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)\])/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       return <strong key={i} className="text-gray-100 font-medium">{part.slice(2, -2)}</strong>;
+    }
+    // Inline system badge: [Tử Vi], [Thần Số], [Hoàng Đạo]
+    const sysMatch = part.match(/^\[(Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)\]$/);
+    if (sysMatch) {
+      const style = INLINE_SYSTEM_STYLES[sysMatch[1]];
+      if (style) {
+        return <span key={i} className={`${style.color} font-semibold`}>{style.label}</span>;
+      }
     }
     return part;
   });
@@ -292,13 +340,229 @@ function AIContentRenderer({ content }: { content: string }) {
   );
 }
 
+// --- Chat sub-components ---
+
+function UserBubble({ message }: { message: AIMessage }) {
+  return (
+    <div className="flex justify-end mb-2">
+      <div className="bg-purple-600/20 border border-purple-500/20 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[75%]">
+        <p className="text-purple-100 text-sm">{message.displayContent || message.content}</p>
+      </div>
+    </div>
+  );
+}
+
+function AIBubble({ message }: { message: AIMessage }) {
+  const content = message.displayContent || message.content;
+  return (
+    <div className="flex justify-start mb-3 gap-2">
+      <div className="w-7 h-7 rounded-full bg-purple-600/30 flex items-center justify-center shrink-0 mt-1">
+        <span className="text-xs">🤖</span>
+      </div>
+      <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
+        <AIContentRenderer content={content} />
+        <SystemsUsedBadge content={content} />
+      </div>
+    </div>
+  );
+}
+
+function SystemsUsedBadge({ content }: { content: string }) {
+  const systems: { key: string; icon: string; label: string; color: string }[] = [];
+
+  if (content.includes('[Tử Vi]') || content.includes('Tử Vi')) {
+    systems.push({ key: 'tv', icon: '🔮', label: 'Tử Vi', color: 'text-purple-400 bg-purple-400/10' });
+  }
+  if (content.includes('[Thần Số]') || content.includes('Thần Số')) {
+    systems.push({ key: 'ts', icon: '🔢', label: 'Thần Số', color: 'text-amber-400 bg-amber-400/10' });
+  }
+  if (content.includes('[Hoàng Đạo]') || content.includes('Hoàng Đạo')) {
+    systems.push({ key: 'hd', icon: '♈', label: 'Hoàng Đạo', color: 'text-blue-400 bg-blue-400/10' });
+  }
+
+  if (systems.length === 0) return null;
+
+  return (
+    <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-gray-700/30">
+      <span className="text-gray-600 text-xs">Nguồn:</span>
+      {systems.map(s => (
+        <span key={s.key} className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded ${s.color}`}>
+          {s.icon} {s.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function TypingIndicator() {
+  return (
+    <div className="flex justify-start mb-3 gap-2">
+      <div className="w-7 h-7 rounded-full bg-purple-600/30 flex items-center justify-center shrink-0 mt-1">
+        <span className="text-xs">🤖</span>
+      </div>
+      <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl rounded-tl-sm px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-400">Đang phân tích</span>
+          <div className="flex gap-1">
+            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuickQuestions({ questions, onSelect, onAnalyze, disabled }: {
+  questions: string[];
+  onSelect: (q: string) => void;
+  onAnalyze: () => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="px-4 py-6">
+      <p className="text-gray-400 text-sm text-center mb-4">
+        Hỏi AI bất kỳ điều gì về lá số của bạn
+      </p>
+      <button
+        onClick={onAnalyze}
+        disabled={disabled}
+        className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white text-sm font-medium rounded-xl px-4 py-2.5 transition-colors mb-3"
+      >
+        <Sparkles className="w-4 h-4" />
+        Phân Tích Tổng Hợp
+      </button>
+      <div className="grid grid-cols-2 gap-2">
+        {questions.map(q => (
+          <button
+            key={q}
+            onClick={() => onSelect(q)}
+            disabled={disabled}
+            className="flex items-center gap-2 bg-gray-800/50 hover:bg-gray-700/50
+                       border border-gray-700/50 hover:border-purple-500/30
+                       rounded-xl px-3 py-2.5 text-left transition-all disabled:opacity-40"
+          >
+            <span className="text-gray-300 text-xs leading-tight">{q}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function generateFollowUpSuggestions(content: string, fallbackQuestions: string[]): string[] {
+  const suggestions: string[] = [];
+  const lower = content.toLowerCase();
+
+  const topicMap: [string[], string][] = [
+    [['sự nghiệp', 'nghề', 'quan lộc', 'công việc', 'career'], 'Tháng nào tốt nhất để thay đổi công việc?'],
+    [['tài chính', 'tiền', 'tài bạch', 'đầu tư', 'thu nhập'], 'Chiến lược tài chính tối ưu theo cả 3 hệ thống?'],
+    [['tình yêu', 'phu thê', 'hôn nhân', 'đối tượng', 'bạn đời'], 'Người phù hợp nhất với tôi theo cả 3?'],
+    [['sức khỏe', 'tật ách', 'bệnh', 'cơ thể'], 'Bộ phận nào cần chú ý nhất năm nay?'],
+    [['đại hạn', 'tiểu hạn', 'lưu niên', 'vận hạn'], 'Phân tích chi tiết Tứ Hóa lưu niên?'],
+    [['năm nay', '2026', '2025', 'năm cá nhân'], 'Tháng nào tốt nhất và xấu nhất năm nay?'],
+    [['lãnh đạo', 'quản lý', 'kinh doanh'], 'Phong cách lãnh đạo phù hợp nhất với tôi?'],
+    [['sáng tạo', 'nghệ thuật', 'nghiên cứu'], 'Làm sao phát huy tối đa khả năng sáng tạo?'],
+    [['nợ nghiệp', 'karmic', 'số thiếu'], 'Nợ nghiệp ảnh hưởng cuộc sống thế nào?'],
+    [['tử vi', 'thần số', 'hoàng đạo', 'đồng nhất', 'khác biệt'], 'Điểm nào cả 3 hệ thống đồng nhất nhất?'],
+  ];
+
+  for (const [keywords, question] of topicMap) {
+    if (keywords.some(kw => lower.includes(kw))) {
+      suggestions.push(question);
+    }
+    if (suggestions.length >= 4) break;
+  }
+
+  if (suggestions.length < 3) {
+    for (const q of fallbackQuestions) {
+      if (!suggestions.includes(q)) {
+        suggestions.push(q);
+      }
+      if (suggestions.length >= 4) break;
+    }
+  }
+
+  return suggestions.slice(0, 4);
+}
+
+function FollowUpSuggestions({ content, fallbackQuestions, onSelect }: {
+  content: string;
+  fallbackQuestions: string[];
+  onSelect: (q: string) => void;
+}) {
+  const suggestions = generateFollowUpSuggestions(content, fallbackQuestions);
+  return (
+    <div className="flex gap-2 px-4 py-2 overflow-x-auto">
+      {suggestions.map(s => (
+        <button
+          key={s}
+          onClick={() => onSelect(s)}
+          className="whitespace-nowrap text-xs bg-gray-800/50 hover:bg-purple-900/30
+                     border border-gray-700/30 hover:border-purple-500/30
+                     rounded-full px-3 py-1.5 text-gray-400 hover:text-purple-300
+                     transition-all shrink-0"
+        >
+          {s}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
+  value: string;
+  onChange: (v: string) => void;
+  onSend: (v: string) => void;
+  isLoading: boolean;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (value.trim() && !isLoading) onSend(value.trim());
+    }
+  };
+
+  return (
+    <div className="px-4 py-2 border-t border-gray-800">
+      <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700/50
+                      rounded-xl px-3 py-2 focus-within:border-purple-500/50 transition">
+        <input
+          ref={inputRef}
+          type="text"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Hỏi AI bất kỳ điều gì..."
+          disabled={isLoading}
+          className="flex-1 bg-transparent text-white text-sm placeholder-gray-500
+                     outline-none disabled:opacity-50"
+        />
+        <button
+          onClick={() => { if (value.trim() && !isLoading) onSend(value.trim()); }}
+          disabled={!value.trim() || isLoading}
+          className="p-1.5 rounded-lg bg-purple-600 hover:bg-purple-500
+                     disabled:bg-gray-700 disabled:opacity-50 transition"
+        >
+          <Send className="w-4 h-4 text-white" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// --- Main component ---
+
 export default function AIAnalysisSection({
   title,
-  description,
+  description: _description,
   quickQuestions,
   onAnalyze,
   onAskQuestion,
   result,
+  initialResult,
   loading,
   error,
   conversationHistory = [],
@@ -306,135 +570,110 @@ export default function AIAnalysisSection({
   const [question, setQuestion] = useState('');
   const [expanded, setExpanded] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    const q = question.trim();
-    if (!q || loading) return;
-    setQuestion('');
-    onAskQuestion(q);
-  };
+  const hasMessages = conversationHistory.length > 0 || result !== null || initialResult !== null;
 
-  const handleQuickQuestion = (q: string) => {
+  // Auto scroll to bottom on new messages
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [conversationHistory, result, loading]);
+
+  const handleSend = (text: string) => {
     setQuestion('');
-    onAskQuestion(q);
+    onAskQuestion(text);
   };
 
   return (
-    <div className="bg-gray-900/80 border border-gray-800 rounded-xl overflow-hidden">
+    <div className="bg-gray-900/80 border border-gray-800 rounded-xl overflow-hidden flex flex-col">
       {/* Header */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-800/50 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-yellow-400" />
-          <span className="text-sm font-semibold text-purple-300">{title}</span>
+          <span className="text-lg">🤖</span>
+          <span className="text-sm font-semibold text-white">{title}</span>
         </div>
         {expanded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 space-y-4">
-          <p className="text-xs text-gray-500">{description}</p>
-
-          {/* Main analyze button */}
-          {!result && !loading && (
-            <button
-              onClick={onAnalyze}
-              className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
-            >
-              <Sparkles className="w-4 h-4" />
-              Phân Tích Tổng Hợp
-            </button>
-          )}
-
-          {/* Quick questions */}
-          <div>
-            <p className="text-xs text-gray-500 mb-2">Hoặc hỏi cụ thể:</p>
-            <div className="flex flex-wrap gap-1.5">
-              {quickQuestions.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => handleQuickQuestion(q)}
-                  disabled={loading}
-                  className="text-[11px] bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-gray-400 hover:text-gray-200 border border-gray-700 rounded-full px-2.5 py-1 transition-colors"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Custom question input */}
-          <div className="flex gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Hỏi AI bất kỳ điều gì..."
+        <div className="flex flex-col">
+          {/* Quick questions — empty state */}
+          {!hasMessages && !loading && (
+            <QuickQuestions
+              questions={quickQuestions}
+              onSelect={handleSend}
+              onAnalyze={onAnalyze}
               disabled={loading}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-purple-500 disabled:opacity-40"
             />
-            <button
-              onClick={handleSend}
-              disabled={!question.trim() || loading}
-              className="bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white rounded-lg px-3 py-2 transition-colors"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Loading */}
-          {loading && (
-            <div className="flex items-center gap-3 py-6 justify-center">
-              <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
-              <span className="text-sm text-gray-400">AI đang phân tích...</span>
-            </div>
           )}
 
-          {/* Error */}
-          {error && (
-            <div className="flex items-start gap-2 bg-red-900/20 border border-red-800/30 rounded-lg px-3 py-2.5">
-              <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
-              <div>
-                <p className="text-sm text-red-400">{error}</p>
-                <button
-                  onClick={onAnalyze}
-                  className="flex items-center gap-1 text-xs text-red-300 hover:text-red-200 mt-1 transition-colors"
-                >
-                  <RotateCcw className="w-3 h-3" /> Thử lại
-                </button>
-              </div>
-            </div>
-          )}
+          {/* Chat area */}
+          {(hasMessages || loading || error) && (
+            <div className="overflow-y-auto px-4 py-3 space-y-1 max-h-[60vh]">
+              {/* Initial analysis result — always show at top */}
+              {initialResult && (
+                <AIBubble message={{ role: 'assistant', content: initialResult, displayContent: initialResult }} />
+              )}
 
-          {/* Conversation history */}
-          {conversationHistory.length > 0 && (
-            <div className="space-y-3 border-t border-gray-800 pt-3">
+              {/* Conversation messages */}
               {conversationHistory.map((msg, i) => (
-                <div key={i} className={msg.role === 'user' ? 'text-right' : ''}>
-                  {msg.role === 'user' ? (
-                    <div className="inline-block bg-purple-900/40 border border-purple-800/30 rounded-lg px-3 py-2 text-sm text-purple-200 max-w-[85%] text-left">
-                      {msg.content}
-                    </div>
-                  ) : (
-                    <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg px-4 py-3">
-                      <AIContentRenderer content={msg.content} />
-                    </div>
-                  )}
-                </div>
+                msg.role === 'user'
+                  ? <UserBubble key={i} message={msg} />
+                  : <AIBubble key={i} message={msg} />
               ))}
+
+              {/* Loading indicator */}
+              {loading && <TypingIndicator />}
+
+              {/* Error */}
+              {error && (
+                <div className="flex items-start gap-2 bg-red-900/20 border border-red-800/30 rounded-lg px-3 py-2.5 mb-2">
+                  <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-sm text-red-400">{error}</p>
+                    <button
+                      onClick={onAnalyze}
+                      className="flex items-center gap-1 text-xs text-red-300 hover:text-red-200 mt-1 transition-colors"
+                    >
+                      <RotateCcw className="w-3 h-3" /> Thử lại
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
             </div>
           )}
 
-          {/* Result (non-chat mode) */}
-          {result && conversationHistory.length === 0 && (
-            <div className="border-t border-gray-800 pt-3">
-              <AIContentRenderer content={result} />
-            </div>
-          )}
+          {/* Follow-up suggestions — after AI response, not loading */}
+          {hasMessages && !loading && (() => {
+            const lastAssistant = [...conversationHistory].reverse().find(m => m.role === 'assistant');
+            const lastContent = lastAssistant?.content || initialResult || '';
+            return (
+              <FollowUpSuggestions
+                content={lastContent}
+                fallbackQuestions={quickQuestions}
+                onSelect={handleSend}
+              />
+            );
+          })()}
+
+          {/* Input bar */}
+          <ChatInput
+            value={question}
+            onChange={setQuestion}
+            onSend={handleSend}
+            isLoading={loading}
+            inputRef={inputRef}
+          />
+
+          {/* Disclaimer */}
+          <p className="text-center text-gray-600 text-xs py-1">
+            AI phân tích chỉ mang tính tham khảo
+          </p>
         </div>
       )}
     </div>

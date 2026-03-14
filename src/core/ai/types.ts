@@ -16,6 +16,7 @@ export interface AIConfig {
 export interface AIMessage {
   role: 'user' | 'assistant';
   content: string;
+  displayContent?: string;
 }
 
 export interface AIRequest {

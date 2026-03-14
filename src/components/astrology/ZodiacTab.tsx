@@ -56,7 +56,7 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
     const config = useAIStore.getState().providerConfig;
     const tier = config ? getModelTier(config.type, config.model) : 'strong';
     const prompt = buildUnifiedQuestionPrompt(question, null, null, big3, '', ai.conversationHistory, tier);
-    ai.askQuestion(prompt);
+    ai.askQuestion(prompt, question);
   }, [big3, ai]);
 
   return (
@@ -157,19 +157,6 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
         <CompatibilityList currentSign={sign.id} label="Thử thách" signs={sign.challengeMatch} colorClass="text-orange-400" barColor="bg-orange-500" />
       </div>
 
-      {/* AI Analysis */}
-      <AIAnalysisSection
-        title="AI Phân Tích Chiêm Tinh"
-        description="Phân tích kết hợp Big 3 + Decan bằng AI — sâu hơn template có sẵn"
-        quickQuestions={ASTROLOGY_QUICK_QUESTIONS}
-        onAnalyze={handleAnalyze}
-        onAskQuestion={handleAskQuestion}
-        result={ai.result}
-        loading={ai.loading}
-        error={ai.error}
-        conversationHistory={ai.conversationHistory}
-      />
-
       {/* Lucky info */}
       <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4">
         <h3 className="text-sm font-semibold text-purple-300 mb-3">Thông tin may mắn</h3>
@@ -198,6 +185,20 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
         <h3 className="text-sm font-semibold text-purple-300 mb-2">Người nổi tiếng cùng cung</h3>
         <p className="text-sm text-gray-300">{sign.celebrities.join(' • ')}</p>
       </div>
+
+      {/* AI Analysis */}
+      <AIAnalysisSection
+        title="AI Phân Tích Chiêm Tinh"
+        description="Phân tích kết hợp Big 3 + Decan bằng AI — sâu hơn template có sẵn"
+        quickQuestions={ASTROLOGY_QUICK_QUESTIONS}
+        onAnalyze={handleAnalyze}
+        onAskQuestion={handleAskQuestion}
+        result={ai.result}
+        initialResult={ai.initialResult}
+        loading={ai.loading}
+        error={ai.error}
+        conversationHistory={ai.conversationHistory}
+      />
     </div>
   );
 }

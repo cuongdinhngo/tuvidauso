@@ -62,7 +62,7 @@ export default function ResultPage() {
 
   const tabs = [
     {
-      label: 'Tổng Quan',
+      label: '📋 Tổng Quan',
       content: (() => {
         const NGU_HANH_COLORS: Record<string, string> = {
           'Kim': '#C0C0C0', 'Mộc': '#22C55E', 'Thủy': '#3B82F6',
@@ -203,7 +203,7 @@ export default function ResultPage() {
       })(),
     },
     {
-      label: 'Lá Số',
+      label: '🔮 Lá Số',
       content: (
         <TuViChart
           palaces={palaces}
@@ -218,11 +218,11 @@ export default function ResultPage() {
       ),
     },
     {
-      label: 'Luận Giải',
+      label: '📖 Luận Giải',
       content: <LuanGiaiTab chart={chart} interpretation={interpretation} />,
     },
     {
-      label: 'Vận Hạn',
+      label: '📅 Vận Hạn',
       content: (
         <div className="space-y-6">
           <DaiHanTimeline
@@ -243,7 +243,7 @@ export default function ResultPage() {
       ),
     },
     {
-      label: 'Bát Tự',
+      label: '🏛️ Bát Tự',
       content: (
         <BatTuTab
           fourPillars={fourPillars}
@@ -256,7 +256,7 @@ export default function ResultPage() {
       ),
     },
     {
-      label: 'Thần Số Học',
+      label: '🔢 Thần Số Học',
       content: numerologyChart ? (
         <NumerologyTab
           chart={numerologyChart}
@@ -267,7 +267,7 @@ export default function ResultPage() {
       ) : null,
     },
     {
-      label: 'Hoàng Đạo ♈',
+      label: '♈ Hoàng Đạo',
       content: <ZodiacTab big3={big3} />,
     },
     {

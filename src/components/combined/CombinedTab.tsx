@@ -52,7 +52,7 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
     const prompt = buildUnifiedQuestionPrompt(
       question, tuViChart, numerologyChart, big3, fullName, ai.conversationHistory, tier,
     );
-    ai.askQuestion(prompt);
+    ai.askQuestion(prompt, question);
   }, [tuViChart, numerologyChart, big3, fullName, ai]);
 
   return (
@@ -147,6 +147,7 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
           onAnalyze={handleAnalyze}
           onAskQuestion={handleAskQuestion}
           result={ai.result}
+          initialResult={ai.initialResult}
           loading={ai.loading}
           error={ai.error}
           conversationHistory={ai.conversationHistory}
