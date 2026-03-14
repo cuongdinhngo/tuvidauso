@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import ApiKeyModal from '../shared/ApiKeyModal';
 
 export default function Layout() {
   return (
@@ -11,6 +12,7 @@ export default function Layout() {
       <footer className="border-t border-purple-900/30 py-4 text-center text-xs text-gray-500">
         <p>Tử Vi Đẩu Số Online — Kết quả chỉ mang tính tham khảo</p>
       </footer>
+      <ApiKeyModal />
     </div>
   );
 }

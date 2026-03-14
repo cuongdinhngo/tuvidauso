@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import type { NumerologyChart, NumberResult } from '../../core/numerology/types';
 import type { BirthInfo, TuViChart } from '../../core/types';
 import { useTuViStore } from '../../store/tuViStore';
@@ -9,6 +9,11 @@ import {
   KARMIC_DEBT_MEANINGS,
   INCLUSION_MEANINGS,
 } from '../../data/numerologyData';
+import { useAIAnalysis } from '../../hooks/useAIAnalysis';
+import { buildNumerologyAIPrompt } from '../../core/ai/prompts/numerologyPrompt';
+import { buildUnifiedQuestionPrompt } from '../../core/ai/prompts/combinedPrompt';
+import AIAnalysisSection from '../shared/AIAnalysisSection';
+import { NUMEROLOGY_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
 
 interface NumerologyTabProps {
   chart: NumerologyChart;
@@ -20,6 +25,18 @@ interface NumerologyTabProps {
 export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: NumerologyTabProps) {
   const currentYear = new Date().getFullYear();
   const currentAge = currentYear - birthInfo.solarDate.year;
+  const ai = useAIAnalysis();
+  const fullName = birthInfo.name || '';
+
+  const handleAnalyze = useCallback(() => {
+    const prompt = buildNumerologyAIPrompt(chart, fullName, currentYear);
+    ai.analyze(prompt);
+  }, [chart, fullName, currentYear, ai]);
+
+  const handleAskQuestion = useCallback((question: string) => {
+    const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory);
+    ai.askQuestion(prompt);
+  }, [chart, tuViChart, fullName, ai]);
 
   return (
     <div className="space-y-8">
@@ -70,6 +87,19 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
 
       {/* East-West comparison */}
       <EastWestSection chart={chart} tuViChart={tuViChart} currentYear={currentYear} />
+
+      {/* AI Analysis */}
+      <AIAnalysisSection
+        title="AI Phân Tích Thần Số Học"
+        description="Phân tích chuyên sâu bộ số của bạn bằng AI — kết hợp tất cả các số thay vì xem riêng lẻ"
+        quickQuestions={NUMEROLOGY_QUICK_QUESTIONS}
+        onAnalyze={handleAnalyze}
+        onAskQuestion={handleAskQuestion}
+        result={ai.result}
+        loading={ai.loading}
+        error={ai.error}
+        conversationHistory={ai.conversationHistory}
+      />
     </div>
   );
 }

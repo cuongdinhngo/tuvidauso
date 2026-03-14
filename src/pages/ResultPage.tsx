@@ -15,6 +15,7 @@ import YearlyDetailPanel from '../components/tuvi/YearlyDetailPanel';
 import BatTuTab from '../components/battu/BatTuTab';
 import NumerologyTab from '../components/numerology/NumerologyTab';
 import ZodiacTab from '../components/astrology/ZodiacTab';
+import CombinedTab from '../components/combined/CombinedTab';
 import { getSunSign } from '../core/astrology/sunSign';
 import { getMoonSign, diaChiToHour } from '../core/astrology/moonSign';
 import { getRisingSign } from '../core/astrology/risingSign';
@@ -268,6 +269,17 @@ export default function ResultPage() {
     {
       label: 'Hoàng Đạo ♈',
       content: <ZodiacTab big3={big3} />,
+    },
+    {
+      label: '🌏 Tổng Hợp',
+      content: (
+        <CombinedTab
+          tuViChart={chart}
+          numerologyChart={numerologyChart}
+          big3={big3}
+          birthInfo={birthInfo}
+        />
+      ),
     },
   ];
 
