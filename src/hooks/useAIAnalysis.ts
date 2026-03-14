@@ -38,7 +38,7 @@ export function useAIAnalysis() {
         return null;
       }
 
-      const cacheKey = hashPrompt(providerConfig.type + providerConfig.model + prompt.system + prompt.user);
+      const cacheKey = hashPrompt([providerConfig.type, providerConfig.model, prompt.system, prompt.user].join('\0'));
       const cached = getCached(cacheKey);
       if (cached) {
         setState((s) => ({ ...s, loading: false, result: cached, error: null, conversationHistory: [] }));
