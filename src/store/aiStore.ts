@@ -32,7 +32,7 @@ function safeRemoveItem(key: string): void {
 interface AIStore {
   apiKey: string | null;
   model: string;
-  cache: Record<string, string>;
+  cache: Map<string, string>;
   showApiKeyModal: boolean;
 
   setApiKey: (key: string) => void;
@@ -46,7 +46,7 @@ interface AIStore {
 export const useAIStore = create<AIStore>((set, get) => ({
   apiKey: safeGetItem(API_KEY_STORAGE),
   model: safeGetItem(MODEL_STORAGE) || DEFAULT_MODEL,
-  cache: {},
+  cache: new Map<string, string>(),
   showApiKeyModal: false,
 
   setApiKey: (key: string) => {
@@ -56,22 +56,23 @@ export const useAIStore = create<AIStore>((set, get) => ({
 
   clearApiKey: () => {
     safeRemoveItem(API_KEY_STORAGE);
-    set({ apiKey: null, cache: {} });
+    set({ apiKey: null, cache: new Map() });
   },
 
   setModel: (model: string) => {
     safeSetItem(MODEL_STORAGE, model);
-    set({ model, cache: {} });
+    set({ model, cache: new Map() });
   },
 
-  getCached: (key: string) => get().cache[key],
+  getCached: (key: string) => get().cache.get(key),
 
   setCache: (key: string, value: string) => {
     set((s) => {
-      const newCache = { ...s.cache, [key]: value };
-      const keys = Object.keys(newCache);
-      if (keys.length > MAX_CACHE_SIZE) {
-        delete newCache[keys[0]];
+      const newCache = new Map(s.cache);
+      newCache.set(key, value);
+      if (newCache.size > MAX_CACHE_SIZE) {
+        const oldest = newCache.keys().next().value;
+        if (oldest !== undefined) newCache.delete(oldest);
       }
       return { cache: newCache };
     });

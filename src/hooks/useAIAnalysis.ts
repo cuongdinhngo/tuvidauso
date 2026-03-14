@@ -41,7 +41,7 @@ export function useAIAnalysis() {
       const cacheKey = hashPrompt(model + prompt.system + prompt.user);
       const cached = getCached(cacheKey);
       if (cached) {
-        setState((s) => ({ ...s, result: cached, error: null }));
+        setState((s) => ({ ...s, result: cached, error: null, conversationHistory: [] }));
         return cached;
       }
 
@@ -56,7 +56,7 @@ export function useAIAnalysis() {
           },
         );
         setCache(cacheKey, response.content);
-        setState((s) => ({ ...s, loading: false, result: response.content }));
+        setState((s) => ({ ...s, loading: false, result: response.content, conversationHistory: [] }));
         return response.content;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Lỗi không xác định';
