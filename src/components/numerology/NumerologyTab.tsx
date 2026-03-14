@@ -14,6 +14,8 @@ import { buildNumerologyAIPrompt } from '../../core/ai/prompts/numerologyPrompt'
 import { buildUnifiedQuestionPrompt } from '../../core/ai/prompts/combinedPrompt';
 import AIAnalysisSection from '../shared/AIAnalysisSection';
 import { NUMEROLOGY_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
+import { useAIStore } from '../../store/aiStore';
+import { getModelTier } from '../../core/ai/types';
 
 interface NumerologyTabProps {
   chart: NumerologyChart;
@@ -34,7 +36,9 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
   }, [chart, fullName, currentYear, birthInfo.solarDate.year, ai]);
 
   const handleAskQuestion = useCallback((question: string) => {
-    const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory);
+    const config = useAIStore.getState().providerConfig;
+    const tier = config ? getModelTier(config.type, config.model) : 'strong';
+    const prompt = buildUnifiedQuestionPrompt(question, tuViChart, chart, null, fullName, ai.conversationHistory, tier);
     ai.askQuestion(prompt);
   }, [chart, tuViChart, fullName, ai]);
 

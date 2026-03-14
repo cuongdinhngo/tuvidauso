@@ -7,6 +7,8 @@ import { useAIAnalysis } from '../../hooks/useAIAnalysis';
 import { buildCombinedAIPrompt, buildUnifiedQuestionPrompt } from '../../core/ai/prompts/combinedPrompt';
 import AIAnalysisSection from '../shared/AIAnalysisSection';
 import { COMBINED_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
+import { useAIStore } from '../../store/aiStore';
+import { getModelTier } from '../../core/ai/types';
 
 const ELEMENT_VI: Record<string, string> = {
   fire: 'Hỏa', earth: 'Thổ', air: 'Khí', water: 'Nước',
@@ -45,8 +47,10 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
   }, [tuViChart, numerologyChart, big3, fullName, currentYear, ai]);
 
   const handleAskQuestion = useCallback((question: string) => {
+    const config = useAIStore.getState().providerConfig;
+    const tier = config ? getModelTier(config.type, config.model) : 'strong';
     const prompt = buildUnifiedQuestionPrompt(
-      question, tuViChart, numerologyChart, big3, fullName, ai.conversationHistory,
+      question, tuViChart, numerologyChart, big3, fullName, ai.conversationHistory, tier,
     );
     ai.askQuestion(prompt);
   }, [tuViChart, numerologyChart, big3, fullName, ai]);

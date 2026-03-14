@@ -1,6 +1,7 @@
 import type { TuViChart } from '../types';
 import type { NumerologyChart } from './types';
 import { LIFE_PATH_MEANINGS, PERSONAL_YEAR_MEANINGS } from '../../data/numerologyData';
+import { ANTI_HALLUCINATION_RULE } from '../ai/prompts/systemPrompts';
 
 export function buildEastWestPrompt(
   tuViChart: TuViChart,
@@ -19,7 +20,9 @@ export function buildEastWestPrompt(
   const currentYear = new Date().getFullYear();
 
   return {
-    system: `Bạn là chuyên gia cả Tử Vi Đẩu Số (phương Đông) lẫn Thần Số Học (phương Tây).
+    system: `${ANTI_HALLUCINATION_RULE}
+
+Bạn là chuyên gia cả Tử Vi Đẩu Số (phương Đông) lẫn Thần Số Học (phương Tây).
 Hãy phân tích KẾT HỢP 2 hệ thống để đưa ra cái nhìn toàn diện nhất.
 Khi 2 hệ thống ĐỒNG NHẤT → nhấn mạnh, đó là điểm rất đáng tin cậy.
 Khi 2 hệ thống KHÁC BIỆT → giải thích góc nhìn khác nhau, cả 2 đều có giá trị.`,
