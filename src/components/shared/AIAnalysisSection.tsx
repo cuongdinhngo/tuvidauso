@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, type ReactNode } from 'react';
 import { Sparkles, Send, Loader2, AlertCircle, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import type { AIMessage } from '../../core/ai/types';
 
@@ -18,8 +18,8 @@ type ListType = 'ul' | 'ol';
 
 function FormatAIResponse({ text }: { text: string }) {
   const lines = text.split('\n');
-  const elements: React.ReactNode[] = [];
-  let listItems: React.ReactNode[] = [];
+  const elements: ReactNode[] = [];
+  let listItems: ReactNode[] = [];
   let listType: ListType | null = null;
   let listKey = 0;
 
@@ -77,7 +77,7 @@ function FormatAIResponse({ text }: { text: string }) {
   return <div>{elements}</div>;
 }
 
-function formatInline(text: string): React.ReactNode {
+function formatInline(text: string): ReactNode {
   // Bold
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {

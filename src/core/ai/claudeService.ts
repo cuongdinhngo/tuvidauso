@@ -4,6 +4,8 @@
  * Security model:
  * - This app has NO backend. API calls go directly from the browser to Anthropic.
  * - The `anthropic-dangerous-direct-browser-access` header is required for browser requests.
+ *   It is only sent when VITE_DIRECT_BROWSER_ACCESS is unset or 'true'. Set it to 'false'
+ *   in .env to disable (e.g. when switching to a backend proxy).
  * - The user's API key is stored in sessionStorage (cleared when the tab closes).
  * - Risk: XSS or malicious extensions could read the key from sessionStorage or intercept
  *   network requests. For production deployments, a backend proxy is recommended so the
@@ -30,14 +32,20 @@ export async function callClaude(
 
   let res: Response;
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'x-api-key': config.apiKey,
+      'anthropic-version': ANTHROPIC_VERSION,
+    };
+
+    const directAccess = import.meta.env.VITE_DIRECT_BROWSER_ACCESS;
+    if (directAccess === undefined || directAccess === 'true') {
+      headers['anthropic-dangerous-direct-browser-access'] = 'true';
+    }
+
     res = await fetch(CLAUDE_API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': config.apiKey,
-        'anthropic-version': ANTHROPIC_VERSION,
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
+      headers,
       body: JSON.stringify(body),
     });
   } catch {
