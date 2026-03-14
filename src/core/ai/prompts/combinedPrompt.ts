@@ -4,6 +4,7 @@ import type { Big3Result } from '../../astrology/types';
 import type { AIMessage, ModelTier } from '../types';
 import { trimConversationHistory } from '../types';
 import { SYSTEM_PROMPT_COMBINED } from './systemPrompts';
+import { SUGGESTION_INSTRUCTION } from './suggestionInstruction';
 import { buildNumerologyDescription } from './numerologyPrompt';
 import { buildAstrologyDescription } from './astrologyPrompt';
 import { calculateYearlyFortune } from '../../tuvi/yearlyPeriod';
@@ -149,7 +150,7 @@ ${question ? `${yearlyContext}
 
 CÂU HỎI CỤ THỂ: ${question}
 
-Trả lời dựa trên CẢ 3 hệ thống. Mỗi hệ thống nói gì? Đồng nhất hay khác biệt?` :
+Trả lời dựa trên CẢ 3 hệ thống. Mỗi hệ thống nói gì? Đồng nhất hay khác biệt?${SUGGESTION_INSTRUCTION}` :
 `${yearlyContext}
 
 HÃY PHÂN TÍCH KẾT HỢP CẢ 3 HỆ THỐNG:
@@ -204,7 +205,7 @@ Liệt kê 3-5 điểm mà CẢ 3 hệ thống đồng ý.
 Liệt kê 2-3 điểm mà các hệ thống có quan điểm khác nhau. Giải thích tại sao khác nhau và cả 2 góc nhìn đều có giá trị.
 
 ## 💡 Lời Khuyên Tổng Hợp
-5-7 lời khuyên DỰA TRÊN CẢ 3 HỆ THỐNG. Mỗi lời khuyên ghi rõ được hệ thống nào ủng hộ.`}`,
+5-7 lời khuyên DỰA TRÊN CẢ 3 HỆ THỐNG. Mỗi lời khuyên ghi rõ được hệ thống nào ủng hộ.${SUGGESTION_INSTRUCTION}`}`,
   };
 }
 
@@ -249,7 +250,7 @@ ${chartData}${yearlyContext}
 Câu hỏi: ${question}
 
 ${instructions}
-Trả lời 4-8 câu, MỖI CÂU phải dẫn chứng từ dữ liệu trên. KHÔNG bịa thêm.`;
+Trả lời 4-8 câu, MỖI CÂU phải dẫn chứng từ dữ liệu trên. KHÔNG bịa thêm.${SUGGESTION_INSTRUCTION}`;
 
     return {
       system,
@@ -268,8 +269,8 @@ ${chartData}
 ${instructions}`;
 
   const userContent = yearlyContext
-    ? `${question}\n${yearlyContext}`
-    : question;
+    ? `${question}\n${yearlyContext}${SUGGESTION_INSTRUCTION}`
+    : `${question}${SUGGESTION_INSTRUCTION}`;
 
   return {
     system,

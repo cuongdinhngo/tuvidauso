@@ -1,11 +1,18 @@
 import { useParams, Link } from 'react-router-dom';
+import { useCallback } from 'react';
 import { ArrowLeft, Check, AlertTriangle } from 'lucide-react';
 import { useCompareStore } from '../../store/compareStore';
+import { useAIAnalysis } from '../../hooks/useAIAnalysis';
+import { useAIStore } from '../../store/aiStore';
+import { getModelTier } from '../../core/ai/types';
+import { buildComparePrompt, buildCompareQuestionPrompt } from '../../core/compare/promptBuilder';
+import { COMPARE_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
 import ScoreGauge from '../../components/compare/ScoreGauge';
 import CategoryBar from '../../components/compare/CategoryBar';
 import PersonCard from '../../components/compare/PersonCard';
 import RelationBadge from '../../components/compare/RelationBadge';
 import MiniTuViChart from '../../components/compare/MiniTuViChart';
+import AIAnalysisSection from '../../components/shared/AIAnalysisSection';
 import { RELATION_PALACE_MAP } from '../../data/compareData';
 
 export default function CompareResultPage() {
@@ -14,6 +21,24 @@ export default function CompareResultPage() {
 
   const relationship = relationships.find(r => r.id === id);
   const person2 = relationship ? profiles.find(p => p.id === relationship.person2Id) : null;
+  const ai = useAIAnalysis(id ? `compare-${id}` : undefined);
+
+  const handleAnalyze = useCallback(() => {
+    if (!mainProfile || !person2 || !relationship?.result) return;
+    const prompt = buildComparePrompt(mainProfile, person2, relationship.result, relationship.relationType);
+    ai.analyze(prompt);
+  }, [mainProfile, person2, relationship, ai]);
+
+  const handleAskQuestion = useCallback((question: string) => {
+    if (!mainProfile || !person2 || !relationship?.result) return;
+    const config = useAIStore.getState().providerConfig;
+    const tier = config ? getModelTier(config.type, config.model) : 'strong';
+    const prompt = buildCompareQuestionPrompt(
+      question, mainProfile, person2, relationship.result,
+      relationship.relationType, ai.conversationHistory, tier,
+    );
+    ai.askQuestion(prompt, question);
+  }, [mainProfile, person2, relationship, ai]);
 
   if (!relationship || !mainProfile || !person2 || !relationship.result) {
     return (
@@ -150,13 +175,19 @@ export default function CompareResultPage() {
         </div>
       </section>
 
-      {/* AI placeholder */}
-      <button
-        disabled
-        className="w-full bg-gray-900/50 border border-purple-900/30 rounded-lg p-4 text-center opacity-60 cursor-not-allowed"
-      >
-        <span className="text-purple-400 text-sm">AI Luận Giải Chi Tiết — Sắp ra mắt</span>
-      </button>
+      {/* AI Analysis */}
+      <AIAnalysisSection
+        title="AI Phân Tích Hợp Duyên"
+        quickQuestions={COMPARE_QUICK_QUESTIONS[relationship.relationType]}
+        onAnalyze={handleAnalyze}
+        onAskQuestion={handleAskQuestion}
+        result={ai.result}
+        initialResult={ai.initialResult}
+        initialSuggestions={ai.initialSuggestions}
+        loading={ai.loading}
+        error={ai.error}
+        conversationHistory={ai.conversationHistory}
+      />
     </div>
   );
 }

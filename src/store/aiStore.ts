@@ -87,6 +87,7 @@ function loadProviderConfig(): AIProviderConfig | null {
 interface TabAIState {
   result: string | null;
   initialResult?: string | null;
+  initialSuggestions?: string[];
   conversationHistory: AIMessage[];
 }
 

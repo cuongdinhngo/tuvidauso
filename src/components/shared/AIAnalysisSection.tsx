@@ -9,6 +9,7 @@ interface AIAnalysisSectionProps {
   onAskQuestion: (question: string) => void;
   result: string | null;
   initialResult?: string | null;
+  initialSuggestions?: string[];
   loading: boolean;
   error: string | null;
   conversationHistory?: AIMessage[];
@@ -510,12 +511,15 @@ function generateFollowUpSuggestions(content: string, fallbackQuestions: string[
   return suggestions.slice(0, 4);
 }
 
-function FollowUpSuggestions({ content, fallbackQuestions, onSelect }: {
+function FollowUpSuggestions({ content, fallbackQuestions, aiSuggestions, onSelect }: {
   content: string;
   fallbackQuestions: string[];
+  aiSuggestions?: string[];
   onSelect: (q: string) => void;
 }) {
-  const suggestions = generateFollowUpSuggestions(content, fallbackQuestions);
+  const suggestions = aiSuggestions && aiSuggestions.length > 0
+    ? aiSuggestions
+    : generateFollowUpSuggestions(content, fallbackQuestions);
   return (
     <div className="flex gap-2 px-4 py-2 overflow-x-auto">
       {suggestions.map(s => (
@@ -585,6 +589,7 @@ export default function AIAnalysisSection({
   onAskQuestion,
   result,
   initialResult,
+  initialSuggestions,
   loading,
   error,
   conversationHistory = [],
@@ -673,11 +678,15 @@ export default function AIAnalysisSection({
           {/* Follow-up suggestions — after AI response, not loading */}
           {hasMessages && !loading && (() => {
             const lastAssistant = [...conversationHistory].reverse().find(m => m.role === 'assistant');
-            const lastContent = lastAssistant?.content || initialResult || '';
+            const lastContent = lastAssistant?.displayContent || lastAssistant?.content || initialResult || '';
+            const aiSuggestions = lastAssistant?.suggestions?.length
+              ? lastAssistant.suggestions
+              : (initialSuggestions?.length ? initialSuggestions : undefined);
             return (
               <FollowUpSuggestions
                 content={lastContent}
                 fallbackQuestions={quickQuestions}
+                aiSuggestions={aiSuggestions}
                 onSelect={handleSend}
               />
             );

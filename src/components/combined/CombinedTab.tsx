@@ -147,6 +147,7 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
           onAskQuestion={handleAskQuestion}
           result={ai.result}
           initialResult={ai.initialResult}
+          initialSuggestions={ai.initialSuggestions}
           loading={ai.loading}
           error={ai.error}
           conversationHistory={ai.conversationHistory}

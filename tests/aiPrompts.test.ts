@@ -198,7 +198,7 @@ describe('buildUnifiedQuestionPrompt', () => {
     const result = buildUnifiedQuestionPrompt('Tôi hợp nghề gì?', tuViChart, numChart, big3Full, 'Test', []);
     const last = result.messages[result.messages.length - 1];
     expect(last.role).toBe('user');
-    expect(last.content).toBe('Tôi hợp nghề gì?');
+    expect(last.content).toContain('Tôi hợp nghề gì?');
   });
 
   it('prepends conversation history', () => {
@@ -210,7 +210,7 @@ describe('buildUnifiedQuestionPrompt', () => {
     expect(result.messages.length).toBe(3);
     expect(result.messages[0].content).toBe('Xin chào');
     expect(result.messages[1].content).toBe('Chào bạn!');
-    expect(result.messages[2].content).toBe('Câu hỏi tiếp');
+    expect(result.messages[2].content).toContain('Câu hỏi tiếp');
   });
 
   it('handles null charts gracefully', () => {

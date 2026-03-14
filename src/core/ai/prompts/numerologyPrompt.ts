@@ -1,5 +1,6 @@
 import type { NumerologyChart } from '../../numerology/types';
 import { SYSTEM_PROMPT_NUMEROLOGY } from './systemPrompts';
+import { SUGGESTION_INSTRUCTION } from './suggestionInstruction';
 
 export function buildNumerologyDescription(chart: NumerologyChart, fullName: string): string {
   return `THẦN SỐ HỌC (${fullName || 'Chưa nhập tên'}):
@@ -99,6 +100,6 @@ Phân tích: thiếu gì cần bổ sung, dư gì cần cân bằng.
 (3-4 câu)
 
 ## 💡 Lời Khuyên
-5 lời khuyên thực tế dựa trên BỘ SỐ TỔNG HỢP (không phải từ 1 số riêng lẻ).`,
+5 lời khuyên thực tế dựa trên BỘ SỐ TỔNG HỢP (không phải từ 1 số riêng lẻ).${SUGGESTION_INSTRUCTION}`,
   };
 }

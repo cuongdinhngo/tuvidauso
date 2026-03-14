@@ -20,6 +20,47 @@ export const ASTROLOGY_QUICK_QUESTIONS = [
   'Sức khỏe cần lưu ý gì?',
 ];
 
+import type { RelationType } from '../core/types/compare';
+
+export const COMPARE_QUICK_QUESTIONS: Record<RelationType, string[]> = {
+  lover: [
+    'Khi nào thời điểm tốt để kết hôn?',
+    'Kiểu xung đột 2 người hay gặp?',
+    'Làm sao giữ lửa tình yêu?',
+    'Ai nên nhường nhịn hơn?',
+  ],
+  business: [
+    'Ai nên quản lý tài chính?',
+    'Lĩnh vực nào hợp tác tốt nhất?',
+    'Rủi ro lớn nhất khi hợp tác?',
+    'Nên bắt đầu hợp tác lúc nào?',
+  ],
+  child: [
+    'Phong cách dạy con phù hợp?',
+    'Con nên học ngành gì?',
+    'Giai đoạn nào con cần mình nhất?',
+    'Cách khuyến khích con phát triển?',
+  ],
+  parent: [
+    'Cách giao tiếp hiệu quả với cha/mẹ?',
+    'Cha/mẹ kỳ vọng gì ở mình?',
+    'Cách cải thiện mối quan hệ?',
+    'Tại sao hay mâu thuẫn?',
+  ],
+  sibling: [
+    'Cách hỗ trợ nhau tốt nhất?',
+    'Điểm giống nhau giữa 2 người?',
+    'Nên hợp tác kinh doanh không?',
+    'Cách xử lý bất đồng?',
+  ],
+  friend: [
+    'Nên hợp tác công việc không?',
+    'Điểm cần tránh khi làm việc chung?',
+    'Tại sao 2 người thu hút nhau?',
+    'Cách giữ tình bạn bền lâu?',
+  ],
+};
+
 export const COMBINED_QUICK_QUESTIONS = [
   'Phân tích kết hợp cả 3 hệ thống',
   'Nghề nào được cả 3 hệ thống ủng hộ?',

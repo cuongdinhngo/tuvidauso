@@ -1,5 +1,6 @@
 import type { Big3Result } from '../../astrology/types';
 import { SYSTEM_PROMPT_ASTROLOGY } from './systemPrompts';
+import { SUGGESTION_INSTRUCTION } from './suggestionInstruction';
 
 const ELEMENT_VI: Record<string, string> = {
   fire: 'Hỏa', earth: 'Thổ', air: 'Khí', water: 'Nước',
@@ -103,6 +104,6 @@ Bộ phận cần lưu ý theo cung. Lời khuyên cụ thể.
 (2-3 câu)
 
 ## 💡 Lời Khuyên
-5 lời khuyên thực tế.`,
+5 lời khuyên thực tế.${SUGGESTION_INSTRUCTION}`,
   };
 }
