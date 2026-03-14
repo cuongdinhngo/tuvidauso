@@ -1,3 +1,5 @@
+import type { RelationType } from '../core/types/compare';
+
 export const NUMEROLOGY_QUICK_QUESTIONS = [
   'Phân tích kết hợp tất cả các số của tôi',
   'Nghề nào phù hợp nhất với bộ số của tôi?',
@@ -19,8 +21,6 @@ export const ASTROLOGY_QUICK_QUESTIONS = [
   'Tại sao tôi mâu thuẫn nội tâm?',
   'Sức khỏe cần lưu ý gì?',
 ];
-
-import type { RelationType } from '../core/types/compare';
 
 export const COMPARE_QUICK_QUESTIONS: Record<RelationType, string[]> = {
   lover: [

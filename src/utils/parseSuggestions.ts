@@ -13,7 +13,7 @@ export function parseAIResponse(raw: string): ParsedAIResponse {
     return { content: raw.trim(), suggestions: [] };
   }
 
-  const content = raw.substring(0, raw.indexOf('[SUGGESTIONS]')).trim();
+  const content = raw.substring(0, raw.search(/\[SUGGESTIONS\]/i)).trim();
 
   const suggestions = match[1]
     .replace(/\[\/SUGGESTIONS\]/i, '')
