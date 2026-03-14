@@ -7,6 +7,8 @@ import { buildAstrologyAIPrompt } from '../../core/ai/prompts/astrologyPrompt';
 import { buildUnifiedQuestionPrompt } from '../../core/ai/prompts/combinedPrompt';
 import AIAnalysisSection from '../shared/AIAnalysisSection';
 import { ASTROLOGY_QUICK_QUESTIONS } from '../../data/aiQuickQuestions';
+import { useAIStore } from '../../store/aiStore';
+import { getModelTier } from '../../core/ai/types';
 
 const ELEMENT_LABELS: Record<string, { name: string; icon: string; color: string }> = {
   fire:  { name: 'Hỏa', icon: '🔥', color: 'text-red-400' },
@@ -51,7 +53,9 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
   }, [big3, ai]);
 
   const handleAskQuestion = useCallback((question: string) => {
-    const prompt = buildUnifiedQuestionPrompt(question, null, null, big3, '', ai.conversationHistory);
+    const config = useAIStore.getState().providerConfig;
+    const tier = config ? getModelTier(config.type, config.model) : 'strong';
+    const prompt = buildUnifiedQuestionPrompt(question, null, null, big3, '', ai.conversationHistory, tier);
     ai.askQuestion(prompt);
   }, [big3, ai]);
 

@@ -19,6 +19,7 @@ import { buildNumerologyDescription, buildNumerologyAIPrompt } from '../src/core
 import { buildAstrologyDescription, buildAstrologyAIPrompt } from '../src/core/ai/prompts/astrologyPrompt';
 import { buildCombinedAIPrompt, buildUnifiedQuestionPrompt } from '../src/core/ai/prompts/combinedPrompt';
 import { SYSTEM_PROMPT_NUMEROLOGY, SYSTEM_PROMPT_ASTROLOGY, SYSTEM_PROMPT_COMBINED } from '../src/core/ai/prompts/systemPrompts';
+import { calculateMajorPeriods } from '../src/core/tuvi/majorPeriod';
 
 // --- Test data setup ---
 
@@ -53,6 +54,15 @@ function buildTestChart(solarYear: number, solarMonth: number, solarDay: number,
   });
 
   const birthInfo: BirthInfo = { solarDate: { year: solarYear, month: solarMonth, day: solarDay }, hour: hourIndex, gender };
+
+  // Attach major periods to palaces
+  const majorPeriods = calculateMajorPeriods(menh, cuc.value, lunarDate.yearCan, gender, solarYear, palacePositions);
+  for (const mp of majorPeriods) {
+    const palace = palaces.find(p => p.position === mp.position);
+    if (palace) {
+      palace.majorPeriod = { startAge: mp.startAge, endAge: mp.endAge, can: mp.can, chi: mp.chi };
+    }
+  }
 
   return {
     birthInfo, lunarDate, fourPillars, menh, than, cuc, palaces,
@@ -207,5 +217,60 @@ describe('buildUnifiedQuestionPrompt', () => {
     const result = buildUnifiedQuestionPrompt('Hỏi gì đó', null, null, null, 'Test', []);
     expect(result.system).toContain(SYSTEM_PROMPT_COMBINED);
     expect(result.messages.length).toBe(1);
+  });
+
+  it('tier=lite: moves chart data to user message instead of system prompt', () => {
+    const result = buildUnifiedQuestionPrompt('Tôi hợp nghề gì?', tuViChart, numChart, big3Full, 'Test', [], 'lite');
+    expect(result.system).not.toContain('DỮ LIỆU ĐẦY ĐỦ');
+    const lastMsg = result.messages[result.messages.length - 1];
+    expect(lastMsg.content).toContain('Dữ liệu của tôi:');
+    expect(lastMsg.content).toContain('TỬ VI ĐẨU SỐ');
+    expect(lastMsg.content).toContain('THẦN SỐ HỌC');
+  });
+
+  it('tier=lite: trims history to 1 turn (2 messages)', () => {
+    const history = Array.from({ length: 6 }, (_, i) => ({
+      role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+      content: `msg-${i}`,
+    }));
+    const result = buildUnifiedQuestionPrompt('Câu hỏi mới', tuViChart, numChart, big3Full, 'Test', history, 'lite');
+    // 2 from trimmed history + 1 new user message = 3
+    expect(result.messages.length).toBe(3);
+    expect(result.messages[0].content).toBe('msg-4');
+    expect(result.messages[1].content).toBe('msg-5');
+  });
+
+  it('tier=medium: trims history to 4 turns (8 messages)', () => {
+    const history = Array.from({ length: 12 }, (_, i) => ({
+      role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+      content: `msg-${i}`,
+    }));
+    const result = buildUnifiedQuestionPrompt('Câu hỏi mới', tuViChart, numChart, big3Full, 'Test', history, 'medium');
+    // 8 from trimmed history + 1 new user message = 9
+    expect(result.messages.length).toBe(9);
+    expect(result.messages[0].content).toBe('msg-4');
+  });
+
+  it('tier=strong: keeps full history within limit', () => {
+    const history = Array.from({ length: 6 }, (_, i) => ({
+      role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+      content: `msg-${i}`,
+    }));
+    const result = buildUnifiedQuestionPrompt('Câu hỏi mới', tuViChart, numChart, big3Full, 'Test', history, 'strong');
+    // 6 from history + 1 new = 7
+    expect(result.messages.length).toBe(7);
+    expect(result.messages[0].content).toBe('msg-0');
+  });
+
+  it('time-related question injects yearly context', () => {
+    const result = buildUnifiedQuestionPrompt('Năm nay thế nào?', tuViChart, numChart, big3Full, 'Test', []);
+    const lastMsg = result.messages[result.messages.length - 1];
+    expect(lastMsg.content).toContain('VẬN HẠN');
+  });
+
+  it('non-time question does NOT inject yearly context', () => {
+    const result = buildUnifiedQuestionPrompt('Tôi hợp nghề gì?', tuViChart, numChart, big3Full, 'Test', []);
+    const lastMsg = result.messages[result.messages.length - 1];
+    expect(lastMsg.content).not.toContain('VẬN HẠN');
   });
 });
