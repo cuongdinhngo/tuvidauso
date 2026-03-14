@@ -17,6 +17,7 @@ export interface AIMessage {
   role: 'user' | 'assistant';
   content: string;
   displayContent?: string;
+  suggestions?: string[];
 }
 
 export interface AIRequest {

@@ -2,12 +2,14 @@ import { useState, useCallback, useEffect } from 'react';
 import type { AIMessage } from '../core/ai/types';
 import { callProvider } from '../core/ai/callProvider';
 import { useAIStore } from '../store/aiStore';
+import { parseAIResponse } from '../utils/parseSuggestions';
 
 interface AIAnalysisState {
   loading: boolean;
   error: string | null;
   result: string | null;
   initialResult: string | null;
+  initialSuggestions: string[];
   conversationHistory: AIMessage[];
 }
 
@@ -31,11 +33,12 @@ export function useAIAnalysis(tabId?: string) {
           error: null,
           result: saved.result,
           initialResult: saved.initialResult ?? null,
+          initialSuggestions: saved.initialSuggestions ?? [],
           conversationHistory: saved.conversationHistory,
         };
       }
     }
-    return { loading: false, error: null, result: null, initialResult: null, conversationHistory: [] };
+    return { loading: false, error: null, result: null, initialResult: null, initialSuggestions: [], conversationHistory: [] };
   });
 
   // Persist result + conversation to store whenever they change
@@ -44,10 +47,11 @@ export function useAIAnalysis(tabId?: string) {
       useAIStore.getState().setTabResult(tabId, {
         result: state.result,
         initialResult: state.initialResult,
+        initialSuggestions: state.initialSuggestions,
         conversationHistory: state.conversationHistory,
       });
     }
-  }, [tabId, state.result, state.initialResult, state.conversationHistory]);
+  }, [tabId, state.result, state.initialResult, state.initialSuggestions, state.conversationHistory]);
 
   const analyze = useCallback(
     async (prompt: { system: string; user: string }) => {
@@ -62,8 +66,9 @@ export function useAIAnalysis(tabId?: string) {
       const cacheKey = hashPrompt([providerConfig.type, providerConfig.model, prompt.system, prompt.user].join('\0'));
       const cached = getCached(cacheKey);
       if (cached) {
-        setState((s) => ({ ...s, loading: false, result: cached, initialResult: cached, error: null, conversationHistory: [] }));
-        return cached;
+        const parsed = parseAIResponse(cached);
+        setState((s) => ({ ...s, loading: false, result: parsed.content, initialResult: parsed.content, initialSuggestions: parsed.suggestions, error: null, conversationHistory: [] }));
+        return parsed.content;
       }
 
       setState((s) => ({ ...s, loading: true, error: null }));
@@ -76,9 +81,10 @@ export function useAIAnalysis(tabId?: string) {
             maxTokens: 4096,
           },
         );
+        const parsed = parseAIResponse(response.content);
         setCache(cacheKey, response.content);
-        setState((s) => ({ ...s, loading: false, result: response.content, initialResult: response.content, conversationHistory: [] }));
-        return response.content;
+        setState((s) => ({ ...s, loading: false, result: parsed.content, initialResult: parsed.content, initialSuggestions: parsed.suggestions, conversationHistory: [] }));
+        return parsed.content;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Lỗi không xác định';
         setState((s) => ({ ...s, loading: false, error: msg }));
@@ -118,17 +124,18 @@ export function useAIAnalysis(tabId?: string) {
             maxTokens: 3000,
           },
         );
+        const parsed = parseAIResponse(response.content);
         // Append assistant response to existing history
         setState((s) => ({
           ...s,
           loading: false,
-          result: response.content,
+          result: parsed.content,
           conversationHistory: [
             ...s.conversationHistory,
-            { role: 'assistant' as const, content: response.content, displayContent: response.content },
+            { role: 'assistant' as const, content: parsed.content, displayContent: parsed.content, suggestions: parsed.suggestions },
           ].slice(-MAX_HISTORY_TURNS * 2),
         }));
-        return response.content;
+        return parsed.content;
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Lỗi không xác định';
         // Rollback optimistic user message on error
@@ -145,16 +152,16 @@ export function useAIAnalysis(tabId?: string) {
   );
 
   const clearResult = useCallback(() => {
-    setState((s) => ({ ...s, result: null, initialResult: null, error: null }));
+    setState((s) => ({ ...s, result: null, initialResult: null, initialSuggestions: [], error: null }));
     if (tabId) {
-      useAIStore.getState().setTabResult(tabId, { result: null, initialResult: null, conversationHistory: [] });
+      useAIStore.getState().setTabResult(tabId, { result: null, initialResult: null, initialSuggestions: [], conversationHistory: [] });
     }
   }, [tabId]);
 
   const clearConversation = useCallback(() => {
-    setState({ loading: false, error: null, result: null, initialResult: null, conversationHistory: [] });
+    setState({ loading: false, error: null, result: null, initialResult: null, initialSuggestions: [], conversationHistory: [] });
     if (tabId) {
-      useAIStore.getState().setTabResult(tabId, { result: null, initialResult: null, conversationHistory: [] });
+      useAIStore.getState().setTabResult(tabId, { result: null, initialResult: null, initialSuggestions: [], conversationHistory: [] });
     }
   }, [tabId]);
 

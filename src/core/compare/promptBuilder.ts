@@ -1,5 +1,8 @@
 import type { PersonProfile, CompatibilityResult, RelationType } from '../types/compare';
+import type { AIMessage, ModelTier } from '../ai/types';
+import { trimConversationHistory } from '../ai/types';
 import { RELATION_LABELS, RELATION_PALACE_MAP } from '../../data/compareData';
+import { SUGGESTION_INSTRUCTION } from '../ai/prompts/suggestionInstruction';
 
 function buildChartSummary(person: PersonProfile): string {
   const { lunarDate, fourPillars, tuViChart } = person;
@@ -73,7 +76,64 @@ Tóm tắt mức độ tương hợp, 2-3 điểm nổi bật. 3-4 câu.
 2-4 thử thách, kèm GIẢI PHÁP cụ thể.
 
 ## Lời Khuyên
-5 lời khuyên CỤ THỂ, THỰC TẾ. Dẫn chứng từ lá số.`;
+5 lời khuyên CỤ THỂ, THỰC TẾ. Dẫn chứng từ lá số.${SUGGESTION_INSTRUCTION}`;
 
   return { system, user };
+}
+
+/**
+ * Build prompt for follow-up questions in compare context.
+ */
+export function buildCompareQuestionPrompt(
+  question: string,
+  p1: PersonProfile,
+  p2: PersonProfile,
+  result: CompatibilityResult,
+  relationType: RelationType,
+  conversationHistory: AIMessage[],
+  tier: ModelTier = 'strong',
+): { system: string; messages: AIMessage[] } {
+  const relationLabel = RELATION_LABELS[relationType];
+  const palaceMap = RELATION_PALACE_MAP[relationType];
+
+  const categorySummary = result.categories
+    .map(c => `- ${c.name}: ${c.score}/100 — ${c.analysis}`)
+    .join('\n');
+
+  const system = `Bạn là chuyên gia Tử Vi Đẩu Số và Bát Tự, phân tích MỐI QUAN HỆ giữa 2 người.
+Loại mối quan hệ: ${relationLabel}.
+
+NGUYÊN TẮC:
+1. Xét Nạp Âm tương sinh/khắc
+2. Xét Con Giáp tam hợp/lục hợp/lục xung
+3. Xét cung liên quan: ${palaceMap.label}
+4. Xét Tứ Hóa chiếu chéo
+5. Xét Ngũ Hành Bát Tự bổ trợ
+6. KHÔNG BAO GIỜ khuyên chia tay/cắt đứt — luôn đưa giải pháp xây dựng.
+7. Mỗi phân tích phải DẪN CHỨNG CỤ THỂ sao + cung + mức sáng.
+
+DỮ LIỆU 2 NGƯỜI:
+
+NGƯỜI 1: ${p1.name}
+${buildChartSummary(p1)}
+
+NGƯỜI 2: ${p2.name}
+${buildChartSummary(p2)}
+
+ĐIỂM TỔNG: ${result.overallScore}/100 (${result.ratingLabel})
+${categorySummary}`;
+
+  const trimmedHistory = trimConversationHistory(conversationHistory, tier);
+
+  const userContent = `${question}
+
+Trả lời 4-8 câu, DẪN CHỨNG CỤ THỂ từ lá số 2 người. KHÔNG bịa thêm.${SUGGESTION_INSTRUCTION}`;
+
+  return {
+    system,
+    messages: [
+      ...trimmedHistory,
+      { role: 'user', content: userContent },
+    ],
+  };
 }

@@ -100,6 +100,7 @@ export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: 
         onAskQuestion={handleAskQuestion}
         result={ai.result}
         initialResult={ai.initialResult}
+        initialSuggestions={ai.initialSuggestions}
         loading={ai.loading}
         error={ai.error}
         conversationHistory={ai.conversationHistory}
