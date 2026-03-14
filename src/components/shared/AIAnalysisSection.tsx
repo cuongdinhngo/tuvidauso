@@ -14,71 +14,149 @@ interface AIAnalysisSectionProps {
   conversationHistory?: AIMessage[];
 }
 
-type ListType = 'ul' | 'ol';
+// --- AI Content Renderer: smart parsing + styled output ---
 
-function FormatAIResponse({ text }: { text: string }) {
-  const lines = text.split('\n');
-  const elements: ReactNode[] = [];
-  let listItems: ReactNode[] = [];
-  let listType: ListType | null = null;
-  let listKey = 0;
+type Block =
+  | { type: 'system-insight'; system: 'tuvi' | 'thanso' | 'hoangdao'; text: string }
+  | { type: 'conclusion'; text: string }
+  | { type: 'agreement'; text: string }
+  | { type: 'difference'; text: string }
+  | { type: 'paragraph'; text: string }
+  | { type: 'list'; listType: 'ul' | 'ol'; items: string[] };
+
+interface Section {
+  heading?: string;
+  emoji?: string;
+  rating?: number;
+  blocks: Block[];
+}
+
+function extractEmoji(text: string): string | undefined {
+  const match = text.match(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u);
+  return match ? match[0] : undefined;
+}
+
+function extractRating(text: string): number | undefined {
+  const stars = text.match(/[⭐]+/);
+  if (!stars) return undefined;
+  return stars[0].length;
+}
+
+function parseIntoSections(raw: string): Section[] {
+  const lines = raw.split('\n');
+  const sections: Section[] = [];
+  let current: Section = { blocks: [] };
+  let listItems: string[] = [];
+  let listType: 'ul' | 'ol' | null = null;
 
   const flushList = () => {
     if (listItems.length === 0) return;
-    const Tag = listType === 'ol' ? 'ol' : 'ul';
-    const cls = listType === 'ol' ? 'list-decimal' : 'list-disc';
-    elements.push(
-      <Tag key={`list-${listKey}`} className={`space-y-1 ml-4 ${cls} text-sm text-gray-300 leading-relaxed`}>
-        {listItems}
-      </Tag>,
-    );
+    current.blocks.push({ type: 'list', listType: listType!, items: [...listItems] });
     listItems = [];
     listType = null;
   };
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const isBullet = line.startsWith('- ') || line.startsWith('* ');
-    const isNumbered = /^\d+\.\s/.test(line);
-
-    if (isBullet) {
-      if (listType !== 'ul') { flushList(); listType = 'ul'; listKey = i; }
-      listItems.push(<li key={i}>{formatInline(line.slice(2))}</li>);
-    } else if (isNumbered) {
-      if (listType !== 'ol') { flushList(); listType = 'ol'; listKey = i; }
-      listItems.push(<li key={i}>{formatInline(line.replace(/^\d+\.\s/, ''))}</li>);
-    } else {
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
       flushList();
-      if (line.startsWith('## ')) {
-        elements.push(
-          <h3 key={i} className="text-base font-semibold text-purple-300 mt-5 mb-2">
-            {line.slice(3)}
-          </h3>,
-        );
-      } else if (line.startsWith('### ')) {
-        elements.push(
-          <h4 key={i} className="text-sm font-semibold text-purple-200 mt-3 mb-1">
-            {line.slice(4)}
-          </h4>,
-        );
-      } else if (line.trim() === '') {
-        elements.push(<div key={i} className="h-2" />);
-      } else {
-        elements.push(
-          <p key={i} className="text-sm text-gray-300 leading-relaxed">
-            {formatInline(line)}
-          </p>,
-        );
-      }
+      continue;
     }
-  }
-  flushList();
 
-  return <div>{elements}</div>;
+    // Headings
+    if (trimmed.startsWith('## ') || trimmed.startsWith('# ')) {
+      flushList();
+      if (current.blocks.length > 0 || current.heading) {
+        sections.push(current);
+      }
+      const headingText = trimmed.replace(/^#+\s*/, '');
+      const emoji = extractEmoji(headingText);
+      const rating = extractRating(headingText);
+      current = {
+        heading: headingText.replace(/[\u2B50\u2606]/g, '').replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}]\s*/u, '').trim(),
+        emoji,
+        rating,
+        blocks: [],
+      };
+      continue;
+    }
+
+    // [Tử Vi]: ...
+    if (trimmed.startsWith('[Tử Vi]') || trimmed.startsWith('[Tử vi]')) {
+      flushList();
+      const text = trimmed.replace(/^\[Tử [Vv]i\]:?\s*/, '');
+      current.blocks.push({ type: 'system-insight', system: 'tuvi', text });
+      continue;
+    }
+
+    // [Thần Số]: ...
+    if (trimmed.startsWith('[Thần Số]') || trimmed.startsWith('[Thần số]')) {
+      flushList();
+      const text = trimmed.replace(/^\[Thần [Ss]ố\]:?\s*/, '');
+      current.blocks.push({ type: 'system-insight', system: 'thanso', text });
+      continue;
+    }
+
+    // [Hoàng Đạo]: ...
+    if (trimmed.startsWith('[Hoàng Đạo]') || trimmed.startsWith('[Hoàng đạo]')) {
+      flushList();
+      const text = trimmed.replace(/^\[Hoàng [Đđ]ạo\]:?\s*/, '');
+      current.blocks.push({ type: 'system-insight', system: 'hoangdao', text });
+      continue;
+    }
+
+    // → conclusion
+    if (trimmed.startsWith('→') || trimmed.startsWith('->')) {
+      flushList();
+      const text = trimmed.replace(/^(→|->)\s*(Kết hợp:?)?\s*/, '');
+      current.blocks.push({ type: 'conclusion', text });
+      continue;
+    }
+
+    // ✅ agreement
+    if (trimmed.startsWith('✅')) {
+      flushList();
+      current.blocks.push({ type: 'agreement', text: trimmed.replace('✅', '').trim() });
+      continue;
+    }
+
+    // ⚠️ or 🔄 difference
+    if (trimmed.startsWith('⚠️') || trimmed.startsWith('🔄')) {
+      flushList();
+      current.blocks.push({ type: 'difference', text: trimmed.replace(/^(⚠️|🔄)\s*/, '').trim() });
+      continue;
+    }
+
+    // Bullet lists
+    const isBullet = trimmed.startsWith('- ') || trimmed.startsWith('* ');
+    if (isBullet) {
+      if (listType !== 'ul') { flushList(); listType = 'ul'; }
+      listItems.push(trimmed.slice(2));
+      continue;
+    }
+
+    // Numbered lists
+    const isNumbered = /^\d+\.\s/.test(trimmed);
+    if (isNumbered) {
+      if (listType !== 'ol') { flushList(); listType = 'ol'; }
+      listItems.push(trimmed.replace(/^\d+\.\s/, ''));
+      continue;
+    }
+
+    // Regular paragraph
+    flushList();
+    current.blocks.push({ type: 'paragraph', text: trimmed });
+  }
+
+  flushList();
+  if (current.blocks.length > 0 || current.heading) {
+    sections.push(current);
+  }
+
+  return sections;
 }
 
 function formatInline(text: string): ReactNode {
-  // Bold
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
@@ -86,6 +164,132 @@ function formatInline(text: string): ReactNode {
     }
     return part;
   });
+}
+
+const SYSTEM_CONFIG = {
+  tuvi: {
+    label: 'Tử Vi',
+    icon: '🔮',
+    badgeBg: 'bg-purple-500/20',
+    badgeText: 'text-purple-400',
+    borderColor: 'border-l-purple-500',
+  },
+  thanso: {
+    label: 'Thần Số',
+    icon: '🔢',
+    badgeBg: 'bg-amber-500/20',
+    badgeText: 'text-amber-400',
+    borderColor: 'border-l-amber-500',
+  },
+  hoangdao: {
+    label: 'Hoàng Đạo',
+    icon: '♈',
+    badgeBg: 'bg-blue-500/20',
+    badgeText: 'text-blue-400',
+    borderColor: 'border-l-blue-500',
+  },
+} as const;
+
+function SystemInsight({ system, text }: { system: 'tuvi' | 'thanso' | 'hoangdao'; text: string }) {
+  const config = SYSTEM_CONFIG[system];
+  return (
+    <div className={`border-l-[3px] ${config.borderColor} pl-3 py-1.5 my-1`}>
+      <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${config.badgeBg} ${config.badgeText} mb-1`}>
+        {config.icon} {config.label}
+      </span>
+      <p className="text-gray-300 text-sm leading-relaxed">{formatInline(text)}</p>
+    </div>
+  );
+}
+
+function ConclusionCard({ text }: { text: string }) {
+  return (
+    <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/20 rounded-lg px-4 py-3 my-2">
+      <p className="text-white text-sm font-medium leading-relaxed">
+        <span className="text-purple-400 mr-1">💡</span> {formatInline(text)}
+      </p>
+    </div>
+  );
+}
+
+function AgreementBadge({ text }: { text: string }) {
+  return (
+    <div className="bg-emerald-900/20 border border-emerald-500/20 rounded-lg px-4 py-2 my-1">
+      <p className="text-emerald-300 text-sm">
+        <span className="font-semibold">✅ Đồng nhất:</span> {formatInline(text)}
+      </p>
+    </div>
+  );
+}
+
+function DifferenceBadge({ text }: { text: string }) {
+  return (
+    <div className="bg-yellow-900/15 border border-yellow-500/15 rounded-lg px-4 py-2 my-1">
+      <p className="text-yellow-300 text-sm">
+        <span className="font-semibold">🔄 Góc nhìn khác:</span> {formatInline(text)}
+      </p>
+    </div>
+  );
+}
+
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <span className="inline-flex items-center gap-0.5 bg-yellow-900/30 px-2 py-0.5 rounded text-sm">
+      {Array.from({ length: 5 }, (_, i) => (
+        <span key={i} className={i < rating ? 'text-yellow-400' : 'text-gray-600'}>⭐</span>
+      ))}
+    </span>
+  );
+}
+
+function RenderSection({ section }: { section: Section }) {
+  return (
+    <div className="mb-6">
+      {section.heading && (
+        <div className="flex items-center gap-2 mb-3">
+          {section.emoji && <span className="text-xl">{section.emoji}</span>}
+          <h3 className="text-lg font-bold text-white">{section.heading}</h3>
+          {section.rating && <StarRating rating={section.rating} />}
+        </div>
+      )}
+      <div className="space-y-1.5">
+        {section.blocks.map((block, i) => {
+          switch (block.type) {
+            case 'system-insight':
+              return <SystemInsight key={i} system={block.system} text={block.text} />;
+            case 'conclusion':
+              return <ConclusionCard key={i} text={block.text} />;
+            case 'agreement':
+              return <AgreementBadge key={i} text={block.text} />;
+            case 'difference':
+              return <DifferenceBadge key={i} text={block.text} />;
+            case 'list': {
+              const Tag = block.listType === 'ol' ? 'ol' : 'ul';
+              const cls = block.listType === 'ol' ? 'list-decimal' : 'list-disc';
+              return (
+                <Tag key={i} className={`space-y-1 ml-4 ${cls} text-sm text-gray-300 leading-relaxed`}>
+                  {block.items.map((item, j) => <li key={j}>{formatInline(item)}</li>)}
+                </Tag>
+              );
+            }
+            case 'paragraph':
+              return <p key={i} className="text-sm text-gray-300 leading-relaxed">{formatInline(block.text)}</p>;
+          }
+        })}
+      </div>
+    </div>
+  );
+}
+
+function AIContentRenderer({ content }: { content: string }) {
+  const sections = parseIntoSections(content);
+  return (
+    <div className="ai-content space-y-4">
+      {sections.map((section, i) => (
+        <RenderSection key={i} section={section} />
+      ))}
+    </div>
+  );
 }
 
 export default function AIAnalysisSection({
@@ -217,7 +421,7 @@ export default function AIAnalysisSection({
                     </div>
                   ) : (
                     <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg px-4 py-3">
-                      <FormatAIResponse text={msg.content} />
+                      <AIContentRenderer content={msg.content} />
                     </div>
                   )}
                 </div>
@@ -228,7 +432,7 @@ export default function AIAnalysisSection({
           {/* Result (non-chat mode) */}
           {result && conversationHistory.length === 0 && (
             <div className="border-t border-gray-800 pt-3">
-              <FormatAIResponse text={result} />
+              <AIContentRenderer content={result} />
             </div>
           )}
         </div>
