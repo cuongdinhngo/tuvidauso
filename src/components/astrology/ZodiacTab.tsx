@@ -43,7 +43,7 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
   const element = ELEMENT_LABELS[sign.element];
   const planet = PLANET_LABELS[sign.rulingPlanet];
   const decanPlanet = PLANET_LABELS[decanRuler];
-  const ai = useAIAnalysis();
+  const ai = useAIAnalysis('zodiac');
 
   const handleAnalyze = useCallback(() => {
     const prompt = buildAstrologyAIPrompt(big3);

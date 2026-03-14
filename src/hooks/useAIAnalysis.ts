@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { AIMessage } from '../core/ai/types';
 import { callProvider } from '../core/ai/callProvider';
 import { useAIStore } from '../store/aiStore';
@@ -20,13 +20,26 @@ function hashPrompt(text: string): string {
   return String(h);
 }
 
-export function useAIAnalysis() {
-  const [state, setState] = useState<AIAnalysisState>({
-    loading: false,
-    error: null,
-    result: null,
-    conversationHistory: [],
+export function useAIAnalysis(tabId?: string) {
+  const [state, setState] = useState<AIAnalysisState>(() => {
+    if (tabId) {
+      const saved = useAIStore.getState().getTabResult(tabId);
+      if (saved) {
+        return { loading: false, error: null, result: saved.result, conversationHistory: saved.conversationHistory };
+      }
+    }
+    return { loading: false, error: null, result: null, conversationHistory: [] };
   });
+
+  // Persist result + conversation to store whenever they change
+  useEffect(() => {
+    if (tabId && (state.result !== null || state.conversationHistory.length > 0)) {
+      useAIStore.getState().setTabResult(tabId, {
+        result: state.result,
+        conversationHistory: state.conversationHistory,
+      });
+    }
+  }, [tabId, state.result, state.conversationHistory]);
 
   const analyze = useCallback(
     async (prompt: { system: string; user: string }) => {
@@ -112,11 +125,17 @@ export function useAIAnalysis() {
 
   const clearResult = useCallback(() => {
     setState((s) => ({ ...s, result: null, error: null }));
-  }, []);
+    if (tabId) {
+      useAIStore.getState().setTabResult(tabId, { result: null, conversationHistory: [] });
+    }
+  }, [tabId]);
 
   const clearConversation = useCallback(() => {
     setState({ loading: false, error: null, result: null, conversationHistory: [] });
-  }, []);
+    if (tabId) {
+      useAIStore.getState().setTabResult(tabId, { result: null, conversationHistory: [] });
+    }
+  }, [tabId]);
 
   return {
     ...state,

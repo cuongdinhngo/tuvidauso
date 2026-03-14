@@ -25,7 +25,7 @@ interface NumerologyTabProps {
 export default function NumerologyTab({ chart, birthInfo, tuViChart, hasName }: NumerologyTabProps) {
   const currentYear = new Date().getFullYear();
   const currentAge = currentYear - birthInfo.solarDate.year;
-  const ai = useAIAnalysis();
+  const ai = useAIAnalysis('numerology');
   const fullName = birthInfo.name || '';
 
   const handleAnalyze = useCallback(() => {

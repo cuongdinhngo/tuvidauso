@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { AIProviderConfig, AIProviderType } from '../core/ai/types';
+import type { AIProviderConfig, AIProviderType, AIMessage } from '../core/ai/types';
 import { VALID_PROVIDER_TYPES } from '../core/ai/types';
 import { PROVIDER_MODELS } from '../core/ai/providerData';
 
@@ -84,22 +84,31 @@ function loadProviderConfig(): AIProviderConfig | null {
   return null;
 }
 
+interface TabAIState {
+  result: string | null;
+  conversationHistory: AIMessage[];
+}
+
 interface AIStore {
   providerConfig: AIProviderConfig | null;
   cache: Map<string, string>;
   showSettingsModal: boolean;
+  tabResults: Map<string, TabAIState>;
 
   setProviderConfig: (config: AIProviderConfig) => void;
   clearProviderConfig: () => void;
   getCached: (key: string) => string | undefined;
   setCache: (key: string, value: string) => void;
   setShowSettingsModal: (show: boolean) => void;
+  getTabResult: (tabId: string) => TabAIState | undefined;
+  setTabResult: (tabId: string, state: TabAIState) => void;
 }
 
 export const useAIStore = create<AIStore>((set, get) => ({
   providerConfig: loadProviderConfig(),
   cache: new Map<string, string>(),
   showSettingsModal: false,
+  tabResults: new Map<string, TabAIState>(),
 
   setProviderConfig: (config: AIProviderConfig) => {
     safeSetItem(STORAGE_KEYS.providerType, config.type);
@@ -139,6 +148,16 @@ export const useAIStore = create<AIStore>((set, get) => ({
   },
 
   setShowSettingsModal: (show: boolean) => set({ showSettingsModal: show }),
+
+  getTabResult: (tabId: string) => get().tabResults.get(tabId),
+
+  setTabResult: (tabId: string, state: TabAIState) => {
+    set((s) => {
+      const newMap = new Map(s.tabResults);
+      newMap.set(tabId, state);
+      return { tabResults: newMap };
+    });
+  },
 }));
 
 /** Get default model for a provider type */

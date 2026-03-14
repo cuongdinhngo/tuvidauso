@@ -22,7 +22,7 @@ interface CombinedTabProps {
 export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInfo }: CombinedTabProps) {
   const currentYear = new Date().getFullYear();
   const fullName = birthInfo.name || '';
-  const ai = useAIAnalysis();
+  const ai = useAIAnalysis('combined');
 
   const menhPalace = tuViChart.palaces.find((p) => p.name === 'Mệnh');
   const quanLocPalace = tuViChart.palaces.find((p) => p.name === 'Quan Lộc');
