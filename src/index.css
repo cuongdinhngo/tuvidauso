@@ -57,6 +57,17 @@ body {
   border-radius: 4px;
 }
 
+/* Horizontal scroll without a visible scrollbar (tab bars).
+   overflow-x:auto implies overflow-y:auto, which would otherwise show a
+   stray vertical scrollbar from the 1px underline overflow. */
+.no-scrollbar {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* old Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;                /* Chromium, Safari */
+}
+
 /* Metallic-gold sheen for hero titles (subtle, single-hue, not rainbow). */
 .text-gold-sheen {
   background: linear-gradient(180deg, #F4D98B 0%, var(--color-gold) 52%, #B98A2E 100%);

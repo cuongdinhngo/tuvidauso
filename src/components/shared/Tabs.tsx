@@ -10,7 +10,7 @@ export default function Tabs({ tabs, defaultIndex = 0 }: TabsProps) {
 
   return (
     <div>
-      <div role="tablist" className="flex border-b border-white/10 overflow-x-auto">
+      <div role="tablist" className="flex border-b border-white/10 overflow-x-auto no-scrollbar">
         {tabs.map((tab, i) => (
           <button
             key={i}
