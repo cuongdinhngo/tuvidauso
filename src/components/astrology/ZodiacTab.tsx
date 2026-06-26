@@ -247,7 +247,7 @@ function CompatibilityList({ currentSign, label, signs, colorClass, barColor }: 
               <span className="text-sm w-24 text-ink truncate">{info.symbol} {info.name}</span>
               <div className="flex-1 h-4 bg-raised rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${barColor} transition-all duration-500`}
+                  className={`h-full rounded-full ${barColor}`}
                   style={{ width: `${score}%` }}
                 />
               </div>

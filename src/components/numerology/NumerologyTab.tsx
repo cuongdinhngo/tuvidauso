@@ -133,8 +133,8 @@ function NameBanner({ birthInfo }: { birthInfo: BirthInfo }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-          placeholder="Nhập họ tên đầy đủ..."
-          className="flex-1 bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink text-sm focus:border-gold focus:outline-none"
+          placeholder="Nhập họ tên đầy đủ…"
+          className="flex-1 bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink text-sm focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
         />
         <button
           onClick={handleSubmit}

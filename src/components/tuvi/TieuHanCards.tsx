@@ -52,7 +52,7 @@ export default function TieuHanCards({ yearChi, gender, birthYear, menh, palaces
             <div key={yf.year}>
               <div
                 onClick={() => setExpandedYear(isExpanded ? null : yf.year)}
-                className={`p-2 rounded-lg border text-xs cursor-pointer transition-all ${
+                className={`p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
                   isExpanded ? 'border-gold bg-gold/20' :
                   isCurrentYear ? 'border-warn bg-warn/20' :
                   'border-white/10 bg-surface hover:bg-raised'

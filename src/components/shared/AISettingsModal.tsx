@@ -179,8 +179,8 @@ export default function AISettingsModal() {
                   type={showKey ? 'text' : 'password'}
                   value={apiKey}
                   onChange={(e) => { setApiKey(e.target.value); setTestResult(null); }}
-                  placeholder={info.keyPrefix + '...'}
-                  className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 pr-10 text-sm text-ink placeholder-ink-muted/60 focus:outline-none focus:border-gold"
+                  placeholder={info.keyPrefix + '…'}
+                  className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 pr-10 text-sm text-ink placeholder-ink-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus:border-gold"
                 />
                 <button
                   onClick={() => setShowKey(!showKey)}
@@ -212,7 +212,7 @@ export default function AISettingsModal() {
                 id="ai-model"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 text-sm text-ink focus:outline-none focus:border-gold"
+                className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 text-sm text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus:border-gold"
               >
                 {models.map((m) => (
                   <option key={m.id} value={m.id}>{m.name}</option>

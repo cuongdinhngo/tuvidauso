@@ -113,7 +113,7 @@ export default function MonthlyCalendar() {
             <button
               key={day}
               onClick={() => selectDate({ year: viewYear, month: viewMonth, day })}
-              className={`aspect-square rounded-lg p-1 flex flex-col items-center justify-center transition-all text-xs border ${
+              className={`aspect-square rounded-lg p-1 flex flex-col items-center justify-center transition-colors text-xs border ${
                 isSelected(day)
                   ? 'border-gold bg-gold/40'
                   : isToday(day)

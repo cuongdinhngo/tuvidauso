@@ -104,8 +104,8 @@ export default function AddPersonPage() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
-            placeholder="Nhập họ tên..."
+            className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+            placeholder="Nhập họ tên…"
           />
         </div>
 
@@ -116,7 +116,7 @@ export default function AddPersonPage() {
             <select
               value={day}
               onChange={(e) => setDay(Number(e.target.value))}
-              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
+              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               <option value="" disabled>Ngày</option>
               {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => (
@@ -126,7 +126,7 @@ export default function AddPersonPage() {
             <select
               value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
-              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
+              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               <option value="" disabled>Tháng</option>
               {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
@@ -136,7 +136,7 @@ export default function AddPersonPage() {
             <select
               value={year}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
+              className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               <option value="" disabled>Năm</option>
               {Array.from({ length: new Date().getFullYear() - 1939 }, (_, i) => new Date().getFullYear() - i).map(y => (
@@ -153,7 +153,7 @@ export default function AddPersonPage() {
             <select
               value={hour}
               onChange={(e) => setHour(Number(e.target.value))}
-              className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
+              className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               <option value="" disabled>Chọn giờ</option>
               {DIA_CHI_HOURS.map((h, i) => (
@@ -192,7 +192,7 @@ export default function AddPersonPage() {
             <select
               value={relationType}
               onChange={(e) => setRelationType(e.target.value as RelationType)}
-              className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none"
+              className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               {RELATION_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>

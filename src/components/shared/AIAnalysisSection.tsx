@@ -420,13 +420,13 @@ function SystemsUsedBadge({ content }: { content: string }) {
 
 function TypingIndicator() {
   return (
-    <div className="flex justify-start mb-3 gap-2">
+    <div className="flex justify-start mb-3 gap-2" role="status" aria-live="polite">
       <div className="w-7 h-7 rounded-full bg-gold/30 flex items-center justify-center shrink-0 mt-1">
-        <span className="text-xs">🤖</span>
+        <span className="text-xs" aria-hidden="true">🤖</span>
       </div>
       <div className="bg-raised border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-ink-muted">Đang phân tích</span>
+          <span className="text-sm text-ink-muted">Đang phân tích…</span>
           <div className="flex gap-1">
             <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
             <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -465,7 +465,7 @@ function QuickQuestions({ questions, onSelect, onAnalyze, disabled }: {
             disabled={disabled}
             className="flex items-center gap-2 bg-raised hover:bg-raised
                        border border-white/10 hover:border-gold/30
-                       rounded-xl px-3 py-2.5 text-left transition-all disabled:opacity-40"
+                       rounded-xl px-3 py-2.5 text-left transition-colors disabled:opacity-40"
           >
             <span className="text-ink text-xs leading-tight">{q}</span>
           </button>
@@ -529,7 +529,7 @@ function FollowUpSuggestions({ content, fallbackQuestions, aiSuggestions, onSele
           className="whitespace-nowrap text-xs bg-raised hover:bg-gold/30
                      border border-white/10 hover:border-gold/30
                      rounded-full px-3 py-1.5 text-ink-muted hover:text-gold
-                     transition-all shrink-0"
+                     transition-colors shrink-0"
         >
           {s}
         </button>
@@ -555,14 +555,15 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
   return (
     <div className="px-4 py-2 border-t border-white/10">
       <div className="flex items-center gap-2 bg-raised border border-white/10
-                      rounded-xl px-3 py-2 focus-within:border-gold/50 transition">
+                      rounded-md px-3 py-2 focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/40 transition-colors">
         <input
           ref={inputRef}
           type="text"
           value={value}
           onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Hỏi AI bất kỳ điều gì..."
+          aria-label="Câu hỏi cho AI"
+          placeholder="Hỏi AI bất kỳ điều gì…"
           disabled={isLoading}
           className="flex-1 bg-transparent text-ink text-sm placeholder-ink-muted/60
                      outline-none disabled:opacity-50"
@@ -572,7 +573,7 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
           disabled={!value.trim() || isLoading}
           aria-label="Gửi"
           className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md bg-gold hover:bg-gold/90
-                     disabled:bg-raised disabled:opacity-50 transition"
+                     disabled:bg-raised disabled:opacity-50 transition-colors"
         >
           <Send className="w-4 h-4 text-base" />
         </button>

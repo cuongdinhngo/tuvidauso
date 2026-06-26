@@ -11,7 +11,7 @@ import Card from '../components/shared/Card';
 
 const fieldClass =
   'w-full bg-surface border border-white/10 rounded-md px-3 py-2 min-h-[44px] text-ink ' +
-  'focus:border-gold focus:outline-none transition-colors';
+  'focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 transition-colors';
 const labelClass = 'block text-sm text-ink-muted mb-1';
 
 export default function InputPage() {

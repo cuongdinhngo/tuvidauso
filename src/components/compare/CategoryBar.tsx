@@ -31,7 +31,7 @@ export default function CategoryBar({ name, score, analysis }: CategoryBarProps)
       </div>
       <div className="h-2.5 bg-raised rounded-full overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all duration-500 ${getBarColor(score)}`}
+          className={`h-full rounded-full ${getBarColor(score)}`}
           style={{ width: `${score}%` }}
         />
       </div>

@@ -104,7 +104,7 @@ export default function CombinedTab({ tuViChart, numerologyChart, big3, birthInf
                       : '-'}
                   </td>
                   <td className="px-4 py-2.5 text-xs text-ink">
-                    {sunNameEn} - {big3.sun.sign.career ? big3.sun.sign.career.slice(0, 40) + '...' : ''}
+                    {sunNameEn} - {big3.sun.sign.career ? big3.sun.sign.career.slice(0, 40) + '…' : ''}
                   </td>
                 </tr>
                 <tr className="border-b border-white/10">

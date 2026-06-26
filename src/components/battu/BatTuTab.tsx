@@ -258,7 +258,7 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
               <button
                 key={i}
                 onClick={() => setExpandedFate(expandedFate === i ? null : i)}
-                className={`flex-shrink-0 rounded-lg p-2 text-center min-w-[72px] border transition-all ${
+                className={`flex-shrink-0 rounded-lg p-2 text-center min-w-[72px] border transition-colors ${
                   isCurrent
                     ? 'border-warn/70 bg-warn/20'
                     : expandedFate === i

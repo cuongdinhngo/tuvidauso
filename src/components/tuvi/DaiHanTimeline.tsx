@@ -28,7 +28,7 @@ export default function DaiHanTimeline({ palaces, currentAge, birthYear }: DaiHa
             <div
               key={palace.position}
               onClick={() => setExpandedPos(isExpanded ? null : palace.position)}
-              className={`flex-shrink-0 w-28 p-2 rounded-lg border text-center text-xs cursor-pointer transition-all ${
+              className={`flex-shrink-0 w-28 p-2 rounded-lg border text-center text-xs cursor-pointer transition-colors ${
                 isExpanded ? 'border-gold bg-gold/20' :
                 isCurrent ? 'border-warn bg-warn/20' :
                 'border-white/10 bg-surface hover:bg-raised'

@@ -58,7 +58,7 @@ export default function GoodDayPicker() {
             <button
               key={p}
               onClick={() => { setPurpose(p); setExpandedDay(null); }}
-              className={`p-3 rounded-lg border text-left text-sm transition-all ${
+              className={`p-3 rounded-lg border text-left text-sm transition-colors ${
                 purpose === p
                   ? 'border-gold bg-gold/40 text-gold'
                   : 'border-white/10 bg-surface text-ink-muted hover:border-white/10 hover:text-ink'
@@ -109,7 +109,7 @@ export default function GoodDayPicker() {
             <div key={r.date.day}>
               <button
                 onClick={() => setExpandedDay(expandedDay === r.date.day ? null : r.date.day)}
-                className={`w-full text-left p-3 rounded-lg border transition-all ${
+                className={`w-full text-left p-3 rounded-lg border transition-colors ${
                   expandedDay === r.date.day
                     ? 'border-gold bg-gold/30'
                     : 'border-white/10 bg-surface hover:border-white/10'
