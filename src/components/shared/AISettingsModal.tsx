@@ -102,13 +102,13 @@ export default function AISettingsModal() {
       onClick={() => setShowSettingsModal(false)}
     >
       <div
-        className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-surface border border-white/10 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-5 pb-3">
-          <h2 id="ai-settings-title" className="text-lg font-semibold text-purple-300">Cài đặt AI</h2>
-          <button onClick={() => setShowSettingsModal(false)} className="text-gray-500 hover:text-gray-300 transition-colors" aria-label="Đóng">
+          <h2 id="ai-settings-title" className="font-display text-lg font-semibold text-gold">Cài đặt AI</h2>
+          <button onClick={() => setShowSettingsModal(false)} className="text-ink-muted hover:text-ink transition-colors" aria-label="Đóng">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -116,7 +116,7 @@ export default function AISettingsModal() {
         <div className="px-5 pb-5 space-y-4">
           {/* Provider Selection */}
           <div>
-            <label id="provider-group-label" className="block text-sm text-gray-400 mb-2">Chọn nhà cung cấp AI:</label>
+            <label id="provider-group-label" className="block text-sm text-ink-muted mb-2">Chọn nhà cung cấp AI:</label>
             <div role="radiogroup" aria-labelledby="provider-group-label" className="space-y-2">
               {PROVIDER_ORDER.map((type) => {
                 const p = PROVIDER_INFO[type];
@@ -128,33 +128,33 @@ export default function AISettingsModal() {
                     role="radio"
                     aria-checked={isSelected}
                     onClick={() => handleSelectProvider(type)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
+                    className={`w-full flex items-center gap-3 p-3 rounded-md border transition-colors text-left ${
                       isSelected
-                        ? 'border-purple-500 bg-purple-900/20'
-                        : 'border-gray-700 bg-gray-800/50 hover:border-gray-600'
+                        ? 'border-gold bg-gold/10'
+                        : 'border-white/10 bg-raised hover:border-white/25'
                     }`}
                   >
                     <span className="text-xl">{p.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-gray-200">{p.name}</span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                        <span className="text-sm font-medium text-ink">{p.name}</span>
+                        <span className={`text-2xs font-bold px-1.5 py-0.5 rounded-sm border ${
                           p.hasFree
-                            ? 'bg-green-900/40 text-green-400 border border-green-800/40'
-                            : 'bg-gray-800 text-gray-500 border border-gray-700'
+                            ? 'bg-good/15 text-good border-good/30'
+                            : 'bg-raised text-ink-muted border-white/10'
                         }`}>
                           {p.hasFree ? 'MIỄN PHÍ' : 'TRẢ PHÍ'}
                         </span>
                         {isActive && (
-                          <span className="text-[10px] text-purple-400 font-medium">ĐANG DÙNG</span>
+                          <span className="text-2xs text-gold font-medium">ĐANG DÙNG</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5 truncate">{p.description}</p>
+                      <p className="text-xs text-ink-muted mt-0.5 truncate">{p.description}</p>
                     </div>
                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                      isSelected ? 'border-purple-500' : 'border-gray-600'
+                      isSelected ? 'border-gold' : 'border-white/25'
                     }`}>
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-purple-500" />}
+                      {isSelected && <div className="w-2 h-2 rounded-full bg-gold" />}
                     </div>
                   </button>
                 );
@@ -163,15 +163,15 @@ export default function AISettingsModal() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-gray-700/50" />
+          <div className="border-t border-white/10" />
 
           {/* Configuration for selected provider */}
           <div className="space-y-3">
-            <p className="text-sm text-gray-400">Cấu hình {info.name}:</p>
+            <p className="text-sm text-ink-muted">Cấu hình {info.name}:</p>
 
             {/* API Key */}
             <div>
-              <label htmlFor="ai-api-key" className="block text-xs text-gray-500 mb-1">API Key</label>
+              <label htmlFor="ai-api-key" className="block text-xs text-ink-muted mb-1">API Key</label>
               <div className="relative">
                 <input
                   ref={inputRef}
@@ -179,12 +179,12 @@ export default function AISettingsModal() {
                   type={showKey ? 'text' : 'password'}
                   value={apiKey}
                   onChange={(e) => { setApiKey(e.target.value); setTestResult(null); }}
-                  placeholder={info.keyPrefix + '...'}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 pr-10 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-purple-500"
+                  placeholder={info.keyPrefix + '…'}
+                  className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 pr-10 text-sm text-ink placeholder-ink-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus:border-gold"
                 />
                 <button
                   onClick={() => setShowKey(!showKey)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
                   aria-label={showKey ? 'Ẩn API key' : 'Hiện API key'}
                 >
                   {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -195,24 +195,24 @@ export default function AISettingsModal() {
                   href={info.apiKeyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] text-purple-400 hover:text-purple-300 flex items-center gap-0.5"
+                  className="text-2xs text-jade hover:text-jade/80 flex items-center gap-0.5"
                 >
                   Lấy API key tại đây <ExternalLink className="w-2.5 h-2.5" />
                 </a>
                 {info.hasFree && (
-                  <span className="text-[10px] text-gray-600"> — Không cần thẻ tín dụng</span>
+                  <span className="text-2xs text-ink-muted"> - Không cần thẻ tín dụng</span>
                 )}
               </div>
             </div>
 
             {/* Model Selection */}
             <div>
-              <label htmlFor="ai-model" className="block text-xs text-gray-500 mb-1">Model</label>
+              <label htmlFor="ai-model" className="block text-xs text-ink-muted mb-1">Model</label>
               <select
                 id="ai-model"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-purple-500"
+                className="w-full bg-raised border border-white/10 rounded-md px-3 py-2 text-sm text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus:border-gold"
               >
                 {models.map((m) => (
                   <option key={m.id} value={m.id}>{m.name}</option>
@@ -222,18 +222,18 @@ export default function AISettingsModal() {
           </div>
 
           {/* Security Disclaimer */}
-          <p className="text-[10px] text-gray-600 leading-relaxed">
-            🔒 Key chỉ lưu trong phiên hiện tại (đóng tab = xóa). API call gửi trực tiếp từ trình duyệt đến nhà cung cấp — không qua server trung gian nào.
+          <p className="text-2xs text-ink-muted leading-relaxed">
+            🔒 Key chỉ lưu trong phiên hiện tại (đóng tab = xóa). API call gửi trực tiếp từ trình duyệt đến nhà cung cấp - không qua server trung gian nào.
           </p>
 
           {/* Test Result */}
           {testResult === 'success' && (
-            <div className="flex items-center gap-2 text-green-400 text-sm bg-green-900/20 border border-green-800/30 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-good text-sm bg-good/15 border border-good/30 rounded-md px-3 py-2">
               <Check className="w-4 h-4" /> Kết nối {info.name} thành công!
             </div>
           )}
           {testResult === 'error' && (
-            <div className="text-red-400 text-sm bg-red-900/20 border border-red-800/30 rounded-lg px-3 py-2">
+            <div className="text-bad text-sm bg-bad/15 border border-bad/30 rounded-md px-3 py-2">
               {testError}
             </div>
           )}
@@ -243,7 +243,7 @@ export default function AISettingsModal() {
             <button
               onClick={handleTest}
               disabled={!apiKey.trim() || testing}
-              className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-gray-200 text-sm rounded-lg px-3 py-2 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 min-h-[44px] bg-raised hover:bg-white/5 border border-white/10 disabled:opacity-40 text-ink text-sm rounded-md px-3 py-2 transition-colors"
             >
               {testing ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               Kiểm tra kết nối
@@ -251,7 +251,7 @@ export default function AISettingsModal() {
             <button
               onClick={handleSave}
               disabled={!apiKey.trim()}
-              className="flex-1 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white text-sm rounded-lg px-3 py-2 transition-colors"
+              className="flex-1 min-h-[44px] bg-gold hover:bg-gold/90 disabled:opacity-40 text-base font-semibold text-sm rounded-md px-3 py-2 transition-colors"
             >
               Lưu
             </button>
@@ -261,7 +261,7 @@ export default function AISettingsModal() {
           {providerConfig && (
             <button
               onClick={handleDisconnect}
-              className="w-full text-red-400 hover:text-red-300 text-xs py-1 transition-colors"
+              className="w-full text-bad hover:text-bad/80 text-xs py-1 transition-colors"
             >
               Ngắt kết nối AI
             </button>

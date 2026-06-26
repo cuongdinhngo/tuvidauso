@@ -10,11 +10,11 @@ import DayDetail from './DayDetail';
 const WEEKDAY_HEADERS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
 const RATING_COLORS: Record<number, string> = {
-  1: 'bg-red-500',
-  2: 'bg-red-400',
-  3: 'bg-yellow-500',
-  4: 'bg-green-500',
-  5: 'bg-green-400',
+  1: 'bg-bad',
+  2: 'bg-bad',
+  3: 'bg-warn',
+  4: 'bg-good',
+  5: 'bg-good',
 };
 
 export default function MonthlyCalendar() {
@@ -82,13 +82,13 @@ export default function MonthlyCalendar() {
     <div className="space-y-4">
       {/* Month navigation */}
       <div className="flex items-center justify-between">
-        <button onClick={() => navigateMonth(-1)} className="p-2 text-gray-400 hover:text-purple-300 transition-colors">
+        <button onClick={() => navigateMonth(-1)} className="p-2 text-ink-muted hover:text-gold transition-colors">
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <h2 className="text-lg font-semibold text-purple-300">
+        <h2 className="text-lg font-semibold text-gold">
           Tháng {viewMonth} / {viewYear}
         </h2>
-        <button onClick={() => navigateMonth(1)} className="p-2 text-gray-400 hover:text-purple-300 transition-colors">
+        <button onClick={() => navigateMonth(1)} className="p-2 text-ink-muted hover:text-gold transition-colors">
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
@@ -96,7 +96,7 @@ export default function MonthlyCalendar() {
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-1">
         {WEEKDAY_HEADERS.map((h) => (
-          <div key={h} className="text-center text-xs font-medium text-gray-500 py-1">
+          <div key={h} className="text-center text-xs font-medium text-ink-muted py-1">
             {h}
           </div>
         ))}
@@ -113,18 +113,18 @@ export default function MonthlyCalendar() {
             <button
               key={day}
               onClick={() => selectDate({ year: viewYear, month: viewMonth, day })}
-              className={`aspect-square rounded-lg p-1 flex flex-col items-center justify-center transition-all text-xs border ${
+              className={`aspect-square rounded-lg p-1 flex flex-col items-center justify-center transition-colors text-xs border ${
                 isSelected(day)
-                  ? 'border-purple-500 bg-purple-900/40'
+                  ? 'border-gold bg-gold/40'
                   : isToday(day)
-                    ? 'border-purple-700/50 bg-gray-800/50'
-                    : 'border-transparent hover:border-gray-700 hover:bg-gray-800/30'
+                    ? 'border-gold/50 bg-raised'
+                    : 'border-transparent hover:border-white/10 hover:bg-raised'
               }`}
             >
-              <span className={`font-semibold ${isToday(day) ? 'text-purple-300' : 'text-gray-200'}`}>
+              <span className={`font-semibold ${isToday(day) ? 'text-gold' : 'text-ink'}`}>
                 {day}
               </span>
-              <span className="text-[10px] text-gray-500">
+              <span className="text-[10px] text-ink-muted">
                 {info.lunar.day}/{info.lunar.month}
               </span>
               <span className={`w-1.5 h-1.5 rounded-full mt-0.5 ${RATING_COLORS[info.overallRating]}`} />
@@ -134,10 +134,10 @@ export default function MonthlyCalendar() {
       </div>
 
       {/* Legend */}
-      <div className="flex justify-center gap-4 text-[10px] text-gray-500">
-        <span><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1" />Tốt</span>
-        <span><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1" />Bình thường</span>
-        <span><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1" />Nên tránh</span>
+      <div className="flex justify-center gap-4 text-[10px] text-ink-muted">
+        <span><span className="inline-block w-2 h-2 rounded-full bg-good mr-1" />Tốt</span>
+        <span><span className="inline-block w-2 h-2 rounded-full bg-warn mr-1" />Bình thường</span>
+        <span><span className="inline-block w-2 h-2 rounded-full bg-bad mr-1" />Nên tránh</span>
       </div>
 
       {/* Day detail panel */}

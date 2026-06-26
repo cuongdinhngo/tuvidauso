@@ -3,10 +3,10 @@ import type { Big3Result } from '../../core/astrology/types';
 import { MOON_SIGN_DESCRIPTIONS, RISING_SIGN_DESCRIPTIONS, getBig3Analysis } from '../../data/big3Data';
 
 const ELEMENT_LABELS: Record<string, { name: string; color: string }> = {
-  fire:  { name: 'Hỏa', color: 'text-red-400' },
-  earth: { name: 'Thổ', color: 'text-yellow-600' },
-  air:   { name: 'Khí', color: 'text-cyan-400' },
-  water: { name: 'Nước', color: 'text-blue-400' },
+  fire:  { name: 'Hỏa', color: 'text-bad' },
+  earth: { name: 'Thổ', color: 'text-warn' },
+  air:   { name: 'Khí', color: 'text-thuy' },
+  water: { name: 'Nước', color: 'text-thuy' },
 };
 
 interface Big3CardProps {
@@ -28,7 +28,7 @@ export default function Big3Card({ big3 }: Big3CardProps) {
   return (
     <div className="space-y-4">
       {/* Big 3 Header */}
-      <h3 className="text-sm font-semibold text-purple-300">Big 3 của bạn</h3>
+      <h3 className="text-sm font-semibold text-gold">Big 3 của bạn</h3>
 
       {/* 3-column (or 2-column) cards */}
       <div className={`grid gap-3 ${rising ? 'grid-cols-3' : moon ? 'grid-cols-2' : 'grid-cols-1'}`}>
@@ -63,14 +63,14 @@ export default function Big3Card({ big3 }: Big3CardProps) {
 
       {/* No Moon info */}
       {!moon && (
-        <p className="text-xs text-gray-500 italic">
+        <p className="text-xs text-ink-muted italic">
           Cần biết giờ sinh để tính Moon Sign và Rising Sign.
         </p>
       )}
 
       {/* No Rising info */}
       {moon && !rising && (
-        <p className="text-xs text-gray-500 italic">
+        <p className="text-xs text-ink-muted italic">
           Cần biết nơi sinh để tính Rising Sign (Cung Mọc).
         </p>
       )}
@@ -111,9 +111,9 @@ export default function Big3Card({ big3 }: Big3CardProps) {
 
       {/* Combined analysis */}
       {analysis && (
-        <div className="bg-purple-900/20 border border-purple-800/30 rounded-xl p-4">
-          <h4 className="text-xs font-semibold text-purple-300 mb-2">Phân tích kết hợp Big 3</h4>
-          <p className="text-sm text-gray-300 leading-relaxed">{analysis}</p>
+        <div className="bg-gold/20 border border-gold/30 rounded-xl p-4">
+          <h4 className="text-xs font-semibold text-gold mb-2">Phân tích kết hợp Big 3</h4>
+          <p className="text-sm text-ink leading-relaxed">{analysis}</p>
         </div>
       )}
     </div>
@@ -131,12 +131,12 @@ function SignCard({ icon, label, role, sign }: {
   const element = ELEMENT_LABELS[sign.element];
 
   return (
-    <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-3 text-center">
-      <div className="text-xs text-gray-500 mb-1">{icon} {label}</div>
+    <div className="bg-surface border border-white/10 rounded-xl p-3 text-center">
+      <div className="text-xs text-ink-muted mb-1">{icon} {label}</div>
       <div className="text-2xl mb-1">{sign.symbol}</div>
-      <div className="text-sm font-medium text-gray-200">{sign.name}</div>
+      <div className="text-sm font-medium text-ink">{sign.name}</div>
       <div className={`text-xs mt-1 ${element.color}`}>{element.name}</div>
-      <div className="text-[10px] text-gray-500 mt-1 italic">"{role}"</div>
+      <div className="text-[10px] text-ink-muted mt-1 italic">"{role}"</div>
     </div>
   );
 }
@@ -149,18 +149,18 @@ function InterpretationRow({ icon, title, content, expanded, onToggle }: {
   onToggle: () => void;
 }) {
   return (
-    <div className="bg-gray-900/80 border border-gray-800 rounded-xl overflow-hidden">
+    <div className="bg-surface border border-white/10 rounded-xl overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-200 hover:bg-gray-800/50 transition-colors"
+        className="w-full flex items-center gap-2 px-4 py-3 text-sm text-ink hover:bg-raised transition-colors"
       >
         <span>{icon}</span>
         <span className="flex-1 text-left font-medium">{title}</span>
-        <span className="text-gray-500 text-xs">{expanded ? '▲' : '▼'}</span>
+        <span className="text-ink-muted text-xs">{expanded ? '▲' : '▼'}</span>
       </button>
       {expanded && (
         <div className="px-4 pb-4">
-          <p className="text-sm text-gray-300 leading-relaxed">{content}</p>
+          <p className="text-sm text-ink leading-relaxed">{content}</p>
         </div>
       )}
     </div>

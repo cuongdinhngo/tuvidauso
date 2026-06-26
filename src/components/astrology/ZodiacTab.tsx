@@ -11,10 +11,10 @@ import { useAIStore } from '../../store/aiStore';
 import { getModelTier } from '../../core/ai/types';
 
 const ELEMENT_LABELS: Record<string, { name: string; icon: string; color: string }> = {
-  fire:  { name: 'Hỏa', icon: '🔥', color: 'text-red-400' },
-  earth: { name: 'Thổ', icon: '🌍', color: 'text-yellow-600' },
-  air:   { name: 'Khí', icon: '💨', color: 'text-cyan-400' },
-  water: { name: 'Nước', icon: '💧', color: 'text-blue-400' },
+  fire:  { name: 'Hỏa', icon: '🔥', color: 'text-bad' },
+  earth: { name: 'Thổ', icon: '🌍', color: 'text-warn' },
+  air:   { name: 'Khí', icon: '💨', color: 'text-thuy' },
+  water: { name: 'Nước', icon: '💧', color: 'text-thuy' },
 };
 
 const MODALITY_LABELS: Record<string, string> = {
@@ -65,34 +65,34 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
       <Big3Card big3={big3} />
 
       {/* Divider */}
-      <div className="border-t border-gray-800 pt-4">
-        <h3 className="text-sm font-semibold text-purple-300 mb-4">Chi tiết Sun Sign</h3>
+      <div className="border-t border-white/10 pt-4">
+        <h3 className="text-sm font-semibold text-gold mb-4">Chi tiết Sun Sign</h3>
       </div>
 
       {/* Hero Card */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-6 text-center">
+      <div className="bg-surface border border-white/10 rounded-xl p-6 text-center">
         <div className="text-5xl mb-2">{sign.symbol}</div>
-        <h2 className="text-2xl font-bold text-purple-300">{sign.name}</h2>
-        <p className="text-gray-400 text-sm">{sign.nameEn}</p>
-        <p className="text-gray-500 text-xs mt-1">{sign.dateRange}</p>
+        <h2 className="text-2xl font-bold text-gold">{sign.name}</h2>
+        <p className="text-ink-muted text-sm">{sign.nameEn}</p>
+        <p className="text-ink-muted text-xs mt-1">{sign.dateRange}</p>
 
         <div className="flex justify-center gap-4 mt-4 text-sm">
           <span className={element.color}>
             {element.icon} {element.name}
           </span>
-          <span className="text-gray-400">|</span>
-          <span className="text-gray-300">{MODALITY_LABELS[sign.modality]}</span>
-          <span className="text-gray-400">|</span>
-          <span className="text-gray-300">{planet.symbol} {planet.name}</span>
+          <span className="text-ink-muted">|</span>
+          <span className="text-ink">{MODALITY_LABELS[sign.modality]}</span>
+          <span className="text-ink-muted">|</span>
+          <span className="text-ink">{planet.symbol} {planet.name}</span>
         </div>
 
-        <div className="mt-3 text-xs text-gray-500">
-          Decan {decan} ({decanPlanet.symbol} {decanPlanet.name}) — {degree.toFixed(1)}°
+        <div className="mt-3 text-xs text-ink-muted">
+          Decan {decan} ({decanPlanet.symbol} {decanPlanet.name}) - {degree.toFixed(1)}°
         </div>
 
         {cuspDate && (
-          <p className="mt-2 text-xs text-yellow-500/80 bg-yellow-900/20 border border-yellow-800/30 rounded px-3 py-1 inline-block">
-            Sinh ngày giáp ranh — cung có thể lệch ±1 ngày tùy năm sinh
+          <p className="mt-2 text-xs text-warn/80 bg-warn/20 border border-warn/30 rounded px-3 py-1 inline-block">
+            Sinh ngày giáp ranh - cung có thể lệch ±1 ngày tùy năm sinh
           </p>
         )}
       </div>
@@ -100,7 +100,7 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
       {/* Keyword tags */}
       <div className="flex flex-wrap gap-2 justify-center">
         {sign.strengths.map((s) => (
-          <span key={s} className="text-xs bg-purple-900/40 text-purple-300 border border-purple-800/40 rounded-full px-3 py-1">
+          <span key={s} className="text-xs bg-gold/40 text-gold border border-gold/40 rounded-full px-3 py-1">
             {s}
           </span>
         ))}
@@ -108,40 +108,40 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
 
       {/* Expandable sections */}
       <ExpandableSection title="Tính cách" defaultOpen>
-        <p className="text-sm text-gray-300 leading-relaxed">{sign.personality}</p>
+        <p className="text-sm text-ink leading-relaxed">{sign.personality}</p>
       </ExpandableSection>
 
       <ExpandableSection title="Sự nghiệp">
-        <p className="text-sm text-gray-300 leading-relaxed">{sign.career}</p>
+        <p className="text-sm text-ink leading-relaxed">{sign.career}</p>
       </ExpandableSection>
 
       <ExpandableSection title="Tình yêu">
-        <p className="text-sm text-gray-300 leading-relaxed">{sign.love}</p>
+        <p className="text-sm text-ink leading-relaxed">{sign.love}</p>
       </ExpandableSection>
 
       <ExpandableSection title="Sức khỏe">
-        <p className="text-sm text-gray-300 leading-relaxed">{sign.health}</p>
-        <p className="text-xs text-gray-500 mt-2">Bộ phận liên quan: {sign.bodyPart}</p>
+        <p className="text-sm text-ink leading-relaxed">{sign.health}</p>
+        <p className="text-xs text-ink-muted mt-2">Bộ phận liên quan: {sign.bodyPart}</p>
       </ExpandableSection>
 
       <ExpandableSection title="Điểm mạnh & Điểm yếu">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <h4 className="text-xs text-green-400 font-semibold mb-2">Điểm mạnh</h4>
+            <h4 className="text-xs text-good font-semibold mb-2">Điểm mạnh</h4>
             <ul className="space-y-1">
               {sign.strengths.map((s) => (
-                <li key={s} className="text-sm text-gray-300 flex items-center gap-1.5">
-                  <span className="text-green-500 text-xs">+</span> {s}
+                <li key={s} className="text-sm text-ink flex items-center gap-1.5">
+                  <span className="text-good text-xs">+</span> {s}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="text-xs text-red-400 font-semibold mb-2">Điểm yếu</h4>
+            <h4 className="text-xs text-bad font-semibold mb-2">Điểm yếu</h4>
             <ul className="space-y-1">
               {sign.weaknesses.map((w) => (
-                <li key={w} className="text-sm text-gray-300 flex items-center gap-1.5">
-                  <span className="text-red-500 text-xs">-</span> {w}
+                <li key={w} className="text-sm text-ink flex items-center gap-1.5">
+                  <span className="text-bad text-xs">-</span> {w}
                 </li>
               ))}
             </ul>
@@ -150,40 +150,40 @@ export default function ZodiacTab({ big3 }: ZodiacTabProps) {
       </ExpandableSection>
 
       {/* Compatibility */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-purple-300 mb-3">Tương hợp</h3>
-        <CompatibilityList currentSign={sign.id} label="Rất hợp" signs={sign.bestMatch} colorClass="text-green-400" barColor="bg-green-500" />
-        <CompatibilityList currentSign={sign.id} label="Hợp" signs={sign.goodMatch} colorClass="text-blue-400" barColor="bg-blue-500" />
-        <CompatibilityList currentSign={sign.id} label="Thử thách" signs={sign.challengeMatch} colorClass="text-orange-400" barColor="bg-orange-500" />
+      <div className="bg-surface border border-white/10 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-gold mb-3">Tương hợp</h3>
+        <CompatibilityList currentSign={sign.id} label="Rất hợp" signs={sign.bestMatch} colorClass="text-good" barColor="bg-good" />
+        <CompatibilityList currentSign={sign.id} label="Hợp" signs={sign.goodMatch} colorClass="text-thuy" barColor="bg-thuy" />
+        <CompatibilityList currentSign={sign.id} label="Thử thách" signs={sign.challengeMatch} colorClass="text-warn" barColor="bg-warn" />
       </div>
 
       {/* Lucky info */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-purple-300 mb-3">Thông tin may mắn</h3>
+      <div className="bg-surface border border-white/10 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-gold mb-3">Thông tin may mắn</h3>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <span className="text-gray-500 text-xs">Số may mắn</span>
-            <p className="text-gray-200">{sign.luckyNumbers.join(', ')}</p>
+            <span className="text-ink-muted text-xs">Số may mắn</span>
+            <p className="text-ink">{sign.luckyNumbers.join(', ')}</p>
           </div>
           <div>
-            <span className="text-gray-500 text-xs">Màu may mắn</span>
-            <p className="text-gray-200">{sign.luckyColors.join(', ')}</p>
+            <span className="text-ink-muted text-xs">Màu may mắn</span>
+            <p className="text-ink">{sign.luckyColors.join(', ')}</p>
           </div>
           <div>
-            <span className="text-gray-500 text-xs">Ngày may mắn</span>
-            <p className="text-gray-200">{sign.luckyDay}</p>
+            <span className="text-ink-muted text-xs">Ngày may mắn</span>
+            <p className="text-ink">{sign.luckyDay}</p>
           </div>
           <div>
-            <span className="text-gray-500 text-xs">Cực tính</span>
-            <p className="text-gray-200">{sign.polarity === 'positive' ? 'Dương (+)' : 'Âm (-)'}</p>
+            <span className="text-ink-muted text-xs">Cực tính</span>
+            <p className="text-ink">{sign.polarity === 'positive' ? 'Dương (+)' : 'Âm (-)'}</p>
           </div>
         </div>
       </div>
 
       {/* Celebrities */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-purple-300 mb-2">Người nổi tiếng cùng cung</h3>
-        <p className="text-sm text-gray-300">{sign.celebrities.join(' • ')}</p>
+      <div className="bg-surface border border-white/10 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-gold mb-2">Người nổi tiếng cùng cung</h3>
+        <p className="text-sm text-ink">{sign.celebrities.join(' • ')}</p>
       </div>
 
       {/* AI Analysis */}
@@ -213,13 +213,13 @@ function ExpandableSection({ title, children, defaultOpen = false }: {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="bg-gray-900/80 border border-gray-800 rounded-xl overflow-hidden">
+    <div className="bg-surface border border-white/10 rounded-xl overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-200 hover:bg-gray-800/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-ink hover:bg-raised transition-colors"
       >
         <span>{title}</span>
-        <span className="text-gray-500 text-xs">{open ? '▲' : '▼'}</span>
+        <span className="text-ink-muted text-xs">{open ? '▲' : '▼'}</span>
       </button>
       {open && <div className="px-4 pb-4">{children}</div>}
     </div>
@@ -244,14 +244,14 @@ function CompatibilityList({ currentSign, label, signs, colorClass, barColor }: 
           const score = getCompatibilityScore(currentSign, s);
           return (
             <div key={s} className="flex items-center gap-2">
-              <span className="text-sm w-24 text-gray-300 truncate">{info.symbol} {info.name}</span>
-              <div className="flex-1 h-4 bg-gray-800 rounded-full overflow-hidden">
+              <span className="text-sm w-24 text-ink truncate">{info.symbol} {info.name}</span>
+              <div className="flex-1 h-4 bg-raised rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${barColor} transition-all duration-500`}
+                  className={`h-full rounded-full ${barColor}`}
                   style={{ width: `${score}%` }}
                 />
               </div>
-              <span className="text-xs text-gray-400 w-8 text-right">{score}%</span>
+              <span className="text-xs text-ink-muted w-8 text-right">{score}%</span>
             </div>
           );
         })}

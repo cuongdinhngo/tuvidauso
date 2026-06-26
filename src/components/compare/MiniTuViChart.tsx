@@ -32,14 +32,14 @@ export default function MiniTuViChart({ palaces, menh, than, tuanTriet, highligh
   }
 
   return (
-    <div className="grid grid-cols-4 gap-px bg-gray-800 border border-gray-700 rounded-lg overflow-hidden" style={{ width: 280 }}>
+    <div className="grid grid-cols-4 gap-px bg-raised border border-white/10 rounded-lg overflow-hidden" style={{ width: 280 }}>
       {grid.flat().map((palace, idx) => {
         if (!palace) {
           // Center cells (rows 1-2, cols 1-2)
           if ((idx >= 5 && idx <= 6) || (idx >= 9 && idx <= 10)) {
-            return <div key={idx} className="bg-gray-950 h-16" />;
+            return <div key={idx} className="bg-surface h-16" />;
           }
-          return <div key={idx} className="bg-gray-950 h-16" />;
+          return <div key={idx} className="bg-surface h-16" />;
         }
 
         const isMenh = palace.position === menh;
@@ -51,24 +51,24 @@ export default function MiniTuViChart({ palaces, menh, than, tuanTriet, highligh
         const mainStars = palace.stars.filter(s => s.type === 'chinh');
 
         let borderClass = 'border border-transparent';
-        if (isHighlight) borderClass = 'border-2 border-yellow-400';
-        else if (isMenh) borderClass = 'border border-yellow-600/60';
-        else if (isThan) borderClass = 'border border-blue-600/60';
+        if (isHighlight) borderClass = 'border-2 border-warn';
+        else if (isMenh) borderClass = 'border border-warn/60';
+        else if (isThan) borderClass = 'border border-thuy/60';
 
         return (
           <div
             key={palace.position}
-            className={`bg-gray-950 h-16 p-0.5 flex flex-col overflow-hidden ${borderClass} ${
-              (isTuan || isTriet) ? 'bg-gray-950/80' : ''
+            className={`bg-surface h-16 p-0.5 flex flex-col overflow-hidden ${borderClass} ${
+              (isTuan || isTriet) ? 'bg-surface' : ''
             }`}
           >
-            <div className="text-[8px] text-gray-500 flex justify-between">
+            <div className="text-[8px] text-ink-muted flex justify-between">
               <span>{palace.name}</span>
               <span>{palace.position}</span>
             </div>
             <div className="flex-1 flex flex-col justify-center">
               {mainStars.slice(0, 2).map(star => (
-                <div key={star.name} className="text-[9px] text-yellow-300 leading-tight truncate">
+                <div key={star.name} className="text-[9px] text-warn leading-tight truncate">
                   {star.name}
                 </div>
               ))}

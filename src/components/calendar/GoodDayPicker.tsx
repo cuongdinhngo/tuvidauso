@@ -52,16 +52,16 @@ export default function GoodDayPicker() {
     <div className="space-y-6">
       {/* Purpose selector */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-400 mb-3">Chọn mục đích</h3>
+        <h3 className="text-sm font-semibold text-ink-muted mb-3">Chọn mục đích</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
           {ALL_PURPOSES.map((p) => (
             <button
               key={p}
               onClick={() => { setPurpose(p); setExpandedDay(null); }}
-              className={`p-3 rounded-lg border text-left text-sm transition-all ${
+              className={`p-3 rounded-lg border text-left text-sm transition-colors ${
                 purpose === p
-                  ? 'border-purple-500 bg-purple-900/40 text-purple-300'
-                  : 'border-gray-800 bg-gray-900/30 text-gray-400 hover:border-gray-700 hover:text-gray-300'
+                  ? 'border-gold bg-gold/40 text-gold'
+                  : 'border-white/10 bg-surface text-ink-muted hover:border-white/10 hover:text-ink'
               }`}
             >
               <span className="mr-1.5">{PURPOSE_ICONS[p]}</span>
@@ -74,23 +74,23 @@ export default function GoodDayPicker() {
       {/* Month selector + filter */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <button onClick={() => navigateMonth(-1)} className="p-1.5 text-gray-400 hover:text-purple-300 transition-colors">
+          <button onClick={() => navigateMonth(-1)} className="p-1.5 text-ink-muted hover:text-gold transition-colors">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm font-medium text-gray-300">
+          <span className="text-sm font-medium text-ink">
             Tháng {month}/{year}
           </span>
-          <button onClick={() => navigateMonth(1)} className="p-1.5 text-gray-400 hover:text-purple-300 transition-colors">
+          <button onClick={() => navigateMonth(1)} className="p-1.5 text-ink-muted hover:text-gold transition-colors">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
         {userYearChi && (
-          <label className="flex items-center gap-2 text-xs text-gray-400 cursor-pointer">
+          <label className="flex items-center gap-2 text-xs text-ink-muted cursor-pointer">
             <input
               type="checkbox"
               checked={filterByAge}
               onChange={(e) => { setFilterByAge(e.target.checked); setExpandedDay(null); }}
-              className="rounded border-gray-600 bg-gray-800 text-purple-500 focus:ring-purple-500"
+              className="rounded border-white/10 bg-raised text-gold focus:ring-gold"
             />
             Lọc theo tuổi {userYearChi} (tránh ngày xung)
           </label>
@@ -100,7 +100,7 @@ export default function GoodDayPicker() {
       {/* Results */}
       {purpose && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-400">
+          <h3 className="text-sm font-semibold text-ink-muted">
             {results.length > 0
               ? `${results.length} ngày tốt cho "${PURPOSE_FILTERS[purpose].label}" trong tháng ${month}`
               : `Không tìm thấy ngày phù hợp cho "${PURPOSE_FILTERS[purpose].label}" trong tháng ${month}`}
@@ -109,31 +109,31 @@ export default function GoodDayPicker() {
             <div key={r.date.day}>
               <button
                 onClick={() => setExpandedDay(expandedDay === r.date.day ? null : r.date.day)}
-                className={`w-full text-left p-3 rounded-lg border transition-all ${
+                className={`w-full text-left p-3 rounded-lg border transition-colors ${
                   expandedDay === r.date.day
-                    ? 'border-purple-500 bg-purple-900/30'
-                    : 'border-gray-800 bg-gray-900/50 hover:border-gray-700'
+                    ? 'border-gold bg-gold/30'
+                    : 'border-white/10 bg-surface hover:border-white/10'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-gray-500">
+                    <span className="text-lg font-bold text-ink-muted">
                       {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`}
                     </span>
                     <div>
-                      <span className="text-sm font-semibold text-gray-200">
+                      <span className="text-sm font-semibold text-ink">
                         {r.date.day}/{r.date.month} ({DAY_NAMES[new Date(r.date.year, r.date.month - 1, r.date.day).getDay()]})
                       </span>
-                      <span className="text-xs text-gray-500 ml-2">
+                      <span className="text-xs text-ink-muted ml-2">
                         Âm: {r.lunar.day}/{r.lunar.month} | Trực: {r.truc.name}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-400">{r.score} điểm</div>
+                    <div className="text-xs text-ink-muted">{r.score} điểm</div>
                     <div className="text-xs">
                       {Array.from({ length: 5 }, (_, i) => (
-                        <span key={i} className={i < r.rating ? 'text-yellow-400' : 'text-gray-700'}>★</span>
+                        <span key={i} className={i < r.rating ? 'text-warn' : 'text-ink-muted'}>★</span>
                       ))}
                     </div>
                   </div>
@@ -141,12 +141,12 @@ export default function GoodDayPicker() {
                 {r.goodStars.length > 0 && (
                   <div className="flex gap-1 mt-1.5">
                     {r.goodStars.map(s => (
-                      <span key={s} className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-400">{s}</span>
+                      <span key={s} className="text-[10px] px-1.5 py-0.5 rounded-full bg-good/30 text-good">{s}</span>
                     ))}
                   </div>
                 )}
                 {r.bestHours.length > 0 && (
-                  <div className="text-[10px] text-gray-500 mt-1">
+                  <div className="text-[10px] text-ink-muted mt-1">
                     Giờ tốt: {r.bestHours.slice(0, 3).join(' | ')}
                   </div>
                 )}
@@ -162,7 +162,7 @@ export default function GoodDayPicker() {
       )}
 
       {!purpose && (
-        <div className="text-center py-8 text-gray-600 text-sm">
+        <div className="text-center py-8 text-ink-muted text-sm">
           Chọn mục đích để tìm ngày tốt
         </div>
       )}
