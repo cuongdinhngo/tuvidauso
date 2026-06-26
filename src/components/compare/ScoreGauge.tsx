@@ -5,12 +5,12 @@ interface ScoreGaugeProps {
   size?: number;
 }
 
+// Map score band to a design token (via CSS var), no literal hex.
 function getScoreColor(score: number): string {
-  if (score >= 85) return '#22c55e';
-  if (score >= 70) return '#3b82f6';
-  if (score >= 50) return '#eab308';
-  if (score >= 30) return '#f97316';
-  return '#ef4444';
+  if (score >= 85) return 'var(--color-good)';
+  if (score >= 70) return 'var(--color-thuy)';
+  if (score >= 50) return 'var(--color-warn)';
+  return 'var(--color-bad)';
 }
 
 export default function ScoreGauge({ score, size = 180 }: ScoreGaugeProps) {
@@ -31,7 +31,7 @@ export default function ScoreGauge({ score, size = 180 }: ScoreGaugeProps) {
         <path
           d={`M ${center - radius} ${center} A ${radius} ${radius} 0 0 1 ${center + radius} ${center}`}
           fill="none"
-          stroke="#374151"
+          className="stroke-white/10"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
         />
@@ -43,10 +43,9 @@ export default function ScoreGauge({ score, size = 180 }: ScoreGaugeProps) {
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={`${progress} ${circumference}`}
-          style={{ filter: `drop-shadow(0 0 6px ${color}40)` }}
         />
         {/* Score text */}
-        <text x={center} y={center - 10} textAnchor="middle" className="text-3xl font-bold" fill="white">
+        <text x={center} y={center - 10} textAnchor="middle" className="text-3xl font-bold" fill="var(--color-ink)">
           {score}%
         </text>
       </svg>
