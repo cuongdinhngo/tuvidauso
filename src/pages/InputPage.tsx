@@ -6,6 +6,13 @@ import { solarToLunar } from '../core/calendar/solarToLunar';
 import { DIA_CHI_HOURS } from '../core/types';
 import type { BirthInfo } from '../core/types';
 import { VIETNAM_CITIES } from '../data/vietnamCities';
+import Button from '../components/shared/Button';
+import Card from '../components/shared/Card';
+
+const fieldClass =
+  'w-full bg-surface border border-white/10 rounded-md px-3 py-2 min-h-[44px] text-ink ' +
+  'focus:border-gold focus:outline-none transition-colors';
+const labelClass = 'block text-sm text-ink-muted mb-1';
 
 export default function InputPage() {
   const navigate = useNavigate();
@@ -66,54 +73,43 @@ export default function InputPage() {
   const daysInMonth = (year !== '' && month !== '') ? new Date(year, month, 0).getDate() : 31;
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8">
-      <div className="text-center mb-8">
-        <Sparkles className="w-10 h-10 text-yellow-400 mx-auto mb-2" />
-        <h1 className="text-2xl font-bold text-purple-300">Lập Lá Số Tử Vi</h1>
+    <div className="stagger-in max-w-lg mx-auto px-4 py-8">
+      <div style={{ ['--i' as string]: 0 }} className="text-center mb-8">
+        <Sparkles className="w-10 h-10 text-gold mx-auto mb-2" />
+        <h1 className="font-display text-2xl font-bold text-ink">Lập Lá Số Tử Vi</h1>
       </div>
 
-      <div className="space-y-5">
+      <div style={{ ['--i' as string]: 1 }} className="space-y-5">
         {/* Name */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">Họ tên (tùy chọn)</label>
+          <label htmlFor="f-name" className={labelClass}>Họ tên (tùy chọn)</label>
           <input
+            id="f-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
+            className={`${fieldClass} placeholder-ink-muted/60`}
             placeholder="Nhập họ tên đầy đủ để xem Thần Số Học"
           />
         </div>
 
         {/* Date of birth */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">Ngày sinh (Dương lịch)</label>
+          <label className={labelClass}>Ngày sinh (Dương lịch)</label>
           <div className="grid grid-cols-3 gap-2">
-            <select
-              value={day}
-              onChange={(e) => setDay(Number(e.target.value))}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            >
+            <select value={day} onChange={(e) => setDay(Number(e.target.value))} className={fieldClass} aria-label="Ngày">
               <option value="" disabled>Chọn ngày</option>
               {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => (
                 <option key={d} value={d}>Ngày {d}</option>
               ))}
             </select>
-            <select
-              value={month}
-              onChange={(e) => setMonth(Number(e.target.value))}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            >
+            <select value={month} onChange={(e) => setMonth(Number(e.target.value))} className={fieldClass} aria-label="Tháng">
               <option value="" disabled>Chọn tháng</option>
               {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
                 <option key={m} value={m}>Tháng {m}</option>
               ))}
             </select>
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            >
+            <select value={year} onChange={(e) => setYear(Number(e.target.value))} className={fieldClass} aria-label="Năm">
               <option value="" disabled>Chọn năm</option>
               {Array.from({ length: new Date().getFullYear() - 1939 }, (_, i) => new Date().getFullYear() - i).map((y) => (
                 <option key={y} value={y}>{y}</option>
@@ -124,25 +120,21 @@ export default function InputPage() {
 
         {/* Birth hour */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">Giờ sinh</label>
+          <label htmlFor="f-hour" className={labelClass}>Giờ sinh</label>
           {!unknownHour && (
-            <select
-              value={hour}
-              onChange={(e) => setHour(Number(e.target.value))}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            >
+            <select id="f-hour" value={hour} onChange={(e) => setHour(Number(e.target.value))} className={fieldClass}>
               <option value="" disabled>Chọn giờ</option>
               {DIA_CHI_HOURS.map((h, i) => (
                 <option key={i} value={i}>{h.name} ({h.time})</option>
               ))}
             </select>
           )}
-          <label className="flex items-center gap-2 mt-2 text-sm text-gray-400 cursor-pointer">
+          <label className="flex items-center gap-2 mt-2 text-sm text-ink-muted cursor-pointer">
             <input
               type="checkbox"
               checked={unknownHour}
               onChange={(e) => setUnknownHour(e.target.checked)}
-              className="rounded border-gray-600"
+              className="rounded border-white/25 accent-gold"
             />
             Không biết giờ sinh
           </label>
@@ -150,7 +142,7 @@ export default function InputPage() {
 
         {/* Gender */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">Giới tính</label>
+          <label className={labelClass}>Giới tính</label>
           <div className="flex gap-4">
             {(['male', 'female'] as const).map((g) => (
               <label key={g} className="flex items-center gap-2 cursor-pointer">
@@ -159,9 +151,9 @@ export default function InputPage() {
                   name="gender"
                   checked={gender === g}
                   onChange={() => setGender(g)}
-                  className="text-purple-500"
+                  className="accent-gold"
                 />
-                <span className="text-gray-200">{g === 'male' ? 'Nam' : 'Nữ'}</span>
+                <span className="text-ink">{g === 'male' ? 'Nam' : 'Nữ'}</span>
               </label>
             ))}
           </div>
@@ -169,25 +161,21 @@ export default function InputPage() {
 
         {/* Birthplace */}
         <div>
-          <label className="block text-sm text-gray-400 mb-1">Nơi sinh (cho Rising Sign)</label>
+          <label htmlFor="f-place" className={labelClass}>Nơi sinh (cho Rising Sign)</label>
           {!unknownBirthplace && (
-            <select
-              value={birthplaceIndex}
-              onChange={(e) => setBirthplaceIndex(Number(e.target.value))}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:border-purple-500 focus:outline-none"
-            >
+            <select id="f-place" value={birthplaceIndex} onChange={(e) => setBirthplaceIndex(Number(e.target.value))} className={fieldClass}>
               <option value="" disabled>Chọn tỉnh/thành</option>
               {VIETNAM_CITIES.map((city, i) => (
                 <option key={city.name} value={i}>{city.name}</option>
               ))}
             </select>
           )}
-          <label className="flex items-center gap-2 mt-2 text-sm text-gray-400 cursor-pointer">
+          <label className="flex items-center gap-2 mt-2 text-sm text-ink-muted cursor-pointer">
             <input
               type="checkbox"
               checked={unknownBirthplace}
               onChange={(e) => setUnknownBirthplace(e.target.checked)}
-              className="rounded border-gray-600"
+              className="rounded border-white/25 accent-gold"
             />
             Không biết / không cần Rising Sign
           </label>
@@ -195,49 +183,41 @@ export default function InputPage() {
 
         {/* Preview */}
         {preview && (
-          <div className="bg-gray-900/80 border border-purple-900/30 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-purple-300 mb-2">Thông tin âm lịch</h3>
+          <Card>
+            <h3 className="font-display text-sm font-semibold text-gold mb-2">Thông tin âm lịch</h3>
             <div className="grid grid-cols-2 gap-2 text-sm">
-              <span className="text-gray-400">Ngày âm lịch:</span>
-              <span className="text-gray-200">
+              <span className="text-ink-muted">Ngày âm lịch:</span>
+              <span className="text-ink">
                 {preview.day}/{preview.month < 10 ? '0' : ''}{preview.month}/{preview.yearCan} {preview.yearChi}
                 {preview.isLeapMonth && ' (nhuận)'}
               </span>
-              <span className="text-gray-400">Con giáp:</span>
-              <span className="text-gray-200">{preview.yearChi} ({CON_GIAP[preview.yearChi]})</span>
-              <span className="text-gray-400">Nạp âm:</span>
-              <span className="text-gray-200">{preview.napAm}</span>
+              <span className="text-ink-muted">Con giáp:</span>
+              <span className="text-ink">{preview.yearChi} ({CON_GIAP[preview.yearChi]})</span>
+              <span className="text-ink-muted">Nạp âm:</span>
+              <span className="text-ink">{preview.napAm}</span>
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Future date error */}
         {isFutureDate && (
-          <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-red-300 text-sm">
+          <div className="bg-bad/15 border border-bad/40 rounded-md p-3 text-bad text-sm">
             Ngày sinh không thể là ngày trong tương lai.
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-red-300 text-sm">
+          <div className="bg-bad/15 border border-bad/40 rounded-md p-3 text-bad text-sm">
             {error}
           </div>
         )}
 
         {/* Submit */}
-        <button
-          onClick={handleSubmit}
-          disabled={!isComplete}
-          className={`w-full flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-all ${
-            isComplete
-              ? 'bg-purple-600 hover:bg-purple-500 hover:shadow-lg hover:shadow-purple-500/25'
-              : 'bg-gray-700 opacity-50 cursor-not-allowed'
-          }`}
-        >
+        <Button onClick={handleSubmit} disabled={!isComplete} className="w-full">
           <Sparkles className="w-5 h-5" />
           Lập Lá Số
-        </button>
+        </Button>
       </div>
     </div>
   );
