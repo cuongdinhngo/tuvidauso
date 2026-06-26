@@ -3,29 +3,31 @@
 @tailwind utilities;
 
 :root {
-  /* Surfaces */
-  --color-base: #0F1115;
-  --color-surface: #171A21;
-  --color-raised: #1F2430;
-  /* Ink */
-  --color-ink: #ECECEC;
-  --color-ink-muted: #9AA0AB;
-  /* Accents (locked: gold + jade) */
-  --color-gold: #D4AF37;
-  --color-jade: #3FB6A8;
-  /* Ngu hanh (Five Elements) - tuned for dark bg */
+  /* Cosmic night surfaces (violet-tinted darks) */
+  --color-base: #0B0A14;
+  --color-surface: #14121F;
+  --color-raised: #1C1930;
+  /* Ink (cool white) */
+  --color-ink: #ECEAF2;
+  --color-ink-muted: #9E98B0;
+  /* Accents: gold (primary, the "stars") + jade (secondary) + iris (amethyst, the "Tử Vi" purple star) */
+  --color-gold: #E2B84A;
+  --color-jade: #45C2B1;
+  --color-iris: #8E80D8;
+  /* Ngu hanh (Five Elements) - tuned for cosmic dark bg */
   --color-kim: #D9D2C5;
   --color-moc: #5FB87A;
-  --color-thuy: #4F8FE0;
+  --color-thuy: #5C97E6;
   --color-hoa: #E0604F;
   --color-tho: #C9A24B;
   /* State */
   --color-good: #5FB87A;
   --color-warn: #E0A23F;
   --color-bad: #E0604F;
-  /* Shadows - subtle, never heavy */
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.32);
-  --shadow-raised: 0 6px 20px -8px rgba(0, 0, 0, 0.55);
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 8px 30px -10px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 28px -4px rgba(226, 184, 74, 0.45);
 }
 
 html {
@@ -33,7 +35,13 @@ html {
 }
 
 body {
+  /* Atmospheric cosmic gradient under every page; panels float above it. */
   background-color: var(--color-base);
+  background-image:
+    radial-gradient(1100px 640px at 50% -12%, rgba(142, 128, 216, 0.20), transparent 62%),
+    radial-gradient(820px 520px at 102% 4%, rgba(69, 194, 177, 0.07), transparent 58%),
+    radial-gradient(720px 480px at -8% 12%, rgba(226, 184, 74, 0.06), transparent 60%);
+  background-attachment: fixed;
   color: var(--color-ink);
   font-family: "Be Vietnam Pro", system-ui, sans-serif;
   min-height: 100vh;
@@ -49,9 +57,16 @@ body {
   border-radius: 4px;
 }
 
-/* Shell page-load stagger (MOTION 3). Data core never uses this.
-   Honors reduced-motion via the block below. */
+/* Metallic-gold sheen for hero titles (subtle, single-hue, not rainbow). */
+.text-gold-sheen {
+  background: linear-gradient(180deg, #F4D98B 0%, var(--color-gold) 52%, #B98A2E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  /* Shell page-load stagger (MOTION 3). Data core never uses this. */
   .stagger-in > * {
     animation: stagger-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(var(--i, 0) * 70ms);
@@ -59,6 +74,16 @@ body {
   @keyframes stagger-fade {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Twinkling stars in the hero atmosphere. */
+  .twinkle {
+    animation: twinkle var(--dur, 4s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.25; transform: scale(0.85); }
+    50%      { opacity: 1; transform: scale(1); }
   }
 }
 
