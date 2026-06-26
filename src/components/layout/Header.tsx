@@ -10,16 +10,16 @@ export default function Header() {
 
   const linkClass = (active: boolean) =>
     active
-      ? 'text-purple-300 font-medium transition-colors'
-      : 'text-gray-400 hover:text-purple-300 transition-colors';
+      ? 'text-gold font-medium transition-colors'
+      : 'text-ink-muted hover:text-ink transition-colors';
 
   const info = providerConfig ? PROVIDER_INFO[providerConfig.type] : null;
 
   return (
-    <header className="border-b border-purple-900/50 bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b border-white/[0.08] bg-base/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-xl font-bold text-purple-300 hover:text-purple-200 transition-colors">
-          <Sparkles className="w-6 h-6 text-yellow-400" />
+        <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold text-ink hover:text-gold transition-colors">
+          <Sparkles className="w-6 h-6 text-gold" />
           <span>Tử Vi Đẩu Số</span>
         </Link>
         <div className="flex items-center gap-4">
@@ -31,14 +31,14 @@ export default function Header() {
           </nav>
           <button
             onClick={() => setShowSettingsModal(true)}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-ink-muted hover:text-gold transition-colors"
             title="Cài đặt AI"
           >
             {info ? (
               <>
                 <span>{info.icon}</span>
                 <span className="hidden sm:inline">{info.name.split('(')[0].trim()}</span>
-                <span className="text-green-500">✓</span>
+                <span className="text-good">✓</span>
               </>
             ) : (
               <>

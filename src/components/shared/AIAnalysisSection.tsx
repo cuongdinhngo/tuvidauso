@@ -211,12 +211,12 @@ function parseIntoSections(raw: string): Section[] {
 }
 
 const INLINE_SYSTEM_STYLES: Record<string, { label: string; color: string }> = {
-  'Tử Vi': { label: 'Tử Vi', color: 'text-purple-400' },
-  'Tử vi': { label: 'Tử Vi', color: 'text-purple-400' },
-  'Thần Số': { label: 'Thần Số', color: 'text-amber-400' },
-  'Thần số': { label: 'Thần Số', color: 'text-amber-400' },
-  'Hoàng Đạo': { label: 'Hoàng Đạo', color: 'text-blue-400' },
-  'Hoàng đạo': { label: 'Hoàng Đạo', color: 'text-blue-400' },
+  'Tử Vi': { label: 'Tử Vi', color: 'text-gold' },
+  'Tử vi': { label: 'Tử Vi', color: 'text-gold' },
+  'Thần Số': { label: 'Thần Số', color: 'text-warn' },
+  'Thần số': { label: 'Thần Số', color: 'text-warn' },
+  'Hoàng Đạo': { label: 'Hoàng Đạo', color: 'text-jade' },
+  'Hoàng đạo': { label: 'Hoàng Đạo', color: 'text-jade' },
 };
 
 function formatInline(text: string): ReactNode {
@@ -224,7 +224,7 @@ function formatInline(text: string): ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*|\[(?:Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)\])/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i} className="text-gray-100 font-medium">{part.slice(2, -2)}</strong>;
+      return <strong key={i} className="text-ink font-medium">{part.slice(2, -2)}</strong>;
     }
     // Inline system badge: [Tử Vi], [Thần Số], [Hoàng Đạo]
     const sysMatch = part.match(/^\[(Tử [Vv]i|Thần [Ss]ố|Hoàng [Đđ]ạo)\]$/);
@@ -242,22 +242,22 @@ const SYSTEM_CONFIG = {
   tuvi: {
     label: 'Tử Vi',
     icon: '🔮',
-    badgeBg: 'bg-purple-500/20',
-    badgeText: 'text-purple-400',
+    badgeBg: 'bg-gold/20',
+    badgeText: 'text-gold',
     borderColor: 'border-l-purple-500',
   },
   thanso: {
     label: 'Thần Số',
     icon: '🔢',
-    badgeBg: 'bg-amber-500/20',
-    badgeText: 'text-amber-400',
+    badgeBg: 'bg-warn/20',
+    badgeText: 'text-warn',
     borderColor: 'border-l-amber-500',
   },
   hoangdao: {
     label: 'Hoàng Đạo',
     icon: '♈',
-    badgeBg: 'bg-blue-500/20',
-    badgeText: 'text-blue-400',
+    badgeBg: 'bg-jade/20',
+    badgeText: 'text-jade',
     borderColor: 'border-l-blue-500',
   },
 } as const;
@@ -269,16 +269,16 @@ function SystemInsight({ system, text }: { system: 'tuvi' | 'thanso' | 'hoangdao
       <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${config.badgeBg} ${config.badgeText} mb-1`}>
         {config.icon} {config.label}
       </span>
-      <p className="text-gray-300 text-sm leading-relaxed">{formatInline(text)}</p>
+      <p className="text-ink text-sm leading-relaxed">{formatInline(text)}</p>
     </div>
   );
 }
 
 function ConclusionCard({ text }: { text: string }) {
   return (
-    <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/20 rounded-lg px-4 py-3 my-2">
-      <p className="text-white text-sm font-medium leading-relaxed">
-        <span className="text-purple-400 mr-1">💡</span> {formatInline(text)}
+    <div className="bg-gradient-to-r from-gold/20 to-jade/20 border border-gold/20 rounded-lg px-4 py-3 my-2">
+      <p className="text-ink text-sm font-medium leading-relaxed">
+        <span className="text-gold mr-1">💡</span> {formatInline(text)}
       </p>
     </div>
   );
@@ -286,8 +286,8 @@ function ConclusionCard({ text }: { text: string }) {
 
 function AgreementBadge({ text }: { text: string }) {
   return (
-    <div className="bg-emerald-900/20 border border-emerald-500/20 rounded-lg px-4 py-2 my-1">
-      <p className="text-emerald-300 text-sm">
+    <div className="bg-good/20 border border-good/20 rounded-lg px-4 py-2 my-1">
+      <p className="text-good text-sm">
         <span className="font-semibold">✅ Đồng nhất:</span> {formatInline(text)}
       </p>
     </div>
@@ -296,8 +296,8 @@ function AgreementBadge({ text }: { text: string }) {
 
 function DifferenceBadge({ text }: { text: string }) {
   return (
-    <div className="bg-yellow-900/15 border border-yellow-500/15 rounded-lg px-4 py-2 my-1">
-      <p className="text-yellow-300 text-sm">
+    <div className="bg-warn/15 border border-warn/15 rounded-lg px-4 py-2 my-1">
+      <p className="text-warn text-sm">
         <span className="font-semibold">🔄 Góc nhìn khác:</span> {formatInline(text)}
       </p>
     </div>
@@ -306,9 +306,9 @@ function DifferenceBadge({ text }: { text: string }) {
 
 function StarRating({ rating }: { rating: number }) {
   return (
-    <span className="inline-flex items-center gap-0.5 bg-yellow-900/30 px-2 py-0.5 rounded text-sm">
+    <span className="inline-flex items-center gap-0.5 bg-warn/30 px-2 py-0.5 rounded text-sm">
       {Array.from({ length: 5 }, (_, i) => (
-        <span key={i} className={i < rating ? 'text-yellow-400' : 'text-gray-600'}>⭐</span>
+        <span key={i} className={i < rating ? 'text-warn' : 'text-ink-muted'}>⭐</span>
       ))}
     </span>
   );
@@ -320,7 +320,7 @@ function RenderSection({ section }: { section: Section }) {
       {section.heading && (
         <div className="flex items-center gap-2 mb-3">
           {section.emoji && <span className="text-xl">{section.emoji}</span>}
-          <h3 className="text-lg font-bold text-white">{section.heading}</h3>
+          <h3 className="text-lg font-bold text-ink">{section.heading}</h3>
           {section.rating && <StarRating rating={section.rating} />}
         </div>
       )}
@@ -339,13 +339,13 @@ function RenderSection({ section }: { section: Section }) {
               const Tag = block.listType === 'ol' ? 'ol' : 'ul';
               const cls = block.listType === 'ol' ? 'list-decimal' : 'list-disc';
               return (
-                <Tag key={i} className={`space-y-1 ml-4 ${cls} text-sm text-gray-300 leading-relaxed`}>
+                <Tag key={i} className={`space-y-1 ml-4 ${cls} text-sm text-ink leading-relaxed`}>
                   {block.items.map((item, j) => <li key={j}>{formatInline(item)}</li>)}
                 </Tag>
               );
             }
             case 'paragraph':
-              return <p key={i} className="text-sm text-gray-300 leading-relaxed">{formatInline(block.text)}</p>;
+              return <p key={i} className="text-sm text-ink leading-relaxed">{formatInline(block.text)}</p>;
           }
         })}
       </div>
@@ -369,8 +369,8 @@ function AIContentRenderer({ content }: { content: string }) {
 function UserBubble({ message }: { message: AIMessage }) {
   return (
     <div className="flex justify-end mb-2">
-      <div className="bg-purple-600/20 border border-purple-500/20 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[75%]">
-        <p className="text-purple-100 text-sm">{message.displayContent || message.content}</p>
+      <div className="bg-gold/20 border border-gold/20 rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-[75%]">
+        <p className="text-gold text-sm">{message.displayContent || message.content}</p>
       </div>
     </div>
   );
@@ -380,10 +380,10 @@ function AIBubble({ message }: { message: AIMessage }) {
   const content = message.displayContent || message.content;
   return (
     <div className="flex justify-start mb-3 gap-2">
-      <div className="w-7 h-7 rounded-full bg-purple-600/30 flex items-center justify-center shrink-0 mt-1">
+      <div className="w-7 h-7 rounded-full bg-gold/30 flex items-center justify-center shrink-0 mt-1">
         <span className="text-xs">🤖</span>
       </div>
-      <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
+      <div className="bg-raised border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
         <AIContentRenderer content={content} />
         <SystemsUsedBadge content={content} />
       </div>
@@ -395,20 +395,20 @@ function SystemsUsedBadge({ content }: { content: string }) {
   const systems: { key: string; icon: string; label: string; color: string }[] = [];
 
   if (content.includes('[Tử Vi]') || content.includes('Tử Vi')) {
-    systems.push({ key: 'tv', icon: '🔮', label: 'Tử Vi', color: 'text-purple-400 bg-purple-400/10' });
+    systems.push({ key: 'tv', icon: '🔮', label: 'Tử Vi', color: 'text-gold bg-gold/10' });
   }
   if (content.includes('[Thần Số]') || content.includes('Thần Số')) {
-    systems.push({ key: 'ts', icon: '🔢', label: 'Thần Số', color: 'text-amber-400 bg-amber-400/10' });
+    systems.push({ key: 'ts', icon: '🔢', label: 'Thần Số', color: 'text-warn bg-warn/10' });
   }
   if (content.includes('[Hoàng Đạo]') || content.includes('Hoàng Đạo')) {
-    systems.push({ key: 'hd', icon: '♈', label: 'Hoàng Đạo', color: 'text-blue-400 bg-blue-400/10' });
+    systems.push({ key: 'hd', icon: '♈', label: 'Hoàng Đạo', color: 'text-jade bg-jade/10' });
   }
 
   if (systems.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-gray-700/30">
-      <span className="text-gray-600 text-xs">Nguồn:</span>
+    <div className="flex items-center gap-1.5 mt-3 pt-2 border-t border-white/10">
+      <span className="text-ink-muted text-xs">Nguồn:</span>
       {systems.map(s => (
         <span key={s.key} className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded ${s.color}`}>
           {s.icon} {s.label}
@@ -421,16 +421,16 @@ function SystemsUsedBadge({ content }: { content: string }) {
 function TypingIndicator() {
   return (
     <div className="flex justify-start mb-3 gap-2">
-      <div className="w-7 h-7 rounded-full bg-purple-600/30 flex items-center justify-center shrink-0 mt-1">
+      <div className="w-7 h-7 rounded-full bg-gold/30 flex items-center justify-center shrink-0 mt-1">
         <span className="text-xs">🤖</span>
       </div>
-      <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl rounded-tl-sm px-4 py-3">
+      <div className="bg-raised border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-400">Đang phân tích</span>
+          <span className="text-sm text-ink-muted">Đang phân tích</span>
           <div className="flex gap-1">
-            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <span className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
         </div>
       </div>
@@ -446,13 +446,13 @@ function QuickQuestions({ questions, onSelect, onAnalyze, disabled }: {
 }) {
   return (
     <div className="px-4 py-6">
-      <p className="text-gray-400 text-sm text-center mb-4">
+      <p className="text-ink-muted text-sm text-center mb-4">
         Hỏi AI bất kỳ điều gì về lá số của bạn
       </p>
       <button
         onClick={onAnalyze}
         disabled={disabled}
-        className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white text-sm font-medium rounded-xl px-4 py-2.5 transition-colors mb-3"
+        className="w-full flex items-center justify-center gap-2 min-h-[44px] bg-gold hover:bg-gold/90 disabled:opacity-40 text-base font-semibold text-sm rounded-md px-4 py-2.5 transition-colors mb-3"
       >
         <Sparkles className="w-4 h-4" />
         Phân Tích Tổng Hợp
@@ -463,11 +463,11 @@ function QuickQuestions({ questions, onSelect, onAnalyze, disabled }: {
             key={q}
             onClick={() => onSelect(q)}
             disabled={disabled}
-            className="flex items-center gap-2 bg-gray-800/50 hover:bg-gray-700/50
-                       border border-gray-700/50 hover:border-purple-500/30
+            className="flex items-center gap-2 bg-raised hover:bg-raised
+                       border border-white/10 hover:border-gold/30
                        rounded-xl px-3 py-2.5 text-left transition-all disabled:opacity-40"
           >
-            <span className="text-gray-300 text-xs leading-tight">{q}</span>
+            <span className="text-ink text-xs leading-tight">{q}</span>
           </button>
         ))}
       </div>
@@ -526,9 +526,9 @@ function FollowUpSuggestions({ content, fallbackQuestions, aiSuggestions, onSele
         <button
           key={s}
           onClick={() => onSelect(s)}
-          className="whitespace-nowrap text-xs bg-gray-800/50 hover:bg-purple-900/30
-                     border border-gray-700/30 hover:border-purple-500/30
-                     rounded-full px-3 py-1.5 text-gray-400 hover:text-purple-300
+          className="whitespace-nowrap text-xs bg-raised hover:bg-gold/30
+                     border border-white/10 hover:border-gold/30
+                     rounded-full px-3 py-1.5 text-ink-muted hover:text-gold
                      transition-all shrink-0"
         >
           {s}
@@ -553,9 +553,9 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
   };
 
   return (
-    <div className="px-4 py-2 border-t border-gray-800">
-      <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700/50
-                      rounded-xl px-3 py-2 focus-within:border-purple-500/50 transition">
+    <div className="px-4 py-2 border-t border-white/10">
+      <div className="flex items-center gap-2 bg-raised border border-white/10
+                      rounded-xl px-3 py-2 focus-within:border-gold/50 transition">
         <input
           ref={inputRef}
           type="text"
@@ -564,16 +564,17 @@ function ChatInput({ value, onChange, onSend, isLoading, inputRef }: {
           onKeyDown={handleKeyDown}
           placeholder="Hỏi AI bất kỳ điều gì..."
           disabled={isLoading}
-          className="flex-1 bg-transparent text-white text-sm placeholder-gray-500
+          className="flex-1 bg-transparent text-ink text-sm placeholder-ink-muted/60
                      outline-none disabled:opacity-50"
         />
         <button
           onClick={() => { if (value.trim() && !isLoading) onSend(value.trim()); }}
           disabled={!value.trim() || isLoading}
-          className="p-1.5 rounded-lg bg-purple-600 hover:bg-purple-500
-                     disabled:bg-gray-700 disabled:opacity-50 transition"
+          aria-label="Gửi"
+          className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md bg-gold hover:bg-gold/90
+                     disabled:bg-raised disabled:opacity-50 transition"
         >
-          <Send className="w-4 h-4 text-white" />
+          <Send className="w-4 h-4 text-base" />
         </button>
       </div>
     </div>
@@ -612,17 +613,17 @@ export default function AIAnalysisSection({
   };
 
   return (
-    <div className="bg-gray-900/80 border border-gray-800 rounded-xl overflow-hidden flex flex-col">
+    <div className="bg-surface border border-white/10 rounded-xl overflow-hidden flex flex-col">
       {/* Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-800/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-raised transition-colors"
       >
         <div className="flex items-center gap-2">
           <span className="text-lg">🤖</span>
-          <span className="text-sm font-semibold text-white">{title}</span>
+          <span className="text-sm font-semibold text-ink">{title}</span>
         </div>
-        {expanded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
+        {expanded ? <ChevronUp className="w-4 h-4 text-ink-muted" /> : <ChevronDown className="w-4 h-4 text-ink-muted" />}
       </button>
 
       {expanded && (
@@ -657,13 +658,13 @@ export default function AIAnalysisSection({
 
               {/* Error */}
               {error && (
-                <div className="flex items-start gap-2 bg-red-900/20 border border-red-800/30 rounded-lg px-3 py-2.5 mb-2">
-                  <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                <div className="flex items-start gap-2 bg-bad/20 border border-bad/30 rounded-lg px-3 py-2.5 mb-2">
+                  <AlertCircle className="w-4 h-4 text-bad mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm text-red-400">{error}</p>
+                    <p className="text-sm text-bad">{error}</p>
                     <button
                       onClick={onAnalyze}
-                      className="flex items-center gap-1 text-xs text-red-300 hover:text-red-200 mt-1 transition-colors"
+                      className="flex items-center gap-1 text-xs text-bad hover:text-bad mt-1 transition-colors"
                     >
                       <RotateCcw className="w-3 h-3" /> Thử lại
                     </button>
@@ -702,7 +703,7 @@ export default function AIAnalysisSection({
           />
 
           {/* Disclaimer */}
-          <p className="text-center text-gray-600 text-xs py-1">
+          <p className="text-center text-ink-muted text-xs py-1">
             AI phân tích chỉ mang tính tham khảo
           </p>
         </div>
