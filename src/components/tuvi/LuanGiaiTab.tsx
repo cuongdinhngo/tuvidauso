@@ -56,7 +56,7 @@ function RatingStars({ score }: { score: number }) {
   return (
     <span className="text-sm">
       {Array.from({ length: 5 }, (_, i) => (
-        <span key={i} className={i < score ? 'text-yellow-400' : 'text-gray-700'}>★</span>
+        <span key={i} className={i < score ? 'text-warn' : 'text-ink-muted'}>★</span>
       ))}
     </span>
   );
@@ -138,12 +138,12 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
   const genericInterp = interpretPalace(palace);
 
   return (
-    <div className={`bg-gray-900/80 border border-gray-800 rounded-lg p-4 space-y-3 ${isPrimary ? '' : 'opacity-90'}`}>
+    <div className={`bg-surface border border-white/10 rounded-lg p-4 space-y-3 ${isPrimary ? '' : 'opacity-90'}`}>
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-purple-300">
-          {isPrimary ? '' : '▸ '}Cung {palace.name} <span className="text-gray-500 font-normal">({palace.position})</span>
-          {isTuan && <span className="ml-2 text-[10px] text-orange-400 border border-orange-800/40 rounded px-1">Tuần</span>}
-          {isTriet && <span className="ml-2 text-[10px] text-red-400 border border-red-800/40 rounded px-1">Triệt</span>}
+        <h4 className="text-sm font-semibold text-gold">
+          {isPrimary ? '' : '▸ '}Cung {palace.name} <span className="text-ink-muted font-normal">({palace.position})</span>
+          {isTuan && <span className="ml-2 text-[10px] text-warn border border-warn/40 rounded px-1">Tuần</span>}
+          {isTriet && <span className="ml-2 text-[10px] text-bad border border-bad/40 rounded px-1">Triệt</span>}
         </h4>
         <RatingStars score={rating.score} />
       </div>
@@ -151,18 +151,18 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
       {/* Stars list */}
       <div className="flex flex-wrap gap-1.5">
         {mainStars.map((s, i) => (
-          <span key={i} className="text-xs bg-yellow-900/30 text-yellow-300 border border-yellow-800/40 rounded px-1.5 py-0.5">
+          <span key={i} className="text-xs bg-warn/30 text-warn border border-warn/40 rounded px-1.5 py-0.5">
             {s.name}{s.brightness ? ` (${s.brightness})` : ''}
-            {s.transform && <span className="ml-1 text-green-400">{s.transform}</span>}
+            {s.transform && <span className="ml-1 text-good">{s.transform}</span>}
           </span>
         ))}
         {catStars.map((s, i) => (
-          <span key={`c${i}`} className="text-xs bg-blue-900/30 text-blue-300 border border-blue-800/40 rounded px-1.5 py-0.5">
+          <span key={`c${i}`} className="text-xs bg-thuy/30 text-thuy border border-thuy/40 rounded px-1.5 py-0.5">
             {s.name}
           </span>
         ))}
         {satStars.map((s, i) => (
-          <span key={`s${i}`} className="text-xs bg-red-900/30 text-red-400 border border-red-800/40 rounded px-1.5 py-0.5">
+          <span key={`s${i}`} className="text-xs bg-bad/30 text-bad border border-bad/40 rounded px-1.5 py-0.5">
             {s.name}
           </span>
         ))}
@@ -172,22 +172,22 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
       {starDetails.length > 0 ? (
         <div className="space-y-2">
           {starDetails.map((d, i) => (
-            <p key={i} className="text-sm text-gray-300 leading-relaxed">{d}</p>
+            <p key={i} className="text-sm text-ink leading-relaxed">{d}</p>
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-300 leading-relaxed">{genericInterp}</p>
+        <p className="text-sm text-ink leading-relaxed">{genericInterp}</p>
       )}
 
       {/* Cát tinh / Sát tinh notes */}
       {catStars.length > 0 && (
-        <p className="text-sm text-blue-300/80 leading-relaxed">
-          Cát tinh hội hợp: {catStars.map(s => s.name).join(', ')} — tăng thêm sức mạnh cho cung.
+        <p className="text-sm text-thuy/80 leading-relaxed">
+          Cát tinh hội hợp: {catStars.map(s => s.name).join(', ')} - tăng thêm sức mạnh cho cung.
         </p>
       )}
       {satStars.length > 0 && (
-        <p className="text-sm text-red-400/80 leading-relaxed">
-          Lưu ý sát tinh: {satStars.map(s => s.name).join(', ')} — cần cẩn trọng, tránh nóng vội.
+        <p className="text-sm text-bad/80 leading-relaxed">
+          Lưu ý sát tinh: {satStars.map(s => s.name).join(', ')} - cần cẩn trọng, tránh nóng vội.
         </p>
       )}
 
@@ -195,37 +195,37 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
       {transformNotes.length > 0 && (
         <div className="space-y-1">
           {transformNotes.map((note, i) => (
-            <p key={i} className="text-sm text-green-300/80 leading-relaxed">{note}</p>
+            <p key={i} className="text-sm text-good/80 leading-relaxed">{note}</p>
           ))}
         </div>
       )}
 
       {/* Tuần/Triệt notes */}
       {isTuan && (
-        <p className="text-sm text-orange-400/70 leading-relaxed">
-          Cung bị Tuần Không — sức mạnh các sao bị giảm. Giai đoạn đầu khó khăn, nhưng có thể vượt qua và phát triển mạnh sau này.
+        <p className="text-sm text-warn/70 leading-relaxed">
+          Cung bị Tuần Không - sức mạnh các sao bị giảm. Giai đoạn đầu khó khăn, nhưng có thể vượt qua và phát triển mạnh sau này.
         </p>
       )}
       {isTriet && (
-        <p className="text-sm text-red-400/70 leading-relaxed">
-          Cung bị Triệt Lộ — các sao bị suy giảm đáng kể. Tuy nhiên nếu sao sáng sủa thì Triệt phá rồi lại thành, có thể phát triển bất ngờ.
+        <p className="text-sm text-bad/70 leading-relaxed">
+          Cung bị Triệt Lộ - các sao bị suy giảm đáng kể. Tuy nhiên nếu sao sáng sủa thì Triệt phá rồi lại thành, có thể phát triển bất ngờ.
         </p>
       )}
 
       {/* Tam hợp / Đối cung chiếu */}
       {chieuDetails.length > 0 && (
-        <div className="border-t border-gray-800 pt-3 mt-3">
-          <h5 className="text-xs font-semibold text-gray-400 mb-2">Ảnh hưởng từ các cung liên quan</h5>
+        <div className="border-t border-white/10 pt-3 mt-3">
+          <h5 className="text-xs font-semibold text-ink-muted mb-2">Ảnh hưởng từ các cung liên quan</h5>
           {chieuDetails.map((cd, i) => (
             <div key={i} className="mb-2">
-              <div className="text-xs text-gray-500 flex items-center gap-1 mb-0.5">
-                <span className={cd.type === 'Tam hợp' ? 'text-green-500' : 'text-cyan-500'}>
+              <div className="text-xs text-ink-muted flex items-center gap-1 mb-0.5">
+                <span className={cd.type === 'Tam hợp' ? 'text-good' : 'text-thuy'}>
                   {cd.type === 'Tam hợp' ? '△' : '↔'}
                 </span>
                 {cd.type}: {cd.source}
               </div>
               {cd.texts.map((t, j) => (
-                <p key={j} className="text-xs text-gray-400 leading-relaxed pl-4">{t}</p>
+                <p key={j} className="text-xs text-ink-muted leading-relaxed pl-4">{t}</p>
               ))}
             </div>
           ))}
@@ -234,8 +234,8 @@ function PalaceSection({ palace, tuanTriet, allPalaces, isPrimary }: {
 
       {/* Rating factors */}
       {rating.factors.length > 0 && (
-        <details className="text-xs text-gray-500">
-          <summary className="cursor-pointer hover:text-gray-400">Chi tiết đánh giá</summary>
+        <details className="text-xs text-ink-muted">
+          <summary className="cursor-pointer hover:text-ink-muted">Chi tiết đánh giá</summary>
           <ul className="mt-1 space-y-0.5 pl-3">
             {rating.factors.map((f, i) => <li key={i}>• {f}</li>)}
           </ul>
@@ -314,7 +314,7 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
         )}
         {secondaryPalaces.length > 0 && (
           <>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">Cung liên quan</h4>
+            <h4 className="text-xs font-semibold text-ink-muted uppercase tracking-wider mt-2">Cung liên quan</h4>
             {secondaryPalaces.map(palace => (
               <PalaceSection
                 key={palace.name}
@@ -339,22 +339,22 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
         return (
           <LuanGiaiAIWrapper sectionId="tong-quan" sectionTitle="Tổng Quan" chart={chart}>
             <div className="space-y-4">
-              <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-purple-300 mb-2">Tổng Quan Lá Số</h3>
-                <p className="text-sm text-gray-300 leading-relaxed">{interpretation.overview}</p>
+              <div className="bg-surface border border-white/10 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-gold mb-2">Tổng Quan Lá Số</h3>
+                <p className="text-sm text-ink leading-relaxed">{interpretation.overview}</p>
               </div>
               {interpretation.strengths.length > 0 && (
-                <div className="bg-green-900/10 border border-green-900/30 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-green-400 mb-2">Điểm mạnh</h3>
-                  <ul className="text-sm text-gray-300 space-y-1">
+                <div className="bg-good/10 border border-good/30 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-good mb-2">Điểm mạnh</h3>
+                  <ul className="text-sm text-ink space-y-1">
                     {interpretation.strengths.map((s, i) => <li key={i}>• {s}</li>)}
                   </ul>
                 </div>
               )}
               {interpretation.weaknesses.length > 0 && (
-                <div className="bg-red-900/10 border border-red-900/30 rounded-lg p-4">
-                  <h3 className="text-sm font-semibold text-red-400 mb-2">Điểm cần lưu ý</h3>
-                  <ul className="text-sm text-gray-300 space-y-1">
+                <div className="bg-bad/10 border border-bad/30 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-bad mb-2">Điểm cần lưu ý</h3>
+                  <ul className="text-sm text-ink space-y-1">
                     {interpretation.weaknesses.map((s, i) => <li key={i}>• {s}</li>)}
                   </ul>
                 </div>
@@ -369,17 +369,17 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
             <div className="space-y-4">
               {interpretation.specialPatterns.length > 0 ? (
                 interpretation.specialPatterns.map((p, i) => (
-                  <div key={i} className="bg-yellow-900/10 border border-yellow-900/30 rounded-lg p-4">
+                  <div key={i} className="bg-warn/10 border border-warn/30 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm text-yellow-300 font-medium">{p.name}</span>
+                      <span className="text-sm text-warn font-medium">{p.name}</span>
                       <RatingStars score={p.rating} />
                     </div>
-                    <p className="text-sm text-gray-300">{p.description}</p>
+                    <p className="text-sm text-ink">{p.description}</p>
                   </div>
                 ))
               ) : (
-                <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-                  <p className="text-sm text-gray-400">Không phát hiện cách cục đặc biệt nào trong lá số.</p>
+                <div className="bg-surface border border-white/10 rounded-lg p-4">
+                  <p className="text-sm text-ink-muted">Không phát hiện cách cục đặc biệt nào trong lá số.</p>
                 </div>
               )}
             </div>
@@ -416,8 +416,8 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
               onClick={() => setActiveSection(s.id)}
               className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
                 activeSection === s.id
-                  ? 'bg-purple-900/40 text-purple-300 font-medium'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                  ? 'bg-gold/40 text-gold font-medium'
+                  : 'text-ink-muted hover:text-ink hover:bg-raised'
               }`}
             >
               {s.label}
@@ -434,8 +434,8 @@ export default function LuanGiaiTab({ chart, interpretation }: LuanGiaiTabProps)
             onClick={() => setActiveSection(s.id)}
             className={`whitespace-nowrap text-xs px-3 py-1.5 rounded-full transition-colors ${
               activeSection === s.id
-                ? 'bg-purple-900/50 text-purple-300 border border-purple-700/50'
-                : 'text-gray-400 border border-gray-700/50 hover:text-gray-200'
+                ? 'bg-gold/50 text-gold border border-gold/50'
+                : 'text-ink-muted border border-white/10 hover:text-ink'
             }`}
           >
             {s.label}
@@ -477,14 +477,14 @@ function AdviceSection({ chart, findPalace }: { chart: TuViChart; findPalace: (n
     <div className="space-y-4">
       {/* Career advice */}
       {uniqueCareers.length > 0 && (
-        <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-          <h4 className="text-sm font-semibold text-purple-300 mb-2">Nghề nghiệp phù hợp</h4>
-          <p className="text-sm text-gray-300 mb-2">
+        <div className="bg-surface border border-white/10 rounded-lg p-4">
+          <h4 className="text-sm font-semibold text-gold mb-2">Nghề nghiệp phù hợp</h4>
+          <p className="text-sm text-ink mb-2">
             Dựa trên chính tinh tại Quan Lộc ({careerStars.map(s => s.name).join(', ')}):
           </p>
           <div className="flex flex-wrap gap-1.5">
             {uniqueCareers.map((c, i) => (
-              <span key={i} className="text-xs bg-purple-900/30 text-purple-300 border border-purple-800/40 rounded px-2 py-0.5">
+              <span key={i} className="text-xs bg-gold/30 text-gold border border-gold/40 rounded px-2 py-0.5">
                 {c}
               </span>
             ))}
@@ -494,11 +494,11 @@ function AdviceSection({ chart, findPalace }: { chart: TuViChart; findPalace: (n
 
       {/* Health advice */}
       {healthNotes.length > 0 && (
-        <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-          <h4 className="text-sm font-semibold text-purple-300 mb-2">Sức khỏe cần lưu ý</h4>
+        <div className="bg-surface border border-white/10 rounded-lg p-4">
+          <h4 className="text-sm font-semibold text-gold mb-2">Sức khỏe cần lưu ý</h4>
           <div className="space-y-2">
             {healthNotes.map((note, i) => (
-              <p key={i} className="text-sm text-gray-300 leading-relaxed">{note}</p>
+              <p key={i} className="text-sm text-ink leading-relaxed">{note}</p>
             ))}
           </div>
         </div>
@@ -511,12 +511,12 @@ function AdviceSection({ chart, findPalace }: { chart: TuViChart; findPalace: (n
         const rating = ratePalace(palace, chart.tuanTriet);
         const isGood = rating.score >= 3;
         return (
-          <div key={palaceName} className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+          <div key={palaceName} className="bg-surface border border-white/10 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <h4 className="text-sm font-semibold text-purple-300">{palaceName}</h4>
+              <h4 className="text-sm font-semibold text-gold">{palaceName}</h4>
               <RatingStars score={rating.score} />
             </div>
-            <p className="text-sm text-gray-300">{isGood ? advice.good : advice.bad}</p>
+            <p className="text-sm text-ink">{isGood ? advice.good : advice.bad}</p>
           </div>
         );
       })}

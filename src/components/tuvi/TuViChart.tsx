@@ -45,20 +45,32 @@ function getTransformBadge(transform?: string): string {
 
 function getTransformColor(transform?: string): string {
   switch (transform) {
-    case 'Hóa Lộc': return 'text-green-400';
-    case 'Hóa Quyền': return 'text-red-400';
-    case 'Hóa Khoa': return 'text-blue-400';
-    case 'Hóa Kỵ': return 'text-purple-400';
+    case 'Hóa Lộc': return 'text-good';
+    case 'Hóa Quyền': return 'text-warn';
+    case 'Hóa Khoa': return 'text-thuy';
+    case 'Hóa Kỵ': return 'text-bad';
     default: return '';
   }
 }
 
 function getStarColor(type: string): string {
   switch (type) {
-    case 'chinh': return 'text-yellow-300 font-semibold';
-    case 'cat': return 'text-blue-300';
-    case 'sat': return 'text-red-400';
-    default: return 'text-gray-400';
+    case 'chinh': return 'text-gold font-semibold';
+    case 'cat': return 'text-thuy';
+    case 'sat': return 'text-hoa';
+    default: return 'text-ink-muted';
+  }
+}
+
+// Readability hierarchy by brightness (no color shouting, just weight/opacity).
+function getBrightnessStrength(brightness?: string): string {
+  switch (brightness) {
+    case 'Miếu':
+    case 'Vượng': return 'font-semibold';   // strongest
+    case 'Đắc':
+    case 'Bình': return '';                  // normal
+    case 'Hãm': return 'opacity-60';         // weakest
+    default: return '';
   }
 }
 
@@ -66,10 +78,10 @@ function StarTooltip({ star }: { star: Star }) {
   const data = STAR_DATABASE[star.name];
   if (!data) return null;
   return (
-    <div className="absolute z-50 bottom-full left-0 mb-1 bg-gray-900 border border-gray-600 rounded-lg p-2 shadow-xl min-w-[180px] max-w-[240px] pointer-events-none">
-      <div className="text-xs font-semibold text-white">{star.name}{star.brightness ? ` (${star.brightness})` : ''}</div>
-      <div className="text-[10px] text-gray-400 mt-0.5">{data.element} — {data.yinYang}</div>
-      <div className="text-[10px] text-gray-300 mt-1 leading-relaxed">{data.keywords.join(', ')}</div>
+    <div className="absolute z-50 bottom-full left-0 mb-1 bg-surface border border-white/15 rounded-md p-2 shadow-raised min-w-[180px] max-w-[240px] pointer-events-none">
+      <div className="text-xs font-semibold text-ink">{star.name}{star.brightness ? ` (${star.brightness})` : ''}</div>
+      <div className="text-2xs text-ink-muted mt-0.5">{data.element} - {data.yinYang}</div>
+      <div className="text-2xs text-ink mt-1 leading-relaxed">{data.keywords.join(', ')}</div>
     </div>
   );
 }
@@ -117,11 +129,12 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
             const isDoiCung = relations?.doiCung === chi;
             const isGiapCung = relations?.giapCung.includes(chi);
 
+            // Relations highlighted by ring/background, never by shouting text color.
             let relationRing = '';
-            if (isSelected) relationRing = 'ring-2 ring-purple-400';
-            else if (isTamHop) relationRing = 'ring-2 ring-green-500/60';
-            else if (isDoiCung) relationRing = 'ring-2 ring-cyan-500/60';
-            else if (isGiapCung) relationRing = 'ring-1 ring-amber-500/40';
+            if (isSelected) relationRing = 'ring-2 ring-gold';
+            else if (isTamHop) relationRing = 'ring-2 ring-jade/60';
+            else if (isDoiCung) relationRing = 'ring-2 ring-thuy/60';
+            else if (isGiapCung) relationRing = 'ring-1 ring-gold/40';
             const dimmed = selectedPalace && !isSelected && !isTamHop && !isDoiCung && !isGiapCung;
 
             const filtered = filterStars(palace.stars);
@@ -135,20 +148,20 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
                 key={chi}
                 onClick={() => setSelectedPalace(palace)}
                 style={{ gridRow: pos.row + 1, gridColumn: pos.col + 1 }}
-                className={`bg-gray-900/80 border cursor-pointer hover:bg-gray-800/80 transition-all p-1.5 min-h-[140px] ${
+                className={`bg-raised border cursor-pointer hover:bg-white/[0.04] transition-colors p-1.5 min-h-[140px] ${
                   isCompact ? 'text-[11px]' : 'text-xs md:text-sm'
                 } ${
-                  isMenh ? 'border-yellow-500/70' : isThan ? 'border-blue-500/50' : 'border-gray-700/50'
-                } ${isTriet ? 'bg-red-950/20' : isTuan ? 'bg-gray-800/30' : ''} ${relationRing} ${dimmed ? 'opacity-40' : ''}`}
+                  isMenh ? 'border-gold/70' : isThan ? 'border-thuy/50' : 'border-white/[0.08]'
+                } ${isTriet ? 'bg-bad/10' : isTuan ? 'bg-white/[0.05]' : ''} ${relationRing} ${dimmed ? 'opacity-40' : ''}`}
               >
                 {/* Header */}
                 <div className="flex justify-between items-start mb-1">
                   <div className="flex items-center gap-1">
-                    <span className="text-gray-500 font-mono">{chi}</span>
-                    {isTuan && <span className="text-[9px] text-orange-400/70 border border-orange-800/40 rounded px-0.5">Tuần</span>}
-                    {isTriet && <span className="text-[9px] text-red-400/80 border border-red-800/40 rounded px-0.5">Triệt</span>}
+                    <span className="text-ink-muted font-mono">{chi}</span>
+                    {isTuan && <span className="text-[9px] text-warn border border-warn/40 rounded-sm px-0.5">Tuần</span>}
+                    {isTriet && <span className="text-[9px] text-bad border border-bad/40 rounded-sm px-0.5">Triệt</span>}
                   </div>
-                  <span className="text-purple-400/70 truncate ml-1">{palace.name}</span>
+                  <span className="text-gold/80 truncate ml-1">{palace.name}</span>
                 </div>
                 {/* Stars */}
                 <div className="space-y-0.5">
@@ -159,12 +172,12 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
                       onMouseEnter={() => setHoveredStar({ palacePos: chi, starIdx: i })}
                       onMouseLeave={() => setHoveredStar(null)}
                     >
-                      <span className={getStarColor(star.type)}>{star.name}</span>
+                      <span className={`${getStarColor(star.type)} ${getBrightnessStrength(star.brightness)}`}>{star.name}</span>
                       {star.brightness && (
-                        <span className="text-gray-600 text-[10px]">{star.brightness}</span>
+                        <span className="text-ink-muted/70 text-[10px]">{star.brightness}</span>
                       )}
                       {star.transform && (
-                        <span className={`text-[10px] ${getTransformColor(star.transform)}`}>
+                        <span className={`text-[10px] font-medium ${getTransformColor(star.transform)}`}>
                           {getTransformBadge(star.transform)}
                         </span>
                       )}
@@ -174,14 +187,14 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
                     </div>
                   ))}
                   {remaining > 0 && (
-                    <span className="text-gray-600" title={filtered.slice(maxShow).map(s => s.name).join(', ')}>
+                    <span className="text-ink-muted" title={filtered.slice(maxShow).map(s => s.name).join(', ')}>
                       +{remaining} sao
                     </span>
                   )}
                 </div>
                 {/* Dai Han */}
                 {palace.majorPeriod && (
-                  <div className="mt-auto pt-1 text-gray-600 text-xs">
+                  <div className="mt-auto pt-1 text-ink-muted text-xs">
                     {palace.majorPeriod.startAge}-{palace.majorPeriod.endAge}
                   </div>
                 )}
@@ -191,20 +204,20 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
 
           {/* Center block */}
           <div
-            className="bg-gray-950/90 border border-purple-900/30 p-3 flex flex-col justify-center items-center text-center"
+            className="bg-base border border-white/[0.08] p-3 flex flex-col justify-center items-center text-center"
             style={{ gridRow: '2 / 4', gridColumn: '2 / 4' }}
           >
-            <div className="text-xl font-bold text-purple-300 mb-2">Tử Vi Đẩu Số</div>
+            <div className="font-display text-xl font-bold text-gold mb-2">Tử Vi Đẩu Số</div>
             <div className="space-y-1 text-sm">
-              <div><span className="text-gray-500">Mệnh:</span> <span className="text-yellow-300">{menh}</span></div>
-              <div><span className="text-gray-500">Thân:</span> <span className="text-blue-300">{than}</span></div>
-              <div><span className="text-gray-500">Cục:</span> <span className="text-gray-200">{cuc.name}</span></div>
-              <div><span className="text-gray-500">Nạp âm:</span> <span className="text-gray-200">{napAm}</span></div>
-              <div><span className="text-gray-500">Can Chi:</span> <span className="text-gray-200">{yearCan} {yearChi}</span></div>
+              <div><span className="text-ink-muted">Mệnh:</span> <span className="text-gold">{menh}</span></div>
+              <div><span className="text-ink-muted">Thân:</span> <span className="text-thuy">{than}</span></div>
+              <div><span className="text-ink-muted">Cục:</span> <span className="text-ink">{cuc.name}</span></div>
+              <div><span className="text-ink-muted">Nạp âm:</span> <span className="text-ink">{napAm}</span></div>
+              <div><span className="text-ink-muted">Can Chi:</span> <span className="text-ink">{yearCan} {yearChi}</span></div>
               {tuanTriet && (
                 <>
-                  <div><span className="text-orange-400/70">Tuần:</span> <span className="text-gray-300">{tuanTriet.tuan[0]}-{tuanTriet.tuan[1]}</span></div>
-                  <div><span className="text-red-400/70">Triệt:</span> <span className="text-gray-300">{tuanTriet.triet[0]}-{tuanTriet.triet[1]}</span></div>
+                  <div><span className="text-warn">Tuần:</span> <span className="text-ink">{tuanTriet.tuan[0]}-{tuanTriet.tuan[1]}</span></div>
+                  <div><span className="text-bad">Triệt:</span> <span className="text-ink">{tuanTriet.triet[0]}-{tuanTriet.triet[1]}</span></div>
                 </>
               )}
             </div>
@@ -212,13 +225,13 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
         </div>
 
         {/* Legend */}
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-gray-500">
-          <span><span className="text-yellow-300">■</span> Chính tinh</span>
-          <span><span className="text-blue-300">■</span> Cát tinh</span>
-          <span><span className="text-red-400">■</span> Sát tinh</span>
-          <span><span className="text-gray-400">■</span> Phụ tinh</span>
-          <span className="border-l border-gray-700 pl-4"><span className="text-green-400">Lộc</span> <span className="text-red-400">Quyền</span> <span className="text-blue-400">Khoa</span> <span className="text-purple-400">Kỵ</span></span>
-          <span className="border-l border-gray-700 pl-4"><span className="text-orange-400/70">Tuần</span> <span className="text-red-400/80">Triệt</span></span>
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-ink-muted">
+          <span><span className="text-gold">■</span> Chính tinh</span>
+          <span><span className="text-thuy">■</span> Cát tinh</span>
+          <span><span className="text-hoa">■</span> Sát tinh</span>
+          <span><span className="text-ink-muted">■</span> Phụ tinh</span>
+          <span className="border-l border-white/10 pl-4"><span className="text-good">Lộc</span> <span className="text-warn">Quyền</span> <span className="text-thuy">Khoa</span> <span className="text-bad">Kỵ</span></span>
+          <span className="border-l border-white/10 pl-4"><span className="text-warn">Tuần</span> <span className="text-bad">Triệt</span></span>
         </div>
       </div>
 
