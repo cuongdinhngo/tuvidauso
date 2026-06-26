@@ -3,6 +3,7 @@ import { useCalendarStore } from '../../store/calendarStore';
 import MonthlyCalendar from '../../components/calendar/MonthlyCalendar';
 import GoodDayPicker from '../../components/calendar/GoodDayPicker';
 import TodayDigest from '../../components/calendar/TodayDigest';
+import PageHero from '../../components/shared/PageHero';
 
 type Tab = 'calendar' | 'pick' | 'today';
 
@@ -18,10 +19,10 @@ export default function CalendarPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold text-gold mb-6 text-center">Xem Ngày Tốt</h1>
+      <PageHero icon={CalendarDays} title="Xem Ngày Tốt" subtitle="Lịch Vạn Niên, giờ Hoàng Đạo và ngày lành cho mọi việc trọng." />
 
       {/* Tab bar */}
-      <div className="flex border-b border-white/10 mb-6 overflow-x-auto">
+      <div className="flex border-b border-white/10 mb-6 mt-2 overflow-x-auto no-scrollbar">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
