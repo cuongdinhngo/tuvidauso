@@ -65,8 +65,8 @@ export default function ResultPage() {
       label: '📋 Tổng Quan',
       content: (() => {
         const NGU_HANH_COLORS: Record<string, string> = {
-          'Kim': '#C0C0C0', 'Mộc': '#22C55E', 'Thủy': '#3B82F6',
-          'Hỏa': '#EF4444', 'Thổ': '#EAB308',
+          'Kim': 'var(--color-kim)', 'Mộc': 'var(--color-moc)', 'Thủy': 'var(--color-thuy)',
+          'Hỏa': 'var(--color-hoa)', 'Thổ': 'var(--color-tho)',
         };
         const maxElement = Math.max(...Object.values(elements), 1);
         const maxKey = Object.entries(elements).reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
@@ -92,16 +92,16 @@ export default function ResultPage() {
           {/* Quick Stats Row */}
           <div className="flex flex-wrap gap-2">
             {[
-              { label: 'Mệnh', value: menh, cls: 'text-yellow-300 border-yellow-800/50' },
-              { label: 'Thân', value: than, cls: 'text-blue-300 border-blue-800/50' },
-              { label: 'Cục', value: cuc.name, cls: 'text-gray-200 border-gray-700' },
+              { label: 'Mệnh', value: menh, cls: 'text-warn border-warn/50' },
+              { label: 'Thân', value: than, cls: 'text-thuy border-thuy/50' },
+              { label: 'Cục', value: cuc.name, cls: 'text-ink border-white/10' },
               ...(chart.tuanTriet ? [
-                { label: 'Tuần', value: `${chart.tuanTriet.tuan[0]}-${chart.tuanTriet.tuan[1]}`, cls: 'text-orange-400 border-orange-800/40' },
-                { label: 'Triệt', value: `${chart.tuanTriet.triet[0]}-${chart.tuanTriet.triet[1]}`, cls: 'text-red-400 border-red-800/40' },
+                { label: 'Tuần', value: `${chart.tuanTriet.tuan[0]}-${chart.tuanTriet.tuan[1]}`, cls: 'text-warn border-warn/40' },
+                { label: 'Triệt', value: `${chart.tuanTriet.triet[0]}-${chart.tuanTriet.triet[1]}`, cls: 'text-bad border-bad/40' },
               ] : []),
             ].map(({ label, value, cls }) => (
-              <div key={label} className={`bg-gray-900/80 border rounded-lg px-3 py-1.5 text-sm ${cls}`}>
-                <span className="text-gray-500 text-xs mr-1">{label}</span>
+              <div key={label} className={`bg-surface border rounded-lg px-3 py-1.5 text-sm ${cls}`}>
+                <span className="text-ink-muted text-xs mr-1">{label}</span>
                 <span className="font-medium">{value}</span>
               </div>
             ))}
@@ -119,24 +119,24 @@ export default function ResultPage() {
               { label: 'Cục', value: cuc.name },
               { label: 'Giờ sinh', value: DIA_CHI_HOURS[birthInfo.hour]?.name || '' },
             ].map(({ label, value }) => (
-              <div key={label} className="bg-gray-900/80 border border-gray-800 rounded-lg p-3">
-                <div className="text-xs text-gray-500">{label}</div>
-                <div className="text-sm text-gray-200 font-medium">{value}</div>
+              <div key={label} className="bg-surface border border-white/10 rounded-lg p-3">
+                <div className="text-xs text-ink-muted">{label}</div>
+                <div className="text-sm text-ink font-medium">{value}</div>
               </div>
             ))}
           </div>
 
           {/* Bat Tu mini */}
           <div>
-            <h3 className="text-sm font-semibold text-purple-300 mb-2">Bát Tự (Tứ Trụ)</h3>
+            <h3 className="text-sm font-semibold text-gold mb-2">Bát Tự (Tứ Trụ)</h3>
             <div className="grid grid-cols-4 gap-2 text-center">
               {(['Năm', 'Tháng', 'Ngày', 'Giờ'] as const).map((label, i) => {
                 const pillar = [fourPillars.year, fourPillars.month, fourPillars.day, fourPillars.hour][i];
                 return (
-                  <div key={label} className="bg-gray-900/80 border border-gray-800 rounded-lg p-2">
-                    <div className="text-xs text-gray-500 mb-1">{label}</div>
-                    <div className="text-yellow-300 font-semibold">{pillar.can}</div>
-                    <div className="text-purple-300">{pillar.chi}</div>
+                  <div key={label} className="bg-surface border border-white/10 rounded-lg p-2">
+                    <div className="text-xs text-ink-muted mb-1">{label}</div>
+                    <div className="text-warn font-semibold">{pillar.can}</div>
+                    <div className="text-gold">{pillar.chi}</div>
                   </div>
                 );
               })}
@@ -145,7 +145,7 @@ export default function ResultPage() {
 
           {/* Ngu Hanh horizontal bars */}
           <div>
-            <h3 className="text-sm font-semibold text-purple-300 mb-2">Ngũ Hành</h3>
+            <h3 className="text-sm font-semibold text-gold mb-2">Ngũ Hành</h3>
             <div className="space-y-2">
               {Object.entries(elements).map(([element, count]) => {
                 const pct = maxElement > 0 ? (count / maxElement) * 100 : 0;
@@ -153,46 +153,46 @@ export default function ResultPage() {
                 const isMin = element === minKey[0] && count <= 1;
                 return (
                   <div key={element} className="flex items-center gap-2">
-                    <span className="text-sm text-gray-300 w-8">{element}</span>
-                    <div className="flex-1 h-6 bg-gray-800 rounded-full overflow-hidden relative">
+                    <span className="text-sm text-ink w-8">{element}</span>
+                    <div className="flex-1 h-6 bg-raised rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full transition-all duration-500"
+                        className="h-full rounded-full"
                         style={{ width: `${Math.max(pct, 4)}%`, backgroundColor: NGU_HANH_COLORS[element] }}
                       />
-                      <span className="absolute inset-0 flex items-center pl-2 text-xs font-medium text-white drop-shadow">
-                        {count}
-                      </span>
                     </div>
-                    {isMax && <span className="text-[10px] bg-green-900/50 text-green-400 border border-green-800/50 rounded px-1.5 py-0.5">Vượng</span>}
-                    {isMin && <span className="text-[10px] bg-red-900/50 text-red-400 border border-red-800/50 rounded px-1.5 py-0.5">Thiếu</span>}
+                    <span className="w-5 text-right text-xs font-medium text-ink-muted tabular-nums">
+                      {count}
+                    </span>
+                    {isMax && <span className="text-[10px] bg-good/50 text-good border border-good/50 rounded px-1.5 py-0.5">Vượng</span>}
+                    {isMin && <span className="text-[10px] bg-bad/50 text-bad border border-bad/50 rounded px-1.5 py-0.5">Thiếu</span>}
                   </div>
                 );
               })}
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-ink-muted mt-2">
               {maxKey[0]} vượng ({maxKey[1]}){minKey[1] as number <= 1 ? `, ${minKey[0]} yếu (${minKey[1]}) → Cần bổ sung ${minKey[0]}` : ''}
             </p>
           </div>
 
           {/* Tu Hoa summary with palace info */}
           <div>
-            <h3 className="text-sm font-semibold text-purple-300 mb-2">Tứ Hóa</h3>
+            <h3 className="text-sm font-semibold text-gold mb-2">Tứ Hóa</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {[
-                { label: 'Hóa Lộc', star: transforms.loc, color: 'text-green-400 border-green-900/50', dot: '🟢' },
-                { label: 'Hóa Quyền', star: transforms.quyen, color: 'text-red-400 border-red-900/50', dot: '🔴' },
-                { label: 'Hóa Khoa', star: transforms.khoa, color: 'text-blue-400 border-blue-900/50', dot: '🔵' },
-                { label: 'Hóa Kỵ', star: transforms.ky, color: 'text-purple-400 border-purple-900/50', dot: '🟣' },
+                { label: 'Hóa Lộc', star: transforms.loc, color: 'text-good border-good/50', dot: '🟢' },
+                { label: 'Hóa Quyền', star: transforms.quyen, color: 'text-bad border-bad/50', dot: '🔴' },
+                { label: 'Hóa Khoa', star: transforms.khoa, color: 'text-thuy border-thuy/50', dot: '🔵' },
+                { label: 'Hóa Kỵ', star: transforms.ky, color: 'text-gold border-gold/50', dot: '🟣' },
               ].map(({ label, star, color, dot }) => {
                 const palace = findStarPalace(star);
                 return (
-                  <div key={label} className={`bg-gray-900/80 border rounded-lg p-3 ${color}`}>
+                  <div key={label} className={`bg-surface border rounded-lg p-3 ${color}`}>
                     <div className="text-xs opacity-70">{dot} {label}</div>
                     <div className="text-sm font-medium mt-0.5">{star}</div>
                     {palace && (
-                      <div className="text-xs text-gray-400 mt-1">→ {palace.name} ({palace.position})</div>
+                      <div className="text-xs text-ink-muted mt-1">→ {palace.name} ({palace.position})</div>
                     )}
-                    <div className="text-[10px] text-gray-500 mt-0.5">{TU_HOA_EXPLAIN[label]}</div>
+                    <div className="text-[10px] text-ink-muted mt-0.5">{TU_HOA_EXPLAIN[label]}</div>
                   </div>
                 );
               })}
@@ -288,10 +288,10 @@ export default function ResultPage() {
       {/* Header */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h1 className="text-xl font-bold text-purple-300">
-            {birthInfo.name ? `Lá số — ${birthInfo.name}` : 'Lá Số Tử Vi'}
+          <h1 className="text-xl font-bold text-gold">
+            {birthInfo.name ? `Lá số - ${birthInfo.name}` : 'Lá Số Tử Vi'}
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ink-muted">
             {birthInfo.solarDate.day}/{birthInfo.solarDate.month}/{birthInfo.solarDate.year}
             {' '}• Giờ {DIA_CHI_HOURS[birthInfo.hour]?.name}
             {' '}• {birthInfo.gender === 'male' ? 'Nam' : 'Nữ'}
@@ -300,7 +300,7 @@ export default function ResultPage() {
         </div>
         <Link
           to="/input"
-          className="text-sm text-purple-400 hover:text-purple-300 border border-purple-700 rounded-lg px-3 py-1"
+          className="text-sm text-gold hover:text-gold border border-gold rounded-lg px-3 py-1"
         >
           Lập lá số mới
         </Link>
