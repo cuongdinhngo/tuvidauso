@@ -17,16 +17,16 @@ interface BatTuTabProps {
 }
 
 const ELEMENT_COLORS: Record<Element, string> = {
-  'Kim': 'text-gray-300 bg-gray-800/50',
-  'Mộc': 'text-green-400 bg-green-900/20',
-  'Thủy': 'text-blue-400 bg-blue-900/20',
-  'Hỏa': 'text-red-400 bg-red-900/20',
-  'Thổ': 'text-yellow-400 bg-yellow-900/20',
+  'Kim': 'text-kim bg-kim/15',
+  'Mộc': 'text-moc bg-moc/15',
+  'Thủy': 'text-thuy bg-thuy/15',
+  'Hỏa': 'text-hoa bg-hoa/15',
+  'Thổ': 'text-tho bg-tho/15',
 };
 
 const ELEMENT_DOT: Record<Element, string> = {
-  'Kim': 'bg-gray-400', 'Mộc': 'bg-green-500', 'Thủy': 'bg-blue-500',
-  'Hỏa': 'bg-red-500', 'Thổ': 'bg-yellow-500',
+  'Kim': 'bg-kim', 'Mộc': 'bg-moc', 'Thủy': 'bg-thuy',
+  'Hỏa': 'bg-hoa', 'Thổ': 'bg-tho',
 };
 
 const ELEMENT_DIRECTION: Record<Element, string> = {
@@ -38,7 +38,8 @@ const ELEMENT_NUMBERS: Record<Element, string> = {
 };
 
 const BAR_COLORS: Record<Element, string> = {
-  'Kim': '#C0C0C0', 'Mộc': '#22C55E', 'Thủy': '#3B82F6', 'Hỏa': '#EF4444', 'Thổ': '#EAB308',
+  'Kim': 'var(--color-kim)', 'Mộc': 'var(--color-moc)', 'Thủy': 'var(--color-thuy)',
+  'Hỏa': 'var(--color-hoa)', 'Thổ': 'var(--color-tho)',
 };
 
 function getGenerates(el: Element): Element {
@@ -110,23 +111,23 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-gray-500">
+            <tr className="text-ink-muted">
               <th className="text-left py-2 pr-4"></th>
               {labels.map((label, i) => (
-                <th key={label} className={`py-2 px-3 text-center ${i === 2 ? 'bg-purple-900/20 rounded-t' : ''}`}>
-                  <div>{i === 2 ? <span className="text-yellow-400">Nhật Chủ</span> : label}</div>
-                  <div className="text-[11px] text-gray-500 font-normal mt-0.5">{dateValues[i]}</div>
+                <th key={label} className={`py-2 px-3 text-center ${i === 2 ? 'bg-gold/20 rounded-t' : ''}`}>
+                  <div>{i === 2 ? <span className="text-warn">Nhật Chủ</span> : label}</div>
+                  <div className="text-[11px] text-ink-muted font-normal mt-0.5">{dateValues[i]}</div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="text-gray-500 pr-4 py-1">Thiên Can</td>
+              <td className="text-ink-muted pr-4 py-1">Thiên Can</td>
               {pillars.map((p, i) => {
                 const el = getElement(p.can);
                 return (
-                  <td key={i} className={`text-center py-1 ${i === 2 ? 'bg-purple-900/20 font-bold text-lg' : ''}`}>
+                  <td key={i} className={`text-center py-1 ${i === 2 ? 'bg-gold/20 font-bold text-lg' : ''}`}>
                     <span className={ELEMENT_COLORS[el].split(' ')[0]}>{p.can}</span>
                     <span className={`inline-block w-2 h-2 rounded-full ml-1 ${ELEMENT_DOT[el]}`} />
                   </td>
@@ -134,11 +135,11 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
               })}
             </tr>
             <tr>
-              <td className="text-gray-500 pr-4 py-1">Địa Chi</td>
+              <td className="text-ink-muted pr-4 py-1">Địa Chi</td>
               {pillars.map((p, i) => {
                 const el = getElement(p.chi);
                 return (
-                  <td key={i} className={`text-center py-1 ${i === 2 ? 'bg-purple-900/20' : ''}`}>
+                  <td key={i} className={`text-center py-1 ${i === 2 ? 'bg-gold/20' : ''}`}>
                     <span className={ELEMENT_COLORS[el].split(' ')[0]}>{p.chi}</span>
                     <span className={`inline-block w-2 h-2 rounded-full ml-1 ${ELEMENT_DOT[el]}`} />
                   </td>
@@ -146,9 +147,9 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
               })}
             </tr>
             <tr>
-              <td className="text-gray-500 pr-4 py-1">Tàng Can</td>
+              <td className="text-ink-muted pr-4 py-1">Tàng Can</td>
               {pillars.map((p, i) => (
-                <td key={i} className={`text-center py-1 text-gray-400 text-xs ${i === 2 ? 'bg-purple-900/20' : ''}`}>
+                <td key={i} className={`text-center py-1 text-ink-muted text-xs ${i === 2 ? 'bg-gold/20' : ''}`}>
                   {getHiddenStems(p.chi).map((h, j) => (
                     <span key={j}>
                       {j > 0 && ', '}
@@ -159,17 +160,17 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
               ))}
             </tr>
             <tr>
-              <td className="text-gray-500 pr-4 py-1">Ngũ Hành</td>
+              <td className="text-ink-muted pr-4 py-1">Ngũ Hành</td>
               {pillars.map((p, i) => (
-                <td key={i} className={`text-center py-1 text-gray-400 text-xs ${i === 2 ? 'bg-purple-900/20' : ''}`}>
+                <td key={i} className={`text-center py-1 text-ink-muted text-xs ${i === 2 ? 'bg-gold/20' : ''}`}>
                   {getElement(p.can)}/{getElement(p.chi)}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="text-gray-500 pr-4 py-1">Thập Thần</td>
+              <td className="text-ink-muted pr-4 py-1">Thập Thần</td>
               {pillars.map((p, i) => (
-                <td key={i} className={`text-center py-1 text-gray-400 text-xs ${i === 2 ? 'bg-purple-900/20 text-yellow-400 font-medium' : ''}`}>
+                <td key={i} className={`text-center py-1 text-ink-muted text-xs ${i === 2 ? 'bg-gold/20 text-warn font-medium' : ''}`}>
                   {i === 2 ? 'Nhật Chủ' : getTenGod(fourPillars.day.can, p.can)}
                 </td>
               ))}
@@ -179,17 +180,17 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
       </div>
 
       {/* Day Master + Ngu Hanh Analysis */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4 space-y-4">
-        <h3 className="text-sm font-semibold text-purple-300">Phân Tích Ngũ Hành</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-4 space-y-4">
+        <h3 className="text-sm font-semibold text-gold">Phân Tích Ngũ Hành</h3>
 
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-gray-400">Nhật Chủ:</span>
+          <span className="text-ink-muted">Nhật Chủ:</span>
           <span className={`font-bold text-lg ${ELEMENT_COLORS[dayElement].split(' ')[0]}`}>
             {fourPillars.day.can}
           </span>
-          <span className="text-gray-400">({dayElement} - {getYinYang(fourPillars.day.can)})</span>
+          <span className="text-ink-muted">({dayElement} - {getYinYang(fourPillars.day.can)})</span>
           <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-            analysis.strength === 'Vượng' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'
+            analysis.strength === 'Vượng' ? 'bg-good/30 text-good' : 'bg-bad/30 text-bad'
           }`}>
             {analysis.strength}
           </span>
@@ -200,31 +201,31 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
           {(Object.entries(elements) as [Element, number][]).map(([element, count]) => (
             <div key={element} className="flex items-center gap-2">
               <span className={`text-xs w-8 ${ELEMENT_COLORS[element].split(' ')[0]}`}>{element}</span>
-              <div className="flex-1 h-5 bg-gray-800 rounded-full overflow-hidden relative">
+              <div className="flex-1 h-5 bg-raised rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all duration-500"
+                  className="h-full rounded-full"
                   style={{ width: `${Math.max((count / maxElement) * 100, 4)}%`, backgroundColor: BAR_COLORS[element] }}
                 />
-                <span className="absolute inset-0 flex items-center pl-2 text-[10px] font-medium text-white drop-shadow">
-                  {count}
-                </span>
               </div>
+              <span className="w-5 text-right text-[10px] font-medium text-ink-muted tabular-nums">
+                {count}
+              </span>
             </div>
           ))}
         </div>
 
         {/* Dung Than analysis */}
         <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="bg-gray-800/50 rounded p-2">
-            <span className="text-gray-500">Dụng Thần:</span>{' '}
+          <div className="bg-raised rounded p-2">
+            <span className="text-ink-muted">Dụng Thần:</span>{' '}
             <span className={ELEMENT_COLORS[analysis.dungThan].split(' ')[0]}>{analysis.dungThan}</span>
           </div>
-          <div className="bg-gray-800/50 rounded p-2">
-            <span className="text-gray-500">Hỷ Thần:</span>{' '}
+          <div className="bg-raised rounded p-2">
+            <span className="text-ink-muted">Hỷ Thần:</span>{' '}
             <span className={ELEMENT_COLORS[analysis.hyThan].split(' ')[0]}>{analysis.hyThan}</span>
           </div>
-          <div className="bg-gray-800/50 rounded p-2">
-            <span className="text-gray-500">Kỵ Thần:</span>{' '}
+          <div className="bg-raised rounded p-2">
+            <span className="text-ink-muted">Kỵ Thần:</span>{' '}
             {analysis.kyThan.map((k, i) => (
               <span key={i}>
                 {i > 0 && ', '}
@@ -232,22 +233,22 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
               </span>
             ))}
           </div>
-          <div className="bg-gray-800/50 rounded p-2">
-            <span className="text-gray-500">Hướng hợp:</span>{' '}
-            <span className="text-gray-300">
+          <div className="bg-raised rounded p-2">
+            <span className="text-ink-muted">Hướng hợp:</span>{' '}
+            <span className="text-ink">
               {ELEMENT_DIRECTION[analysis.dungThan]}, {ELEMENT_DIRECTION[analysis.hyThan]}
             </span>
           </div>
-          <div className="bg-gray-800/50 rounded p-2">
-            <span className="text-gray-500">Số hợp:</span>{' '}
-            <span className="text-gray-300">{ELEMENT_NUMBERS[analysis.dungThan]}</span>
+          <div className="bg-raised rounded p-2">
+            <span className="text-ink-muted">Số hợp:</span>{' '}
+            <span className="text-ink">{ELEMENT_NUMBERS[analysis.dungThan]}</span>
           </div>
         </div>
       </div>
 
       {/* Dai Van Timeline */}
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4 space-y-3">
-        <h3 className="text-sm font-semibold text-purple-300">Đại Vận Bát Tự</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-gold">Đại Vận Bát Tự</h3>
 
         <div className="flex gap-1 overflow-x-auto pb-2">
           {majorFates.map((fate, i) => {
@@ -259,19 +260,19 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
                 onClick={() => setExpandedFate(expandedFate === i ? null : i)}
                 className={`flex-shrink-0 rounded-lg p-2 text-center min-w-[72px] border transition-all ${
                   isCurrent
-                    ? 'border-yellow-500/70 bg-yellow-900/20'
+                    ? 'border-warn/70 bg-warn/20'
                     : expandedFate === i
-                    ? 'border-purple-500/50 bg-purple-900/20'
-                    : 'border-gray-700/50 hover:border-gray-600'
+                    ? 'border-gold/50 bg-gold/20'
+                    : 'border-white/10 hover:border-white/10'
                 }`}
               >
                 <div className={`text-xs font-medium ${ELEMENT_COLORS[fateEl].split(' ')[0]}`}>
                   {fate.canChi.can} {fate.canChi.chi}
                 </div>
-                <div className="text-[10px] text-gray-500 mt-0.5">
+                <div className="text-[10px] text-ink-muted mt-0.5">
                   {fate.startAge}-{fate.endAge}
                 </div>
-                {isCurrent && <div className="text-[9px] text-yellow-400 mt-0.5">Hiện tại</div>}
+                {isCurrent && <div className="text-[9px] text-warn mt-0.5">Hiện tại</div>}
               </button>
             );
           })}
@@ -296,24 +297,24 @@ export default function BatTuTab({ fourPillars, gender, solarYear, solarMonth, s
           else if (overcomesMe) relationship = `${dayElement} khắc ${fateEl} → Nhật Chủ phải nỗ lực`;
 
           return (
-            <div className="bg-gray-800/50 rounded-lg p-3 text-xs space-y-2">
+            <div className="bg-raised rounded-lg p-3 text-xs space-y-2">
               <div className="flex items-center gap-2">
                 <span className={`font-medium ${ELEMENT_COLORS[fateEl].split(' ')[0]}`}>
                   {fate.canChi.can} {fate.canChi.chi}
                 </span>
-                <span className="text-gray-500">({fateEl})</span>
-                <span className="text-gray-500">Tuổi {fate.startAge}-{fate.endAge}</span>
+                <span className="text-ink-muted">({fateEl})</span>
+                <span className="text-ink-muted">Tuổi {fate.startAge}-{fate.endAge}</span>
               </div>
-              {relationship && <p className="text-gray-300">{relationship}</p>}
-              <p className="text-gray-400">
+              {relationship && <p className="text-ink">{relationship}</p>}
+              <p className="text-ink-muted">
                 {analysis.strength === 'Nhược' && generates
-                  ? 'Đại vận tốt — hỗ trợ Nhật Chủ yếu.'
+                  ? 'Đại vận tốt - hỗ trợ Nhật Chủ yếu.'
                   : analysis.strength === 'Nhược' && overcomes
-                  ? 'Đại vận khó khăn — thêm áp lực lên Nhật Chủ yếu.'
+                  ? 'Đại vận khó khăn - thêm áp lực lên Nhật Chủ yếu.'
                   : analysis.strength === 'Vượng' && overcomes
-                  ? 'Đại vận tốt — cân bằng Nhật Chủ vượng.'
+                  ? 'Đại vận tốt - cân bằng Nhật Chủ vượng.'
                   : analysis.strength === 'Vượng' && generates
-                  ? 'Đại vận cần thận trọng — Nhật Chủ vốn đã vượng.'
+                  ? 'Đại vận cần thận trọng - Nhật Chủ vốn đã vượng.'
                   : 'Đại vận bình thường.'}
               </p>
             </div>

@@ -123,8 +123,8 @@ function NameBanner({ birthInfo }: { birthInfo: BirthInfo }) {
   }
 
   return (
-    <div className="bg-blue-900/20 border border-blue-800/50 rounded-lg p-4">
-      <p className="text-sm text-blue-300 mb-3">
+    <div className="bg-thuy/20 border border-thuy/50 rounded-lg p-4">
+      <p className="text-sm text-thuy mb-3">
         Nhập họ tên đầy đủ để xem phân tích Thần Số Học hoàn chỉnh (Số Vận Mệnh, Số Linh Hồn, Biểu đồ Inclusion...)
       </p>
       <div className="flex gap-2">
@@ -134,12 +134,12 @@ function NameBanner({ birthInfo }: { birthInfo: BirthInfo }) {
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder="Nhập họ tên đầy đủ..."
-          className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 text-sm focus:border-purple-500 focus:outline-none"
+          className="flex-1 bg-surface border border-white/10 rounded-lg px-3 py-2 text-ink text-sm focus:border-gold focus:outline-none"
         />
         <button
           onClick={handleSubmit}
           disabled={!name.trim()}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-gold hover:bg-gold/90 text-base font-semibold text-sm rounded-md min-h-[44px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Xem
         </button>
@@ -161,30 +161,30 @@ function LifePathCard({ result }: { result: NumberResult }) {
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Số Chủ Đạo (Life Path)</h3>
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-5">
+      <h3 className="text-sm font-semibold text-gold mb-3">Số Chủ Đạo (Life Path)</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-5">
         {/* Hero number */}
         <div className="text-center mb-4">
           <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full text-3xl font-bold ${
             result.masterNumber
-              ? 'bg-gradient-to-br from-yellow-500/30 to-purple-500/30 border-2 border-yellow-500/50 text-yellow-300'
-              : 'bg-purple-900/40 border-2 border-purple-500/50 text-purple-200'
+              ? 'bg-gradient-to-br from-warn/30 to-gold/30 border-2 border-warn/50 text-warn'
+              : 'bg-gold/40 border-2 border-gold/50 text-gold'
           }`}>
             {result.value}
           </div>
-          <h4 className="text-lg font-semibold text-gray-100 mt-3">{meaning.title}</h4>
+          <h4 className="text-lg font-semibold text-ink mt-3">{meaning.title}</h4>
           {result.masterNumber && (
-            <span className="inline-block mt-1 px-2 py-0.5 text-[10px] bg-yellow-900/40 text-yellow-300 border border-yellow-700/40 rounded">
+            <span className="inline-block mt-1 px-2 py-0.5 text-[10px] bg-warn/40 text-warn border border-warn/40 rounded">
               Master Number
             </span>
           )}
-          <p className="text-xs text-gray-500 mt-2">{result.reductionPath}</p>
+          <p className="text-xs text-ink-muted mt-2">{result.reductionPath}</p>
         </div>
 
         {/* Keywords */}
         <div className="flex flex-wrap justify-center gap-2 mb-4">
           {meaning.keywords.map((kw) => (
-            <span key={kw} className="px-2.5 py-1 text-xs bg-purple-900/30 text-purple-300 border border-purple-800/40 rounded-full">
+            <span key={kw} className="px-2.5 py-1 text-xs bg-gold/30 text-gold border border-gold/40 rounded-full">
               {kw}
             </span>
           ))}
@@ -197,23 +197,23 @@ function LifePathCard({ result }: { result: NumberResult }) {
           ['love', 'Tình yêu', meaning.love],
           ['challenge', 'Thử thách', meaning.challenge],
         ] as const).map(([key, label, text]) => (
-          <div key={key} className="border-t border-gray-800">
+          <div key={key} className="border-t border-white/10">
             <button
               onClick={() => toggle(key)}
-              className="w-full flex justify-between items-center py-3 text-sm text-gray-300 hover:text-purple-300 transition-colors"
+              className="w-full flex justify-between items-center py-3 text-sm text-ink hover:text-gold transition-colors"
             >
               <span className="font-medium">{label}</span>
-              <span className="text-gray-600">{expanded === key ? '▲' : '▼'}</span>
+              <span className="text-ink-muted">{expanded === key ? '▲' : '▼'}</span>
             </button>
             {expanded === key && (
-              <p className="text-sm text-gray-400 pb-3 leading-relaxed">{text}</p>
+              <p className="text-sm text-ink-muted pb-3 leading-relaxed">{text}</p>
             )}
           </div>
         ))}
 
         {/* Celebrities */}
-        <div className="border-t border-gray-800 pt-3">
-          <p className="text-xs text-gray-500">
+        <div className="border-t border-white/10 pt-3">
+          <p className="text-xs text-ink-muted">
             Người nổi tiếng: {meaning.celebrities.join(', ')}
           </p>
         </div>
@@ -229,15 +229,15 @@ function LifePathCard({ result }: { result: NumberResult }) {
 function KarmicDebtSection({ debts }: { debts: number[] }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-red-400 mb-3">Nợ Nghiệp (Karmic Debt)</h3>
+      <h3 className="text-sm font-semibold text-bad mb-3">Nợ Nghiệp (Karmic Debt)</h3>
       <div className="space-y-2">
         {debts.map((n) => {
           const info = KARMIC_DEBT_MEANINGS[n];
           if (!info) return null;
           return (
-            <div key={n} className="bg-red-900/10 border border-red-800/30 rounded-lg p-3">
-              <div className="text-sm font-medium text-red-300">{info.title}</div>
-              <p className="text-xs text-gray-400 mt-1">{info.description}</p>
+            <div key={n} className="bg-bad/10 border border-bad/30 rounded-lg p-3">
+              <div className="text-sm font-medium text-bad">{info.title}</div>
+              <p className="text-xs text-ink-muted mt-1">{info.description}</p>
             </div>
           );
         })}
@@ -262,7 +262,7 @@ function CoreNumbersGrid({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Bộ Số Cốt Lõi</h3>
+      <h3 className="text-sm font-semibold text-gold mb-3">Bộ Số Cốt Lõi</h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <NumberCard label="Số Vận Mệnh" sublabel="Expression" result={expression} disabled={!hasName} />
         <NumberCard label="Số Linh Hồn" sublabel="Soul Urge" result={soulUrge} disabled={!hasName} />
@@ -285,11 +285,11 @@ function NumberCard({ label, sublabel, result, disabled }: {
 
   if (disabled) {
     return (
-      <div className="bg-gray-900/40 border border-gray-800/50 rounded-lg p-3 opacity-50">
-        <div className="text-xs text-gray-500">{label}</div>
-        <div className="text-lg font-bold text-gray-600 mt-1">—</div>
-        <div className="text-[10px] text-gray-600">{sublabel}</div>
-        <p className="text-[10px] text-gray-600 mt-1">Nhập họ tên để xem</p>
+      <div className="bg-surface border border-white/10 rounded-lg p-3 opacity-50">
+        <div className="text-xs text-ink-muted">{label}</div>
+        <div className="text-lg font-bold text-ink-muted mt-1">-</div>
+        <div className="text-[10px] text-ink-muted">{sublabel}</div>
+        <p className="text-[10px] text-ink-muted mt-1">Nhập họ tên để xem</p>
       </div>
     );
   }
@@ -299,23 +299,23 @@ function NumberCard({ label, sublabel, result, disabled }: {
       type="button"
       aria-expanded={open}
       onClick={() => setOpen(!open)}
-      className="w-full text-left bg-gray-900/80 border border-gray-800 rounded-lg p-3 hover:border-purple-700/50 transition-colors"
+      className="w-full text-left bg-surface border border-white/10 rounded-lg p-3 hover:border-gold/50 transition-colors"
     >
-      <div className="text-xs text-gray-500">{label}</div>
+      <div className="text-xs text-ink-muted">{label}</div>
       <div className="flex items-baseline gap-2 mt-1">
-        <span className={`text-lg font-bold ${result.masterNumber ? 'text-yellow-300' : 'text-gray-100'}`}>
+        <span className={`text-lg font-bold ${result.masterNumber ? 'text-warn' : 'text-ink'}`}>
           {result.value}
         </span>
-        {result.masterNumber && <span className="text-[9px] text-yellow-500">Master</span>}
+        {result.masterNumber && <span className="text-[9px] text-warn">Master</span>}
       </div>
-      <div className="text-[10px] text-gray-600">{sublabel}</div>
+      <div className="text-[10px] text-ink-muted">{sublabel}</div>
       {meaning && (
-        <div className="text-[10px] text-gray-500 mt-1">{meaning.title}</div>
+        <div className="text-[10px] text-ink-muted mt-1">{meaning.title}</div>
       )}
       {open && meaning && (
-        <p className="text-xs text-gray-400 mt-2 border-t border-gray-800 pt-2">{meaning.brief}</p>
+        <p className="text-xs text-ink-muted mt-2 border-t border-white/10 pt-2">{meaning.brief}</p>
       )}
-      <div className="text-[10px] text-gray-600 mt-1">{result.reductionPath}</div>
+      <div className="text-[10px] text-ink-muted mt-1">{result.reductionPath}</div>
     </button>
   );
 }
@@ -335,17 +335,17 @@ function PersonalYearCard({
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Năm Cá Nhân {currentYear}</h3>
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+      <h3 className="text-sm font-semibold text-gold mb-3">Năm Cá Nhân {currentYear}</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-4">
         <div className="flex items-center gap-4 mb-3">
-          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-purple-900/40 border border-purple-700/40">
-            <span className="text-2xl font-bold text-purple-200">{personalYear.value}</span>
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gold/40 border border-gold/40">
+            <span className="text-2xl font-bold text-gold">{personalYear.value}</span>
           </div>
           <div>
             {yearMeaning && (
               <>
-                <h4 className="text-base font-semibold text-gray-100">Năm {personalYear.value} — {yearMeaning.theme}</h4>
-                <p className="text-xs text-gray-400 mt-1">{yearMeaning.description}</p>
+                <h4 className="text-base font-semibold text-ink">Năm {personalYear.value} - {yearMeaning.theme}</h4>
+                <p className="text-xs text-ink-muted mt-1">{yearMeaning.description}</p>
               </>
             )}
           </div>
@@ -355,10 +355,10 @@ function PersonalYearCard({
           <div className="grid grid-cols-2 gap-3 mt-3">
             {yearMeaning.doList.length > 0 && (
               <div>
-                <div className="text-xs font-medium text-green-400 mb-1.5">Nên</div>
+                <div className="text-xs font-medium text-good mb-1.5">Nên</div>
                 <div className="flex flex-wrap gap-1.5">
                   {yearMeaning.doList.map((item) => (
-                    <span key={item} className="px-2 py-0.5 text-[10px] bg-green-900/20 text-green-400 border border-green-800/30 rounded">
+                    <span key={item} className="px-2 py-0.5 text-[10px] bg-good/20 text-good border border-good/30 rounded">
                       {item}
                     </span>
                   ))}
@@ -367,10 +367,10 @@ function PersonalYearCard({
             )}
             {yearMeaning.dontList.length > 0 && (
               <div>
-                <div className="text-xs font-medium text-red-400 mb-1.5">Tránh</div>
+                <div className="text-xs font-medium text-bad mb-1.5">Tránh</div>
                 <div className="flex flex-wrap gap-1.5">
                   {yearMeaning.dontList.map((item) => (
-                    <span key={item} className="px-2 py-0.5 text-[10px] bg-red-900/20 text-red-400 border border-red-800/30 rounded">
+                    <span key={item} className="px-2 py-0.5 text-[10px] bg-bad/20 text-bad border border-bad/30 rounded">
                       {item}
                     </span>
                   ))}
@@ -381,12 +381,12 @@ function PersonalYearCard({
         )}
 
         {/* Personal Month sub-card */}
-        <div className="mt-4 pt-3 border-t border-gray-800">
+        <div className="mt-4 pt-3 border-t border-white/10">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Tháng Cá Nhân (tháng {new Date().getMonth() + 1}):</span>
-            <span className="text-sm font-semibold text-gray-200">{personalMonth.value}</span>
+            <span className="text-xs text-ink-muted">Tháng Cá Nhân (tháng {new Date().getMonth() + 1}):</span>
+            <span className="text-sm font-semibold text-ink">{personalMonth.value}</span>
             {NUMBER_MEANINGS[personalMonth.value] && (
-              <span className="text-xs text-gray-500">— {NUMBER_MEANINGS[personalMonth.value].title}</span>
+              <span className="text-xs text-ink-muted">- {NUMBER_MEANINGS[personalMonth.value].title}</span>
             )}
           </div>
         </div>
@@ -410,8 +410,8 @@ function InclusionSection({
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Biểu Đồ Inclusion</h3>
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+      <h3 className="text-sm font-semibold text-gold mb-3">Biểu Đồ Inclusion</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-4">
         <div className="space-y-2">
           {Object.entries(inclusionChart).map(([num, count]) => {
             const n = parseInt(num);
@@ -421,32 +421,32 @@ function InclusionSection({
             const meaning = INCLUSION_MEANINGS[n];
             return (
               <div key={num} className="flex items-center gap-2">
-                <span className={`text-sm w-5 text-center font-medium ${isMissing ? 'text-red-400' : isPassion ? 'text-yellow-300' : 'text-gray-300'}`}>
+                <span className={`text-sm w-5 text-center font-medium ${isMissing ? 'text-bad' : isPassion ? 'text-warn' : 'text-ink'}`}>
                   {num}
                 </span>
-                <div className="flex-1 h-5 bg-gray-800 rounded-full overflow-hidden relative">
+                <div className="flex-1 h-5 bg-raised rounded-full overflow-hidden">
                   {count > 0 && (
                     <div
-                      className={`h-full rounded-full transition-all duration-500 ${isPassion ? 'bg-yellow-500/70' : 'bg-purple-500/60'}`}
+                      className={`h-full rounded-full ${isPassion ? 'bg-warn/70' : 'bg-gold/60'}`}
                       style={{ width: `${Math.max(pct, 6)}%` }}
                     />
                   )}
-                  <span className="absolute inset-0 flex items-center pl-2 text-[10px] font-medium text-white/80">
-                    {count > 0 ? count : ''}
-                  </span>
                 </div>
+                <span className="w-4 text-right text-[10px] font-medium text-ink-muted tabular-nums">
+                  {count > 0 ? count : ''}
+                </span>
                 {isMissing && (
-                  <span className="text-[10px] bg-red-900/30 text-red-400 border border-red-800/30 rounded px-1.5 py-0.5 whitespace-nowrap">
+                  <span className="text-[10px] bg-bad/30 text-bad border border-bad/30 rounded px-1.5 py-0.5 whitespace-nowrap">
                     Thiếu
                   </span>
                 )}
                 {isPassion && (
-                  <span className="text-[10px] bg-yellow-900/30 text-yellow-300 border border-yellow-800/30 rounded px-1.5 py-0.5 whitespace-nowrap">
+                  <span className="text-[10px] bg-warn/30 text-warn border border-warn/30 rounded px-1.5 py-0.5 whitespace-nowrap">
                     Đam mê
                   </span>
                 )}
                 {meaning && (
-                  <span className="text-[10px] text-gray-600 hidden md:inline">
+                  <span className="text-[10px] text-ink-muted hidden md:inline">
                     {isMissing ? meaning.missing : meaning.present}
                   </span>
                 )}
@@ -456,22 +456,22 @@ function InclusionSection({
         </div>
 
         {/* Summary */}
-        <div className="mt-3 pt-3 border-t border-gray-800 space-y-1">
+        <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
           {karmicLessons.length > 0 && (
-            <p className="text-xs text-gray-400">
-              <span className="text-red-400">Bài học nghiệp:</span>{' '}
+            <p className="text-xs text-ink-muted">
+              <span className="text-bad">Bài học nghiệp:</span>{' '}
               {karmicLessons.map((n) => (
-                <span key={n} className="inline-block px-1.5 py-0.5 bg-red-900/20 text-red-400 border border-red-800/30 rounded text-[10px] mr-1">
+                <span key={n} className="inline-block px-1.5 py-0.5 bg-bad/20 text-bad border border-bad/30 rounded text-[10px] mr-1">
                   {n}
                 </span>
               ))}
             </p>
           )}
           {hiddenPassion.length > 0 && (
-            <p className="text-xs text-gray-400">
-              <span className="text-yellow-300">Đam mê ẩn:</span>{' '}
+            <p className="text-xs text-ink-muted">
+              <span className="text-warn">Đam mê ẩn:</span>{' '}
               {hiddenPassion.map((n) => (
-                <span key={n} className="inline-block px-1.5 py-0.5 bg-yellow-900/20 text-yellow-300 border border-yellow-800/30 rounded text-[10px] mr-1">
+                <span key={n} className="inline-block px-1.5 py-0.5 bg-warn/20 text-warn border border-warn/30 rounded text-[10px] mr-1">
                   {n}
                 </span>
               ))}
@@ -496,32 +496,32 @@ function PinnaclesAndChallenges({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Đỉnh Cao & Thử Thách</h3>
+      <h3 className="text-sm font-semibold text-gold mb-3">Đỉnh Cao & Thử Thách</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Pinnacles */}
-        <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-          <h4 className="text-xs font-medium text-green-400 mb-3">4 Đỉnh Cao (Pinnacles)</h4>
+        <div className="bg-surface border border-white/10 rounded-lg p-4">
+          <h4 className="text-xs font-medium text-good mb-3">4 Đỉnh Cao (Pinnacles)</h4>
           <div className="space-y-2">
             {pinnacles.map((p, i) => {
               const isCurrent = currentAge >= p.startAge && (p.endAge === null || currentAge <= p.endAge);
               return (
-                <div key={i} className={`flex items-center gap-3 p-2 rounded-lg ${isCurrent ? 'bg-green-900/20 border border-green-800/30' : ''}`}>
+                <div key={i} className={`flex items-center gap-3 p-2 rounded-lg ${isCurrent ? 'bg-good/20 border border-good/30' : ''}`}>
                   <div className={`flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold ${
-                    isCurrent ? 'bg-green-900/40 text-green-300 border border-green-700/40' : 'bg-gray-800 text-gray-400'
+                    isCurrent ? 'bg-good/40 text-good border border-good/40' : 'bg-raised text-ink-muted'
                   }`}>
                     {p.number}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs font-medium ${isCurrent ? 'text-green-300' : 'text-gray-300'}`}>
+                      <span className={`text-xs font-medium ${isCurrent ? 'text-good' : 'text-ink'}`}>
                         Đỉnh {i + 1}
                       </span>
-                      <span className="text-[10px] text-gray-500">
-                        ({p.startAge}–{p.endAge ?? '∞'} tuổi)
+                      <span className="text-[10px] text-ink-muted">
+                        ({p.startAge}-{p.endAge ?? '∞'} tuổi)
                       </span>
-                      {isCurrent && <span className="text-[9px] bg-green-800/40 text-green-400 rounded px-1">Hiện tại</span>}
+                      {isCurrent && <span className="text-[9px] bg-good/40 text-good rounded px-1">Hiện tại</span>}
                     </div>
-                    <div className="text-[10px] text-gray-500 truncate">{p.description}</div>
+                    <div className="text-[10px] text-ink-muted truncate">{p.description}</div>
                   </div>
                 </div>
               );
@@ -530,29 +530,29 @@ function PinnaclesAndChallenges({
         </div>
 
         {/* Challenges */}
-        <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
-          <h4 className="text-xs font-medium text-orange-400 mb-3">4 Thử Thách (Challenges)</h4>
+        <div className="bg-surface border border-white/10 rounded-lg p-4">
+          <h4 className="text-xs font-medium text-warn mb-3">4 Thử Thách (Challenges)</h4>
           <div className="space-y-2">
             {challenges.map((c, i) => {
               const isCurrent = currentAge >= c.startAge && (c.endAge === null || currentAge <= c.endAge);
               return (
-                <div key={i} className={`flex items-center gap-3 p-2 rounded-lg ${isCurrent ? 'bg-orange-900/20 border border-orange-800/30' : ''}`}>
+                <div key={i} className={`flex items-center gap-3 p-2 rounded-lg ${isCurrent ? 'bg-warn/20 border border-warn/30' : ''}`}>
                   <div className={`flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold ${
-                    isCurrent ? 'bg-orange-900/40 text-orange-300 border border-orange-700/40' : 'bg-gray-800 text-gray-400'
+                    isCurrent ? 'bg-warn/40 text-warn border border-warn/40' : 'bg-raised text-ink-muted'
                   }`}>
                     {c.number}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs font-medium ${isCurrent ? 'text-orange-300' : 'text-gray-300'}`}>
+                      <span className={`text-xs font-medium ${isCurrent ? 'text-warn' : 'text-ink'}`}>
                         Thử thách {i + 1}
                       </span>
-                      <span className="text-[10px] text-gray-500">
-                        ({c.startAge}–{c.endAge ?? '∞'} tuổi)
+                      <span className="text-[10px] text-ink-muted">
+                        ({c.startAge}-{c.endAge ?? '∞'} tuổi)
                       </span>
-                      {isCurrent && <span className="text-[9px] bg-orange-800/40 text-orange-400 rounded px-1">Hiện tại</span>}
+                      {isCurrent && <span className="text-[9px] bg-warn/40 text-warn rounded px-1">Hiện tại</span>}
                     </div>
-                    <div className="text-[10px] text-gray-500 truncate">{c.description}</div>
+                    <div className="text-[10px] text-ink-muted truncate">{c.description}</div>
                   </div>
                 </div>
               );
@@ -571,8 +571,8 @@ function PinnaclesAndChallenges({
 function BirthPyramid({ pyramid }: { pyramid: number[][] }) {
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Kim Tự Tháp Ngày Sinh</h3>
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg p-4">
+      <h3 className="text-sm font-semibold text-gold mb-3">Kim Tự Tháp Ngày Sinh</h3>
+      <div className="bg-surface border border-white/10 rounded-lg p-4">
         <div className="flex flex-col items-center gap-1">
           {pyramid.map((row, ri) => (
             <div key={ri} className="flex gap-1 justify-center">
@@ -581,10 +581,10 @@ function BirthPyramid({ pyramid }: { pyramid: number[][] }) {
                   key={di}
                   className={`w-7 h-7 flex items-center justify-center rounded text-xs font-medium ${
                     ri === 0
-                      ? 'bg-purple-900/40 text-purple-300 border border-purple-800/40'
+                      ? 'bg-gold/40 text-gold border border-gold/40'
                       : ri === pyramid.length - 1
-                        ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-800/40'
-                        : 'bg-gray-800/60 text-gray-400'
+                        ? 'bg-warn/30 text-warn border border-warn/40'
+                        : 'bg-raised text-ink-muted'
                   }`}
                 >
                   {digit}
@@ -593,7 +593,7 @@ function BirthPyramid({ pyramid }: { pyramid: number[][] }) {
             </div>
           ))}
         </div>
-        <p className="text-[10px] text-gray-500 text-center mt-3">
+        <p className="text-[10px] text-ink-muted text-center mt-3">
           Hàng trên: các chữ số ngày sinh • Hàng dưới: kết quả cộng dồn
         </p>
       </div>
@@ -616,53 +616,53 @@ function EastWestSection({
   const menhPalace = tuViChart.palaces.find(p => p.name === 'Mệnh');
   const quanLocPalace = tuViChart.palaces.find(p => p.name === 'Quan Lộc');
 
-  const menhStars = menhPalace?.stars.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '—';
-  const quanLocStars = quanLocPalace?.stars.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '—';
+  const menhStars = menhPalace?.stars.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '-';
+  const quanLocStars = quanLocPalace?.stars.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '-';
 
   const personalYearMeaning = PERSONAL_YEAR_MEANINGS[chart.personalYear.value];
   const expressionMeaning = NUMBER_MEANINGS[chart.expression.value];
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-purple-300 mb-3">Đông Tây Kết Hợp</h3>
-      <div className="bg-gray-900/80 border border-gray-800 rounded-lg overflow-hidden">
+      <h3 className="text-sm font-semibold text-gold mb-3">Đông Tây Kết Hợp</h3>
+      <div className="bg-surface border border-white/10 rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-800">
-              <th className="text-left px-4 py-2 text-xs text-gray-500 font-medium w-1/4"></th>
-              <th className="text-left px-4 py-2 text-xs text-purple-400 font-medium">Tử Vi Đẩu Số</th>
-              <th className="text-left px-4 py-2 text-xs text-blue-400 font-medium">Thần Số Học</th>
+            <tr className="border-b border-white/10">
+              <th className="text-left px-4 py-2 text-xs text-ink-muted font-medium w-1/4"></th>
+              <th className="text-left px-4 py-2 text-xs text-gold font-medium">Tử Vi Đẩu Số</th>
+              <th className="text-left px-4 py-2 text-xs text-thuy font-medium">Thần Số Học</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-gray-800/50">
-              <td className="px-4 py-2.5 text-xs text-gray-400">Tính cách</td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">{menhStars}</td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">
-                Số {chart.lifePath.value} — {lifeMeaning?.title || ''}
+            <tr className="border-b border-white/10">
+              <td className="px-4 py-2.5 text-xs text-ink-muted">Tính cách</td>
+              <td className="px-4 py-2.5 text-xs text-ink">{menhStars}</td>
+              <td className="px-4 py-2.5 text-xs text-ink">
+                Số {chart.lifePath.value} - {lifeMeaning?.title || ''}
               </td>
             </tr>
-            <tr className="border-b border-gray-800/50">
-              <td className="px-4 py-2.5 text-xs text-gray-400">Sự nghiệp</td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">{quanLocStars}</td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">
-                {chart.expression.value > 0 ? `Số ${chart.expression.value} — ${expressionMeaning?.title || ''}` : '—'}
+            <tr className="border-b border-white/10">
+              <td className="px-4 py-2.5 text-xs text-ink-muted">Sự nghiệp</td>
+              <td className="px-4 py-2.5 text-xs text-ink">{quanLocStars}</td>
+              <td className="px-4 py-2.5 text-xs text-ink">
+                {chart.expression.value > 0 ? `Số ${chart.expression.value} - ${expressionMeaning?.title || ''}` : '-'}
               </td>
             </tr>
             <tr>
-              <td className="px-4 py-2.5 text-xs text-gray-400">Năm {currentYear}</td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">
+              <td className="px-4 py-2.5 text-xs text-ink-muted">Năm {currentYear}</td>
+              <td className="px-4 py-2.5 text-xs text-ink">
                 {tuViChart.menhPalaceName}
               </td>
-              <td className="px-4 py-2.5 text-xs text-gray-200">
-                Năm {chart.personalYear.value} — {personalYearMeaning?.theme || ''}
+              <td className="px-4 py-2.5 text-xs text-ink">
+                Năm {chart.personalYear.value} - {personalYearMeaning?.theme || ''}
               </td>
             </tr>
           </tbody>
         </table>
-        <div className="px-4 py-3 border-t border-gray-800">
-          <p className="text-[10px] text-gray-500">
-            So sánh 2 hệ thống Đông — Tây để có cái nhìn toàn diện. Khi cả 2 đồng nhất, đó là điểm rất đáng tin cậy.
+        <div className="px-4 py-3 border-t border-white/10">
+          <p className="text-[10px] text-ink-muted">
+            So sánh 2 hệ thống Đông - Tây để có cái nhìn toàn diện. Khi cả 2 đồng nhất, đó là điểm rất đáng tin cậy.
           </p>
         </div>
       </div>
