@@ -3,9 +3,12 @@
 > Đọc file này ở đầu MỖI session refactor UI trước khi sửa bất cứ thứ gì.
 
 ## Direction
-Cổ điển tân thời (modern mystical). Dark-first (khoá 1 theme, không lật sáng/tối giữa trang).
-Sang, tĩnh, dễ đọc ở vùng dữ liệu.
-(Muốn đổi sang thuần truyền thống giấy dó/mực tàu/đỏ-vàng thì chỉ sửa Color tokens bên dưới.)
+Vũ trụ huyền bí (cosmic mystical). Trời đêm tím-chàm + sao vàng. "Tử Vi" = Sao Tím, nên
+tím/chàm là màu nền chủ đạo (KHÔNG phải "AI purple slop" - tím sâu, trầm, dùng cho khí
+quyển/glow, KHÔNG dùng làm nền nút). Gold là accent chính (sao + tương tác), jade phụ,
+iris (thạch anh tím) cho glow. Vỏ giàu không khí (gradient nền, starfield, ring chiêm tinh,
+glow tiết chế). Lõi dữ liệu vẫn tĩnh, đối xứng, dễ đọc.
+(Muốn đổi hướng khác chỉ cần sửa Color tokens + nền body trong index.css.)
 
 ## Hai vùng, hai bộ núm (design-taste-frontend dials)
 - VỎ (HomePage, InputPage, header, footer, modal, AI shell): VARIANCE 4 / MOTION 3 / DENSITY 3.
@@ -14,13 +17,14 @@ Sang, tĩnh, dễ đọc ở vùng dữ liệu.
   qua phần thẩm mỹ marketing của skill, ưu tiên READABILITY tuyệt đối, KHÔNG animation,
   layout đối xứng.
 
-## Color tokens
-- bg/base:#0F1115  bg/surface:#171A21  bg/raised:#1F2430
-- ink/primary:#ECECEC  ink/muted:#9AA0AB
-- accent/gold:#D4AF37  accent/jade:#3FB6A8   (accent KHOÁ: chỉ gold + jade toàn app, KHÔNG tím)
-- Ngũ hành (giữ ý nghĩa, chỉnh sắc cho nền tối):
-  Kim #D9D2C5 · Mộc #5FB87A · Thủy #4F8FE0 · Hỏa #E0604F · Thổ #C9A24B
+## Color tokens (cosmic night)
+- bg/base:#0B0A14  bg/surface:#14121F  bg/raised:#1C1930  (tím-chàm rất tối)
+- ink/primary:#ECEAF2  ink/muted:#9E98B0
+- accent/gold:#E2B84A (chính)  accent/jade:#45C2B1 (phụ)  accent/iris:#8E80D8 (glow/tím sao)
+- body có gradient khí quyển (radial tím + jade + gold rất mờ), background-attachment: fixed.
+- Ngũ hành: Kim #D9D2C5 · Mộc #5FB87A · Thủy #5C97E6 · Hỏa #E0604F · Thổ #C9A24B
 - state: good #5FB87A · warn #E0A23F · bad #E0604F
+- shadow-glow: quầng vàng quanh CTA/medallion (tiết chế, chỉ ở vỏ).
 
 ## Typography
 - display: "Noto Serif" (self-host qua @fontsource/noto-serif, đủ dấu tiếng Việt) — dùng cho

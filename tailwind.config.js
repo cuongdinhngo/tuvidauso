@@ -15,9 +15,10 @@ export default {
         // Ink
         ink: 'var(--color-ink)',
         'ink-muted': 'var(--color-ink-muted)',
-        // Accents (locked: gold + jade only, no purple anywhere)
+        // Accents: gold (primary) + jade (secondary) + iris (amethyst "Tử Vi" star)
         gold: 'var(--color-gold)',
         jade: 'var(--color-jade)',
+        iris: 'var(--color-iris)',
         // Ngu hanh (Five Elements)
         kim: 'var(--color-kim)',
         moc: 'var(--color-moc)',
@@ -48,6 +49,7 @@ export default {
       boxShadow: {
         card: 'var(--shadow-card)',
         raised: 'var(--shadow-raised)',
+        glow: 'var(--shadow-glow)',
       },
     },
   },
