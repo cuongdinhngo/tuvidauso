@@ -244,21 +244,21 @@ const SYSTEM_CONFIG = {
     icon: '🔮',
     badgeBg: 'bg-gold/20',
     badgeText: 'text-gold',
-    borderColor: 'border-l-purple-500',
+    borderColor: 'border-l-gold',
   },
   thanso: {
     label: 'Thần Số',
     icon: '🔢',
     badgeBg: 'bg-warn/20',
     badgeText: 'text-warn',
-    borderColor: 'border-l-amber-500',
+    borderColor: 'border-l-warn',
   },
   hoangdao: {
     label: 'Hoàng Đạo',
     icon: '♈',
     badgeBg: 'bg-jade/20',
     badgeText: 'text-jade',
-    borderColor: 'border-l-blue-500',
+    borderColor: 'border-l-thuy',
   },
 } as const;
 
