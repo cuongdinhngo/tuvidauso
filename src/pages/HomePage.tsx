@@ -4,7 +4,7 @@ import { Sparkles, Star, Clock, Columns3, Grid3X3, BookOpen, TrendingUp, Trash2,
 import { useTuViStore, type ChartHistoryEntry } from '../store/tuViStore';
 import { DIA_CHI_HOURS } from '../core/types';
 import Card from '../components/shared/Card';
-import Button from '../components/shared/Button';
+import Starfield from '../components/shared/Starfield';
 
 const FEATURES = [
   { title: 'Bát Tự', desc: 'Tứ Trụ, Ngũ Hành, Thập Thần, Nhật Chủ, Đại Vận', icon: Columns3 },
@@ -53,32 +53,41 @@ export default function HomePage() {
   return (
     <div className="stagger-in flex flex-col items-center px-4 max-w-5xl mx-auto">
       {/* Hero */}
-      <section style={{ ['--i' as string]: 0 }} className="text-center pt-16 pb-12 md:pt-20 md:pb-16">
-        <Sparkles className="w-12 h-12 text-gold mx-auto mb-5" />
-        <h1 className="font-display text-h1 md:text-[3.25rem] md:leading-[1.05] font-bold text-ink mb-4">
-          Tử Vi Đẩu Số
-        </h1>
-        <p className="text-ink-muted max-w-lg mx-auto text-lg mb-2">
-          Lập lá số Tử Vi Đẩu Số miễn phí, tính toán hoàn toàn trên trình duyệt.
-        </p>
-        <p className="text-ink-muted/70 text-sm mb-8">
-          Hơn 100 sao, Bát Tự Tứ Trụ, luận giải vận mệnh và tam hợp chiếu.
-        </p>
+      <section style={{ ['--i' as string]: 0 }} className="relative w-full text-center pt-20 pb-14 md:pt-28 md:pb-20">
+        <Starfield />
+        <div className="relative">
+          <span className="inline-flex items-center justify-center w-14 h-14 mb-6 rounded-full bg-gold/10 ring-1 ring-gold/25 shadow-glow">
+            <Sparkles className="w-7 h-7 text-gold" />
+          </span>
+          <h1 className="font-display text-[2.75rem] leading-[1.04] md:text-[4rem] font-bold text-gold-sheen mb-4 [text-wrap:balance]">
+            Tử Vi Đẩu Số
+          </h1>
+          <p className="text-ink max-w-xl mx-auto text-lg md:text-xl mb-2 [text-wrap:pretty]">
+            Lập lá số trọn vẹn, tỏ tường tinh đẩu, thấu suốt vận mệnh.
+          </p>
+          <p className="text-ink-muted/80 text-sm mb-9">
+            Hơn 100 sao, Bát Tự Tứ Trụ, luận giải vận mệnh và tam hợp chiếu.
+          </p>
 
-        <Link to="/input" className="inline-block group">
-          <Button size="lg">
-            <Star className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+          <Link
+            to="/input"
+            className="group inline-flex items-center gap-2 px-8 py-3.5 min-h-[48px] rounded-md bg-gold text-base font-semibold
+                       shadow-glow hover:shadow-[0_0_36px_-2px_rgba(226,184,74,0.6)] hover:-translate-y-0.5 transition-[transform,box-shadow]"
+          >
+            <Star className="w-5 h-5 group-hover:rotate-[18deg] transition-transform" />
             Lập Lá Số
-          </Button>
-        </Link>
+          </Link>
+        </div>
       </section>
 
       {/* Feature cards */}
       <section style={{ ['--i' as string]: 1 }} className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
         {FEATURES.map(({ title, desc, icon: Icon, link }) => {
           const card = (
-            <Card interactive className="h-full flex flex-col items-center text-center group">
-              <Icon className="w-8 h-8 text-gold mb-3" />
+            <Card interactive className="h-full flex flex-col items-center text-center group hover:shadow-glow">
+              <span className="inline-flex items-center justify-center w-11 h-11 mb-3 rounded-full bg-gold/10 ring-1 ring-gold/20 group-hover:ring-gold/45 transition-colors">
+                <Icon className="w-5 h-5 text-gold" />
+              </span>
               <h3 className="font-display text-ink font-semibold mb-1">{title}</h3>
               <p className="text-ink-muted text-sm leading-relaxed">{desc}</p>
             </Card>
