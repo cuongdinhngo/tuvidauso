@@ -628,7 +628,7 @@ export default function AIAnalysisSection({
 
       {expanded && (
         <div className="flex flex-col">
-          {/* Quick questions — empty state */}
+          {/* Quick questions - empty state */}
           {!hasMessages && !loading && (
             <QuickQuestions
               questions={quickQuestions}
@@ -641,7 +641,7 @@ export default function AIAnalysisSection({
           {/* Chat area */}
           {(hasMessages || loading || error) && (
             <div className="overflow-y-auto px-4 py-3 space-y-1 max-h-[60vh]">
-              {/* Initial analysis result — always show at top */}
+              {/* Initial analysis result - always show at top */}
               {initialResult && (
                 <AIBubble message={{ role: 'assistant', content: initialResult, displayContent: initialResult }} />
               )}
@@ -676,7 +676,7 @@ export default function AIAnalysisSection({
             </div>
           )}
 
-          {/* Follow-up suggestions — after AI response, not loading */}
+          {/* Follow-up suggestions - after AI response, not loading */}
           {hasMessages && !loading && (() => {
             const lastAssistant = [...conversationHistory].reverse().find(m => m.role === 'assistant');
             const lastContent = lastAssistant?.displayContent || lastAssistant?.content || initialResult || '';

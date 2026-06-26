@@ -10,7 +10,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="border-t border-white/[0.06] py-4 text-center text-xs text-ink-muted">
-        <p>Tử Vi Đẩu Số Online — Kết quả chỉ mang tính tham khảo</p>
+        <p>Tử Vi Đẩu Số Online - Kết quả chỉ mang tính tham khảo</p>
       </footer>
       <AISettingsModal />
     </div>

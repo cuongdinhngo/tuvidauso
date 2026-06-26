@@ -13,7 +13,7 @@
   /* Accents (locked: gold + jade) */
   --color-gold: #D4AF37;
   --color-jade: #3FB6A8;
-  /* Ngu hanh (Five Elements) — tuned for dark bg */
+  /* Ngu hanh (Five Elements) - tuned for dark bg */
   --color-kim: #D9D2C5;
   --color-moc: #5FB87A;
   --color-thuy: #4F8FE0;
@@ -23,7 +23,7 @@
   --color-good: #5FB87A;
   --color-warn: #E0A23F;
   --color-bad: #E0604F;
-  /* Shadows — subtle, never heavy */
+  /* Shadows - subtle, never heavy */
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.32);
   --shadow-raised: 0 6px 20px -8px rgba(0, 0, 0, 0.55);
 }
