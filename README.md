@@ -19,7 +19,7 @@
 
 ### Bát Tự (Tứ Trụ)
 - **Tứ Trụ** — Trụ Năm, Tháng, Ngày, Giờ với Tàng Can, Ngũ Hành, Thập Thần, Nhật Chủ phân tích
-- **Đại Vận** — Timeline đại vận với phân tích chi tiết
+- **Đại Vận** — Dòng thời gian đại vận với phân tích chi tiết
 
 ### Chiêm Tinh Phương Tây
 - **Big 3** — Cung Mặt Trời, Mặt Trăng, Mệnh Chủ (Rising Sign)
@@ -48,47 +48,47 @@
 ### Phân Tích AI
 - **Đa nhà cung cấp** — OpenAI, Google Gemini, Anthropic Claude, Groq
 - **Hội thoại** — Chat tới 10 lượt hỏi đáp
-- **Gợi ý follow-up** — AI tự đề xuất 3 câu hỏi tiếp theo, hiển thị dạng nút bấm
+- **Gợi ý tiếp nối** — AI tự đề xuất 3 câu hỏi tiếp theo, hiển thị dạng nút bấm
 - **Câu hỏi nhanh** — Câu hỏi gợi ý cho từng mục phân tích
 - **Phân tích kết hợp** — AI tổng hợp Tử Vi + Bát Tự + Chiêm Tinh + Thần Số Học
 
 ### Tính Năng Chung
 - **Lịch sử** — Lưu 10 lá số gần nhất (localStorage)
 - **Xem trước Âm lịch** — Hiển thị ngay khi nhập ngày Dương lịch
-- **Lazy loading** — Trang Lịch và Hợp Duyên tải theo yêu cầu
+- **Tải theo nhu cầu** — Trang Lịch và Hợp Duyên tải khi cần (lazy loading)
 
-## Tech Stack
+## Công Nghệ
 
 | | |
 |---|---|
-| Framework | React 19 + TypeScript 5.9 |
-| Build | Vite 8 |
-| Styling | TailwindCSS 3 |
-| State | Zustand 5 |
-| Routing | React Router 7 (HashRouter) |
-| Testing | Vitest 4 |
-| Deploy | GitHub Pages (gh-pages) |
+| Nền tảng | React 19 + TypeScript 5.9 |
+| Đóng gói | Vite 8 |
+| Giao diện | TailwindCSS 3 |
+| Trạng thái | Zustand 5 |
+| Định tuyến | React Router 7 (HashRouter) |
+| Kiểm thử | Vitest 4 |
+| Triển khai | GitHub Pages (gh-pages) |
 
 ## Bắt Đầu
 
 ```bash
-# Clone
+# Sao chép mã nguồn
 git clone https://github.com/cuong-ngo/tuvidauso.git
 cd tuvidauso
 
 # Cài đặt
 npm install
 
-# Chạy dev server
+# Chạy máy chủ phát triển
 npm run dev
 
-# Chạy tests
+# Chạy kiểm thử
 npm test
 
-# Build production
+# Đóng gói bản phát hành
 npm run build
 
-# Deploy lên GitHub Pages
+# Triển khai lên GitHub Pages
 npm run deploy
 ```
 
@@ -102,19 +102,19 @@ src/
 │   ├── battu/      # Bát Tự: Tứ Trụ, Ngũ Hành, Thập Thần, Đại Vận
 │   ├── tuvi/       # Tử Vi: An sao, Tứ Hóa, Độ sáng, Đại/Tiểu Hạn,
 │   │               # Tuần Triệt, Tam hợp, Đánh giá cung, 3-layer Tứ Hóa
-│   ├── astrology/  # Chiêm tinh phương Tây: Sun/Moon/Rising sign
-│   ├── numerology/ # Thần Số Học: Life Path, Expression, Personal Year
+│   ├── astrology/  # Chiêm tinh phương Tây: cung Mặt Trời/Mặt Trăng/Mệnh Chủ
+│   ├── numerology/ # Thần Số Học: Số Chủ Đạo, Biểu Đạt, Năm Cá Nhân
 │   ├── compare/    # Hợp duyên: So sánh đa chiều, xếp hạng
-│   ├── ai/         # AI: Multi-provider, prompts, conversation, suggestions
-│   │   ├── prompts/    # Prompt templates (system, astrology, numerology, combined, suggestion instruction)
-│   │   └── providers/  # Provider implementations (OpenAI, Google, Anthropic, Groq)
-│   └── types/      # TypeScript types & constants
-├── data/           # Star database, palace meanings, 25 cách cục,
-│                   # 210 interpretation rules, zodiac data, numerology data,
-│                   # calendar data, comparison data, AI quick questions
+│   ├── ai/         # AI: Đa nhà cung cấp, prompt, hội thoại, gợi ý
+│   │   ├── prompts/    # Mẫu prompt (hệ thống, chiêm tinh, số học, kết hợp, gợi ý)
+│   │   └── providers/  # Cài đặt nhà cung cấp (OpenAI, Google, Anthropic, Groq)
+│   └── types/      # Kiểu TypeScript & hằng số
+├── data/           # Cơ sở dữ liệu sao, ý nghĩa cung, 25 cách cục,
+│                   # 210 quy tắc luận giải, dữ liệu hoàng đạo, số học,
+│                   # lịch, so sánh, câu hỏi nhanh AI
 ├── pages/
-│   ├── HomePage.tsx        # Trang chủ + feature cards + lịch sử
-│   ├── InputPage.tsx       # Form nhập thông tin
+│   ├── HomePage.tsx        # Trang chủ + thẻ tính năng + lịch sử
+│   ├── InputPage.tsx       # Biểu mẫu nhập thông tin
 │   ├── ResultPage.tsx      # 8 tab kết quả
 │   ├── calendar/           # Trang Lịch & Chọn Ngày Tốt
 │   └── compare/            # Trang Hợp Duyên (ComparePage, AddPerson, Result, Ranking)
@@ -131,14 +131,14 @@ src/
 │   │               # ScoreGauge, RelationBadge
 │   ├── layout/     # Header, Layout
 │   └── shared/     # Tabs, ErrorBoundary, AIAnalysisSection, AISettingsModal
-├── utils/          # parseSuggestions (AI response parsing)
+├── utils/          # parseSuggestions (phân tích phản hồi AI)
 ├── hooks/          # useStarFilter, useAIAnalysis
 ├── store/          # tuViStore, aiStore, calendarStore, compareStore
-└── App.tsx         # Router setup (8 routes)
+└── App.tsx         # Thiết lập router (8 route)
 
-tests/              # 201 tests across 12 files (calendar, bát tự, tử vi,
-                    # tuần triệt, palace relations, integration, astrology,
-                    # numerology, compare, AI prompts, provider routing)
+tests/              # 201 test trên 12 file (lịch, bát tự, tử vi,
+                    # tuần triệt, quan hệ cung, tích hợp, chiêm tinh,
+                    # số học, so sánh, prompt AI, định tuyến nhà cung cấp)
 ```
 
 ## Giao Diện
@@ -146,10 +146,10 @@ tests/              # 201 tests across 12 files (calendar, bát tự, tử vi,
 Ứng dụng có 8 tab kết quả chính:
 
 1. **Tổng Quan** — Thông tin cơ bản, Bát Tự mini, biểu đồ Ngũ Hành, Tứ Hóa với cung vị trí
-2. **Bát Tự** — Tứ Trụ với màu Ngũ Hành, highlight Nhật Chủ, Tàng Can, Thập Thần, Đại Vận timeline
-3. **Lá Số** — Bảng 4×4 với 12 cung, lọc sao 4 chế độ, tam hợp/đối cung highlight, panel chi tiết cung với đánh giá sao
+2. **Bát Tự** — Tứ Trụ với màu Ngũ Hành, làm nổi bật Nhật Chủ, Tàng Can, Thập Thần, dòng thời gian Đại Vận
+3. **Lá Số** — Bảng 4×4 với 12 cung, lọc sao 4 chế độ, làm nổi bật tam hợp/đối cung, bảng chi tiết cung với đánh giá sao
 4. **Luận Giải** — 9 mục phân tích (Tính Cách, Sự Nghiệp, Tài Lộc, Tình Duyên, Sức Khỏe, Gia Đình, Cách Cục, Lời Khuyên), 210 quy tắc, tư vấn nghề nghiệp/sức khỏe
-5. **Vận Hạn** — Timeline Đại Hạn clickable, Tiểu Hạn cards, Tứ Hóa 3 tầng (bản mệnh + đại hạn + lưu niên), chọn năm, nhận diện Song Kỵ/Song Lộc
+5. **Vận Hạn** — Dòng thời gian Đại Hạn nhấp được, thẻ Tiểu Hạn, Tứ Hóa 3 tầng (bản mệnh + đại hạn + lưu niên), chọn năm, nhận diện Song Kỵ/Song Lộc
 6. **Số Học** — Số Chủ Đạo, Số Biểu Đạt, Số Năm Cá Nhân, phân tích AI chuyên sâu
 7. **Chiêm Tinh** — Big 3 (Mặt Trời, Mặt Trăng, Mệnh Chủ), chi tiết cung Hoàng Đạo, tương hợp
 8. **Kết Hợp** — Tổng hợp Tử Vi + Bát Tự + Chiêm Tinh + Thần Số Học, phân tích AI toàn diện
@@ -158,19 +158,19 @@ Ngoài ra có các trang riêng:
 - **Lịch & Chọn Ngày Tốt** — Lịch tháng, giờ Hoàng Đạo, chọn ngày theo 15 mục đích, cá nhân hóa
 - **Hợp Duyên** — So tuổi đa chiều, thêm nhiều người, xếp hạng tương hợp
 
-## Scripts
+## Lệnh
 
 | Lệnh | Mô tả |
 |---|---|
-| `npm run dev` | Dev server (hot reload) |
-| `npm run build` | TypeScript check + Vite build |
-| `npm test` | Chạy 201 tests |
-| `npm run preview` | Preview bản build |
-| `npm run deploy` | Build + deploy GitHub Pages |
+| `npm run dev` | Máy chủ phát triển (tải nóng) |
+| `npm run build` | Kiểm tra TypeScript + đóng gói Vite |
+| `npm test` | Chạy 201 test |
+| `npm run preview` | Xem trước bản đóng gói |
+| `npm run deploy` | Đóng gói + triển khai GitHub Pages |
 | `npm run lint` | ESLint |
-| `npm run validate` | Full validation suite |
-| `npm run quickcheck` | Quick chart check (CLI) |
+| `npm run validate` | Bộ kiểm định đầy đủ |
+| `npm run quickcheck` | Kiểm tra lá số nhanh (CLI) |
 
-## License
+## Giấy Phép
 
 MIT
