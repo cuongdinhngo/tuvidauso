@@ -101,6 +101,7 @@ const PHA_TOAI: Record<string, string> = {
   'Thìn': 'Sửu', 'Tuất': 'Sửu', 'Sửu': 'Sửu', 'Mùi': 'Sửu',
 };
 
+// Thiên Không — đồng cung Thiếu Dương = năm Chi + 1 (sau Thái Tuế). verified ✓ tracuutuvi.com.
 const THIEN_KHONG_CHI: Record<string, string> = {
   'Tý': 'Sửu', 'Sửu': 'Dần', 'Dần': 'Mão', 'Mão': 'Thìn',
   'Thìn': 'Tị', 'Tị': 'Ngọ', 'Ngọ': 'Mùi', 'Mùi': 'Thân',
@@ -144,12 +145,14 @@ const DUONG_PHU: Record<string, string> = {
   'Nhâm': 'Thìn', 'Quý': 'Tị',
 };
 
-// === NEW: Stars by lunar month ===
+// === Stars by lunar month ===
+// Thiên Hình — khởi Dậu tháng 1, đếm thuận theo tháng. verified ✓ tracuutuvi.com.
 const THIEN_HINH_MONTH = [
   'Dậu', 'Tuất', 'Hợi', 'Tý', 'Sửu', 'Dần',
   'Mão', 'Thìn', 'Tị', 'Ngọ', 'Mùi', 'Thân',
 ];
 
+// Thiên Riêu — khởi Sửu tháng 1, đếm thuận theo tháng. verified ✓ tracuutuvi.com.
 const THIEN_RIEU_MONTH = [
   'Sửu', 'Dần', 'Mão', 'Thìn', 'Tị', 'Ngọ',
   'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi', 'Tý',
@@ -250,7 +253,7 @@ export function placeAuxStars(
   stars.push({ star: 'Tam Thai', position: offsetChi(chiIndex(taPhuPos), lunarDay - 1), group: 'Phụ tinh' });
   stars.push({ star: 'Bát Tọa', position: offsetChi(chiIndex(huuBatPos), -(lunarDay - 1)), group: 'Phụ tinh' });
 
-  // Fixed positions
+  // Fixed positions — Thiên La luôn Thìn, Địa Võng luôn Tuất. verified ✓ tuvi.cohoc.net.
   stars.push({ star: 'Thiên La', position: 'Thìn', group: 'Sát tinh' });
   stars.push({ star: 'Địa Võng', position: 'Tuất', group: 'Sát tinh' });
 
