@@ -19,11 +19,10 @@ describe('Tu Vi Core', () => {
 
   it('Cuc: Mau + Tuat', () => {
     const result = getCuc('Mậu', 'Tuất');
-    // Mau = canIndex 4, pair 4%5=4 (Mau/Quy row)
-    // Tuat = chiIndex 10
-    // CUC_TABLE[4][10] = 5
-    expect(result.value).toBe(5);
-    expect(result.name).toBe('Thổ Ngũ Cục');
+    // Sourced (nạp âm): Mậu year → Ngũ Hổ Độn Giáp Dần → cung Tuất = Nhâm Tuất
+    // → nạp âm Đại Hải Thủy → Thủy Nhị Cục (2). (tuvi.cohoc.net grid: Mậu/Quý, Tuất = Thủy 2.)
+    expect(result.value).toBe(2);
+    expect(result.name).toBe('Thủy Nhị Cục');
   });
 
   it('12 palaces from Tuat', () => {

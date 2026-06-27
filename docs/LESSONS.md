@@ -43,3 +43,28 @@ table and the long tail. When fixing any core lookup table, cite the external so
 group, add value-level sourced tests (not just relational invariants), and for school-dependent cells
 (e.g. Thiên Phúc Bính) leave unchanged with a documented split rather than guessing. See
 [[mango-workflow-and-verification]].
+
+## cuc-table-fix — the corpus's first external chart caught a P0 (CUC_TABLE wrong for ~75% of charts)
+
+**Context:** Building the C2 corpus (slice A), verifying the *second* seed chart (Tết 2020, Canh Tý)
+against external sources immediately exposed that `CUC_TABLE` (`src/core/tuvi/cuc.ts`) returned the
+wrong Cục. Independent confirmation (nạp-âm derivation + published grid at tuvi.cohoc.net) showed the
+table was wrong for 15/20 reference charts — mis-placing all 14 main stars on each, plus Đại Hạn start
+ages. It had survived 1294 tests.
+
+**Lesson:** Two structural reasons a catastrophic table bug stayed invisible: (1) the reference
+`cucValue` was engine-generated (B1 tautology), and (2) the star invariants (trine/mirror) only assert
+*relationships*, which hold regardless of where a wrong Cục drops the whole system. The cheap guard
+that would have caught it: a **domain-structural invariant** — a valid Cục row must be 6 adjacent equal
+pairs (nạp âm pairs consecutive can-chi; Tuất/Hợi follow Dần/Mão). Relational invariants are necessary
+but not sufficient; add value-anchored AND structural-shape tests for lookup tables.
+
+**Why:** The single external chart did what 1294 self-referential tests could not. This is the
+strongest possible argument for the external corpus as the verification foundation.
+
+**How to apply:** (1) When a corpus/seed chart disagrees with the engine, treat it as a caught defect
+and STOP — don't seed around it (mango escalation worked here). (2) For every core lookup table, add a
+structural-shape invariant (here: adjacent-pair) plus per-row externally-sourced anchors where at
+least one anchor per row fails on the pre-fix data (non-tautological). (3) Beware coincidentally-correct
+cells: a single passing anchor can be a pre-existing correct value, not proof of a fix. See
+[[aux-star-sweep]] and [[mango-workflow-and-verification]].

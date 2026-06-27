@@ -238,7 +238,12 @@ describe('calculateCompatibility', () => {
     const tamHopResult = calculateCompatibility(pThin, pTy, 'lover');  // Thin-Ty tam hop
     const lucXungResult = calculateCompatibility(pTy, pNgo, 'lover');  // Ty-Ngo luc xung
 
-    expect(tamHopResult.overallScore).toBeGreaterThan(lucXungResult.overallScore);
+    // The tam-hợp / lục-xung relationship lives in the year-branch ("Con Giáp")
+    // dimension; assert there. The aggregate overallScore mixes 7 dimensions and is
+    // not a guaranteed ranking (it tied here only by chance on the pre-fix star data).
+    const conGiap = (r: ReturnType<typeof calculateCompatibility>) =>
+      r.categories.find((c) => c.name === 'Con Giáp')!.score;
+    expect(conGiap(tamHopResult)).toBeGreaterThan(conGiap(lucXungResult));
   });
 
   it.each(['business', 'child', 'parent', 'sibling'] as const)(
