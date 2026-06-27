@@ -45,7 +45,10 @@ The corrected table is justified against an external source (published Cục gri
 **STRUCTURE:** synthesized (Context/Defect/Scope/AC prose)
 
 ## Session status
-- **Phase:** 2 (design) COMPLETE → **STOP at Gate 2** (awaiting approval to execute)
+- **Phase:** DONE — **merged in PR #23** (commit `81e0656` on `main`). Full lifecycle complete; durable lesson recorded.
+- **Outcome:** CUC_TABLE corrected (15/20 reference charts had wrong Cục); 15 charts re-synced provisional; 1311 tests / validate 20/20.
+- _(historical phase log below)_
+- **Phase (historical):** 2 (design) COMPLETE → STOP at Gate 2 (approved)
 - **Branch:** to create on approval → `fix/cuc-table` (on `main`)
 - **TIER:** full · **TRACK:** backend · **SCOPE:** **M**
 

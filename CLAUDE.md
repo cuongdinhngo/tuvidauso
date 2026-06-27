@@ -11,7 +11,7 @@ Guidance for AI agents editing this codebase. For a feature tour and setup instr
 ```bash
 npm run dev        # Dev server (hot reload)
 npm run build      # tsc -b + Vite production build — run before considering work done
-npm test           # Vitest (201 tests, 12 files)
+npm test           # Vitest (1311 tests, 15 files)
 npm run lint       # ESLint
 npm run validate   # Full validation suite (tsx tests/validation/runValidation.ts)
 npm run quickcheck # Quick chart check with CLI args
@@ -82,7 +82,7 @@ Key files to know: `store/tuViStore.ts` (the calculation pipeline + 10-chart his
 
 ## Testing & validation
 
-201 tests across 12 files (`npm test`). Reference cases the validation suite asserts:
+1311 tests across 15 files (`npm test`). Reference cases the validation suite asserts:
 - 15/04/1988 → Lunar 29/02 Mậu Thìn, Đại Lâm Mộc
 - 25/01/2020 → Lunar 01/01 Canh Tý (Tết)
 - Every chart yields exactly 14 main stars and 12 unique palaces

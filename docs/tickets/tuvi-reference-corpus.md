@@ -29,8 +29,8 @@ Reference values come only from external sources, never engine output.
 **STRUCTURE:** synthesized (Context/Scope/AC prose, not the C/R/G/AC header schema)
 
 ## Session status
-- **Phase:** PARKED at Phase 3 — caught a P0 Cục bug (see Phase-3 record below). User chose to fix Cục first.
-- **Resume after:** the Cục fix (`tuvi-cuc-table-fix.md`) merges, then re-seed the corpus on a correct engine.
+- **Phase:** READY TO RESUME — the P0 Cục bug this run caught is now **fixed & merged** (PR #23, `tuvi-cuc-table-fix.md`). Re-run Slice A on the corrected engine.
+- **On resume:** the 15 charts re-synced by the Cục fix are still `verified:false` (provisional); promote the seed to `verified:true` with external sources per the design below. Engine is now trustworthy for Cục + main stars.
 - **Branch:** none (empty branch deleted; no code changed).
 - **TIER:** full · **TRACK:** backend · **SCOPE:** **M** (Slice A — infrastructure + small seed)
 

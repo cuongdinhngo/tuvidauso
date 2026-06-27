@@ -31,9 +31,8 @@ Any change to `src/core/**` must be justified against an external source or a pr
 **STRUCTURE:** synthesized (ticket uses Context/Scope/AC prose, not the C/R/G/AC header schema)
 
 ## Session status
-- **Phase:** 5 (finalise) COMPLETE — **PR #22 open** (https://github.com/cuongdinhngo/tuvidauso/pull/22), branch pushed.
-- **Next action:** await human review/merge of PR #22; then start P1 `tuvi-reference-corpus.md` (C2 corpus — the durable oracle).
-- **Revert path:** `git revert` the branch commits (`e0c9005` aux fixes + `2c09ee2` citations) restores all tables + signature together; or close PR #22 unmerged.
+- **Phase:** DONE — **merged in PR #22** (on `main`). 14 of 19 aux stars corrected; gender threaded into `placeAuxStars`.
+- **Revert path:** `git revert` the merge commit of PR #22.
 - **Durable lesson:** recorded to `docs/LESSONS.md` (aux-star-sweep — systematic untested an-sao errors; invariants ≠ correctness; prioritise C2 corpus).
 - **Branch:** `fix/aux-star-accuracy-sweep` · **reviewed commit:** `2c09ee2`
 - **Reviewed at `2c09ee2`** — files: `src/core/tuvi/auxStars.ts`, `src/core/compare/buildProfile.ts`, `tests/auxStarsInvariants.test.ts`, `tests/{fullValidation,aiPrompts}.test.ts`, `tests/validation/quickCheck.ts`
