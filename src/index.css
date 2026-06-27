@@ -122,6 +122,11 @@ body {
   to   { transform: translateY(0); }
 }
 
+/* Safe-area padding for fixed bottom-edge elements (iOS home indicator). */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @media print {
   body { background: white; color: black; }
   .no-print { display: none !important; }

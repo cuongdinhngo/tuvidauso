@@ -51,7 +51,7 @@ export default function CungDetail({ palace, isMenh, isThan, onClose, influence,
         aria-hidden="true"
       />
       {/* Bottom sheet below lg; sticky side panel at lg+ */}
-      <div className="fixed inset-x-0 bottom-0 z-50 w-full max-h-[85vh] overflow-y-auto rounded-t-2xl animate-slide-up bg-surface border border-white/10 lg:static lg:sticky lg:top-20 lg:inset-x-auto lg:bottom-auto lg:z-auto lg:w-96 lg:max-h-[80vh] lg:rounded-lg">
+      <div className="fixed inset-x-0 bottom-0 z-50 w-full max-h-[85vh] overflow-y-auto rounded-t-lg animate-slide-up bg-surface border border-white/10 pb-safe lg:sticky lg:top-20 lg:inset-x-auto lg:bottom-auto lg:z-auto lg:w-96 lg:max-h-[80vh] lg:rounded-lg lg:pb-0">
       {/* Header */}
       <div className="sticky top-0 bg-surface border-b border-white/10 p-4 z-10">
         <div className="flex justify-between items-start">
@@ -68,7 +68,7 @@ export default function CungDetail({ palace, isMenh, isThan, onClose, influence,
               {isTriet && <span className="text-[10px] text-bad border border-bad/40 rounded px-1">Triệt</span>}
             </div>
           </div>
-          <button onClick={onClose} className="text-ink-muted hover:text-ink p-1">
+          <button onClick={onClose} aria-label="Đóng" className="text-ink-muted hover:text-ink p-1">
             <X className="w-5 h-5" />
           </button>
         </div>

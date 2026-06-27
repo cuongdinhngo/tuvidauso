@@ -72,6 +72,7 @@ export default function Header() {
           className="md:hidden inline-flex items-center justify-center min-h-[44px] min-w-[44px] -mr-2 text-ink-muted hover:text-gold transition-colors"
           aria-label="Menu"
           aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -79,7 +80,7 @@ export default function Header() {
 
       {/* Mobile dropdown panel (below md) */}
       {menuOpen && (
-        <nav className="md:hidden border-t border-white/[0.08] bg-base/95 backdrop-blur-sm px-4 py-2">
+        <nav id="mobile-nav" className="md:hidden border-t border-white/[0.08] bg-base/95 backdrop-blur-sm px-4 py-2">
           {navLinks.map((l) => (
             <Link
               key={l.to}
