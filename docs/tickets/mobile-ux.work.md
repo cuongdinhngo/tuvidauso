@@ -241,7 +241,21 @@ All proofs sit at or above their AC's risk layer (real-DOM manual-recorded, not 
 
 ## Session status
 
-- **Last updated:** Phase 4 clean (LGTM at eefa82e)
-- **Current phase:** 5 — Finalise (final gate)
-- **Next action:** Draft PR body; request per-action approval (push, open PR); capture durable lesson
-- **Blocked on:** final-gate per-action approvals
+## Phase 5 — Finalise ✋ final gate
+
+- **PR draft:** `/tmp/pr-mobile-ux.md`
+- **Stale-review guard:** ✅ not stale — since `eefa82e` only `docs/tickets/` changed; zero reviewed-code-file changes.
+- **Planned outward actions (each needs separate approval):**
+  - [ ] push branch `feat/mobile-ux` to origin
+  - [ ] open PR via `gh pr create` (base `main`)
+  - tracker comment/transition: **n/a** — no tracker ticket (pasted-file ticket)
+- **Follow-up tickets drafted (deferred rows):** F2 star-row hover/tap keyboard+AT parity (pre-existing, out of scope); optional responsive smoke-test harness.
+- **Durable lesson:** ✅ recorded to `docs/LESSONS.md` — responsive/a11y ACs can't be unit-proven; with `tests/` off-limits + no DOM harness, prove via manual-recorded / headless screenshot @viewport (coverage-gap exclusion at Gate 2).
+- **Revert path:** `git checkout main` + delete branch `feat/mobile-ux`; or revert `9aaa5ed..eefa82e`.
+
+## Session status
+
+- **Last updated:** Phase 5 — awaiting per-action approval
+- **Current phase:** 5 — Finalise (final gate ✋)
+- **Next action:** User approves each outward action individually → push branch, then open PR
+- **Blocked on:** per-action approval for push + PR
