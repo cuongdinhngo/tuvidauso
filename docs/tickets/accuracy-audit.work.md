@@ -8,10 +8,17 @@
 ---
 
 ## Session status
-- **Phase:** 4 (review) CLEAN → 5 (finalise) pending final gate
-- **Branch:** `fix/accuracy-audit-main-stars` · **commit:** `2ccfbb8`
-- **Reviewed at 2ccfbb8** — files: `src/core/tuvi/mainStars.ts`, `tests/mainStarsInvariants.test.ts`, `tests/validation/referenceData.ts`
-- _(prev: Phases 1+2+3 — Gates 0/1/2 CLEARED; execute committed e89a11a→amended 2ccfbb8)_
+- **Phase:** DONE — first slice (A1/A2 main-star offsets + C1 invariants) **merged in PR #20**.
+- **Epic follow-up chain (status):**
+  - ✅ A1/A2 Phá Quân/Liêm Trinh offsets + C1 invariants — PR #20 (merged)
+  - ✅ Triệt Lộ + Cô Thần/Quả Tú — merged
+  - ✅ Aux-star sweep (14 of 19 stars) — `tuvi-hoa-linh-aux-sweep.md`, PR #22 (merged)
+  - ✅ **P0 CUC_TABLE fix** (Cục wrong for 15/20 charts; found by the corpus run) — `tuvi-cuc-table-fix.md`, PR #23 (merged)
+  - ⏳ C2 external reference corpus — `tuvi-reference-corpus.md` (READY TO RESUME on corrected engine)
+  - ⏳ C4/C5 calendar precision — `tuvi-calendar-precision.md`
+  - ⏳ Đại/Tiểu Hạn + palaces audit — `tuvi-periods-palaces-audit.md`
+  - ⏳ C6 Tứ Hóa school — `tuvi-tuhoa-school.md`
+- _(historical: first slice reviewed at 2ccfbb8; files mainStars.ts, mainStarsInvariants.test.ts, referenceData.ts)_
 
 ---
 

@@ -136,7 +136,7 @@ src/
 ├── store/          # tuViStore, aiStore, calendarStore, compareStore
 └── App.tsx         # Thiết lập router (8 route)
 
-tests/              # 201 test trên 12 file (lịch, bát tự, tử vi,
+tests/              # 1311 test trên 15 file (lịch, bát tự, tử vi,
                     # tuần triệt, quan hệ cung, tích hợp, chiêm tinh,
                     # số học, so sánh, prompt AI, định tuyến nhà cung cấp)
 ```

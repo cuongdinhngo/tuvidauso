@@ -56,7 +56,7 @@ Codified standards (`/mango:codify`, ratified):
 
 ## Testing & the Definition of Done
 <!-- Observed: test runner / command. -->
-- **Test runner:** Vitest 4. Run with `npm test` (`vitest run`). 201 tests across 12 files.
+- **Test runner:** Vitest 4. Run with `npm test` (`vitest run`). 1311 tests across 15 files.
 - Additional validation: `npm run validate` (full suite), `npm run quickcheck` (CLI chart check).
 - Invariants worth a proving test: every chart yields exactly 14 main stars and 12 unique palaces; Solar→Lunar conversion cases.
 - TODO: define what level of test a change requires (the proving test mango asks for).
