@@ -91,7 +91,7 @@ const palacePositions = arrangePalaces(menh);
 
 // Stars
 const mainStarPositions = placeMainStars(cuc.value, lunar.day);
-const auxStarPositions = placeAuxStars(lunar.yearCan, lunar.yearChi, lunar.month, lunar.day, hourIndex);
+const auxStarPositions = placeAuxStars(lunar.yearCan, lunar.yearChi, lunar.month, lunar.day, hourIndex, gender, menh);
 const tuHoa = getFourTransforms(lunar.yearCan);
 
 // Build palaces with stars

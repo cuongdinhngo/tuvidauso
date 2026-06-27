@@ -41,7 +41,7 @@ export function buildTuViChart(info: BirthInfo): TuViChart {
 
   // 6. Place aux stars
   const auxStars = placeAuxStars(
-    lunarDate.yearCan, lunarDate.yearChi, lunarDate.month, lunarDate.day, hour
+    lunarDate.yearCan, lunarDate.yearChi, lunarDate.month, lunarDate.day, hour, gender, menh
   );
 
   // 7. Build palaces with stars
