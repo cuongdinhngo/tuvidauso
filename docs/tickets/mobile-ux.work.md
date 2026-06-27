@@ -246,8 +246,8 @@ All proofs sit at or above their AC's risk layer (real-DOM manual-recorded, not 
 - **PR draft:** `/tmp/pr-mobile-ux.md`
 - **Stale-review guard:** ✅ not stale — since `eefa82e` only `docs/tickets/` changed; zero reviewed-code-file changes.
 - **Planned outward actions (each needs separate approval):**
-  - [ ] push branch `feat/mobile-ux` to origin
-  - [ ] open PR via `gh pr create` (base `main`)
+  - [x] push branch `feat/mobile-ux` to origin — done (tracking `origin/feat/mobile-ux`)
+  - [x] open PR via `gh pr create` (base `main`) — done → https://github.com/cuongdinhngo/tuvidauso/pull/17
   - tracker comment/transition: **n/a** — no tracker ticket (pasted-file ticket)
 - **Follow-up tickets drafted (deferred rows):** F2 star-row hover/tap keyboard+AT parity (pre-existing, out of scope); optional responsive smoke-test harness.
 - **Durable lesson:** ✅ recorded to `docs/LESSONS.md` — responsive/a11y ACs can't be unit-proven; with `tests/` off-limits + no DOM harness, prove via manual-recorded / headless screenshot @viewport (coverage-gap exclusion at Gate 2).
@@ -255,7 +255,7 @@ All proofs sit at or above their AC's risk layer (real-DOM manual-recorded, not 
 
 ## Session status
 
-- **Last updated:** Phase 5 — awaiting per-action approval
-- **Current phase:** 5 — Finalise (final gate ✋)
-- **Next action:** User approves each outward action individually → push branch, then open PR
-- **Blocked on:** per-action approval for push + PR
+- **Last updated:** Phase 5 complete — PR #17 open
+- **Current phase:** DONE — all 5 phases cleared; PR open, awaiting human merge
+- **Next action:** Review/merge PR #17; on merge, delete branch `feat/mobile-ux`
+- **Blocked on:** nothing (lifecycle complete)
