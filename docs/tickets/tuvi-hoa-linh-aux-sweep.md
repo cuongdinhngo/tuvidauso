@@ -31,10 +31,33 @@ Any change to `src/core/**` must be justified against an external source or a pr
 **STRUCTURE:** synthesized (ticket uses Context/Scope/AC prose, not the C/R/G/AC header schema)
 
 ## Session status
-- **Phase:** 3 (execute) COMPLETE → flowing to **Phase 4 (review)**
-- **Branch:** `fix/aux-star-accuracy-sweep`
-- **Working doc:** this file, below the separator
+- **Phase:** 4 (review) CLEAN → **Phase 5 (finalise)** pending final gate
+- **Branch:** `fix/aux-star-accuracy-sweep` · **commit:** `2c09ee2`
+- **Reviewed at `2c09ee2`** — files: `src/core/tuvi/auxStars.ts`, `src/core/compare/buildProfile.ts`, `tests/auxStarsInvariants.test.ts`, `tests/{fullValidation,aiPrompts}.test.ts`, `tests/validation/quickCheck.ts`
 - **TIER:** full · **TRACK:** backend · **SCOPE:** **L**
+
+---
+
+## PHASE 4 — REVIEW (CLEAN)
+
+**Reviewer (Sonnet): LGTM** — no Critical/Important. Verified independently: Dương-Nam/Âm-Nữ predicate (Can parity), Hỏa/Linh opposite directions, Đại Hao⊥Tiểu Hao Δ6 (∀ d), Phá Toái 3-group mapping, by-Can tables match cited sources, Đường Phù=Quốc Ấn−3 (∀), Tam Thai/Bát Tọa anchors, Thiên Thương/Sứ=Mệnh−7/−5 straddling Thiên Di. All 6 call sites threaded; no orphans; `src/core` purity preserved; Vietnamese intact; tests non-tautological. (Minor: pre-existing dead `placeAuxStars` import in `runValidation.ts` — out of scope.)
+
+**Challenger (ticket-blind): 5 met, 1 partial → RESOLVED.** R2a ("each placement confirmed-with-source-comment or fixed") flagged 5 confirmed-correct stars (Thiên Hình, Thiên Riêu, Thiên Không, Thiên La, Địa Võng) lacking a citation comment. **Looped back → added `verified ✓ <source>` comments (commit `2c09ee2`, comment-only).** All 19 targets now carry a source/verified comment (grep-confirmed). R1, R3–R7 MET. Re-review delta is comment-only → reviewer LGTM on logic stands.
+
+**Scope reconciliation:** diff = the 6 approved files only (+ working doc); no creep; `buildProfile`/test-caller updates are mechanical signature changes, not creep. SCOPE=L held; branch type `fix` matches.
+
+**Proving test:** green at HEAD; fails without the change (encodes corrected values + invariants). `npm test` 1294; `validate` 20/20; `build` clean; lint clean on changed files.
+
+### Ph3/4 proven by (k/N)
+| Row | Proven by | k/N |
+|-----|-----------|-----|
+| R-1 Hỏa/Linh | direction-flip assertion + reviewer arithmetic | 2/2 |
+| R-2 sweep (19 stars) | 14 fixed w/ source + WebFetch reconfirm; 5 confirmed-correct w/ citation; all 19 commented | 19/19 |
+| R-3 invariants | Song Hao Δ6, Phá Toái set, Đường Phù−3, straddle Δ2, Cô/Quả | green |
+| AC-2 non-tautology | reviewer + challenger confirmed sourced expecteds | pass |
+| AC-4 | test 1294 / validate 20/20 / build / lint | pass |
+
+**Reviewed at `2c09ee2`** (stale-review guard).
 
 ---
 
