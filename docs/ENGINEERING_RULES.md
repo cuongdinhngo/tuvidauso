@@ -32,7 +32,7 @@
 
 Codified standards (`/mango:codify`, ratified):
 - **Exports**: default export for React components/pages; **named** exports for everything in `src/core` and util/lib modules. (Observed: 42/42 components default, core 100% named.)
-- **Component declaration**: components declared as **`function Name()`**. (Observed: all 35 components — matches existing code.)
+- **Component declaration**: components declared as **`function Name()`**. (Observed: all 34 components — matches existing code.)
 - **Import paths**: **relative imports only** (`../`, `./`); no path alias. (Observed: 378 relative, 0 alias.)
 - **Type declarations**: use `interface` for object/props shapes; reserve `type` for unions and aliases. (Observed: 97 interface, 21 type.)
 - **File naming**: `src/core` & util files **camelCase** (`menhCung.ts`); component files **PascalCase** (`BatTuTab.tsx`).
@@ -56,7 +56,7 @@ Codified standards (`/mango:codify`, ratified):
 
 ## Testing & the Definition of Done
 <!-- Observed: test runner / command. -->
-- **Test runner:** Vitest 4. Run with `npm test` (`vitest run`). 188 tests across 12 files.
+- **Test runner:** Vitest 4. Run with `npm test` (`vitest run`). 201 tests across 12 files.
 - Additional validation: `npm run validate` (full suite), `npm run quickcheck` (CLI chart check).
 - Invariants worth a proving test: every chart yields exactly 14 main stars and 12 unique palaces; Solar→Lunar conversion cases.
 - TODO: define what level of test a change requires (the proving test mango asks for).
