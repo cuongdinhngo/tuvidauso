@@ -20,18 +20,31 @@ describe('Cục — structural invariant (adjacent-pair signature)', () => {
 });
 
 describe('Cục — externally-sourced anchor values', () => {
-  // tuvi.cohoc.net grid + nạp-âm derivation (3 independent methods agree).
-  it('Canh year, Mệnh Dần → Thổ Ngũ Cục (5)', () => {
+  // Values are the published tuvi.cohoc.net grid (cross-checked by nạp-âm derivation).
+  // Each Can-pair row has ≥1 anchor that ALSO fails on the pre-fix table (marked ⚑),
+  // so the suite's non-tautology guarantee covers every row — not just the adjacent-pair
+  // invariant. (Giáp/Tý and Mậu/Dậu happen to be correct in the pre-fix table too, so
+  // they are correctness anchors only; the ⚑ anchors + the invariant carry the regression proof.)
+  it('⚑ Ất/Canh row — Canh/Dần → Thổ Ngũ Cục (5) [pre-fix gave 4]', () => {
     expect(getCuc('Canh', 'Dần')).toEqual({ name: 'Thổ Ngũ Cục', value: 5 });
   });
-  it('Mậu year, Mệnh Dậu → Mộc Tam Cục (3)', () => {
+  it('⚑ Giáp/Kỷ row — Kỷ/Tuất → Hỏa Lục Cục (6) [pre-fix gave 2]', () => {
+    expect(getCuc('Kỷ', 'Tuất')).toEqual({ name: 'Hỏa Lục Cục', value: 6 });
+  });
+  it('⚑ Bính/Tân row — Bính/Tý → Thổ Ngũ Cục (5) [pre-fix gave 3]', () => {
+    expect(getCuc('Bính', 'Tý')).toEqual({ name: 'Thổ Ngũ Cục', value: 5 });
+  });
+  it('⚑ Đinh/Nhâm row — Nhâm/Tý → Mộc Tam Cục (3) [pre-fix gave 4]', () => {
+    expect(getCuc('Nhâm', 'Tý')).toEqual({ name: 'Mộc Tam Cục', value: 3 });
+  });
+  it('⚑ Mậu/Quý row — Mậu/Tý → Kim Tứ Cục (4) [pre-fix gave 5]', () => {
+    expect(getCuc('Mậu', 'Tý')).toEqual({ name: 'Kim Tứ Cục', value: 4 });
+  });
+  // Correctness anchors (coincidentally also correct in the pre-fix table):
+  it('Mậu/Dậu → Mộc Tam Cục (3)', () => {
     expect(getCuc('Mậu', 'Dậu')).toEqual({ name: 'Mộc Tam Cục', value: 3 });
   });
-  it('Giáp year, Mệnh Tý → Thủy Nhị Cục (2)', () => {
+  it('Giáp/Tý → Thủy Nhị Cục (2)', () => {
     expect(getCuc('Giáp', 'Tý')).toEqual({ name: 'Thủy Nhị Cục', value: 2 });
-  });
-  it('Kỷ Mùi (year Kỷ), Mệnh Tuất → Hỏa Lục Cục (6)', () => {
-    // tuvisaigon.vn bài 6 worked example.
-    expect(getCuc('Kỷ', 'Tuất')).toEqual({ name: 'Hỏa Lục Cục', value: 6 });
   });
 });
