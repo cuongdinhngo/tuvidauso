@@ -78,7 +78,7 @@ function StarTooltip({ star }: { star: Star }) {
   const data = STAR_DATABASE[star.name];
   if (!data) return null;
   return (
-    <div className="absolute z-50 bottom-full left-0 mb-1 bg-surface border border-white/15 rounded-md p-2 shadow-raised min-w-[180px] max-w-[240px] pointer-events-none">
+    <div className="hidden md:block absolute z-50 bottom-full left-0 mb-1 bg-surface border border-white/15 rounded-md p-2 shadow-raised min-w-[180px] max-w-[240px] pointer-events-none">
       <div className="text-xs font-semibold text-ink">{star.name}{star.brightness ? ` (${star.brightness})` : ''}</div>
       <div className="text-2xs text-ink-muted mt-0.5">{data.element} - {data.yinYang}</div>
       <div className="text-2xs text-ink mt-1 leading-relaxed">{data.keywords.join(', ')}</div>
@@ -148,7 +148,7 @@ export default function TuViChart({ palaces, menh, than, cuc, yearCan, yearChi, 
                 key={chi}
                 onClick={() => setSelectedPalace(palace)}
                 style={{ gridRow: pos.row + 1, gridColumn: pos.col + 1 }}
-                className={`bg-raised border cursor-pointer hover:bg-white/[0.04] transition-colors p-1.5 min-h-[140px] ${
+                className={`bg-raised border cursor-pointer hover:bg-white/[0.04] transition-colors p-1.5 min-h-[108px] sm:min-h-[140px] ${
                   isCompact ? 'text-[11px]' : 'text-xs md:text-sm'
                 } ${
                   isMenh ? 'border-gold/70' : isThan ? 'border-thuy/50' : 'border-white/[0.08]'

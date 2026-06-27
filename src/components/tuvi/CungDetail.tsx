@@ -43,7 +43,15 @@ export default function CungDetail({ palace, isMenh, isThan, onClose, influence,
   const auxStars = palace.stars.filter(s => s.type !== 'chinh');
 
   return (
-    <div className="w-full lg:w-96 bg-surface border border-white/10 rounded-lg lg:sticky lg:top-20 max-h-[80vh] overflow-y-auto">
+    <>
+      {/* Mobile backdrop (below lg) */}
+      <div
+        className="fixed inset-0 z-40 bg-base/70 lg:hidden"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Bottom sheet below lg; sticky side panel at lg+ */}
+      <div className="fixed inset-x-0 bottom-0 z-50 w-full max-h-[85vh] overflow-y-auto rounded-t-2xl animate-slide-up bg-surface border border-white/10 lg:static lg:sticky lg:top-20 lg:inset-x-auto lg:bottom-auto lg:z-auto lg:w-96 lg:max-h-[80vh] lg:rounded-lg">
       {/* Header */}
       <div className="sticky top-0 bg-surface border-b border-white/10 p-4 z-10">
         <div className="flex justify-between items-start">
@@ -266,6 +274,7 @@ export default function CungDetail({ palace, isMenh, isThan, onClose, influence,
           </details>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }
