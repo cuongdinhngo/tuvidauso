@@ -286,7 +286,7 @@ export default function ResultPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start mb-6">
         <div>
           <h1 className="text-xl font-bold text-gold">
             {birthInfo.name ? `Lá số - ${birthInfo.name}` : 'Lá Số Tử Vi'}
@@ -300,7 +300,7 @@ export default function ResultPage() {
         </div>
         <Link
           to="/input"
-          className="text-sm text-gold hover:text-gold border border-gold rounded-lg px-3 py-1"
+          className="w-full sm:w-auto text-center inline-flex items-center justify-center min-h-[44px] md:min-h-0 text-sm text-gold hover:text-gold border border-gold rounded-lg px-3 py-1"
         >
           Lập lá số mới
         </Link>

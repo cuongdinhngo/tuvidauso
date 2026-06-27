@@ -30,7 +30,7 @@ export default function StarFilterBar({ mode, setMode, customGroups, toggleGroup
               if (m.value === 'custom') setShowCustom(true);
               else setShowCustom(false);
             }}
-            className={`text-xs px-2.5 py-1 rounded-full transition-colors ${
+            className={`text-xs px-2.5 py-1 rounded-full inline-flex items-center justify-center min-h-[44px] md:min-h-0 transition-colors ${
               mode === m.value
                 ? 'bg-gold/50 text-gold border border-gold/50'
                 : 'text-ink-muted border border-white/10 hover:text-ink'
