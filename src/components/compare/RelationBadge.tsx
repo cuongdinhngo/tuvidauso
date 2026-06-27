@@ -16,7 +16,7 @@ interface RelationBadgeProps {
 export default function RelationBadge({ type }: RelationBadgeProps) {
   const config = RELATION_CONFIG[type];
   return (
-    <span className={`inline-block px-2 py-0.5 text-xs rounded-full border ${config.color}`}>
+    <span className={`inline-block shrink-0 whitespace-nowrap px-2 py-0.5 text-xs rounded-full border ${config.color}`}>
       {config.label}
     </span>
   );
