@@ -26,20 +26,25 @@ export function getTuanKhong(yearCan: string, yearChi: string): [string, string]
 }
 
 /**
- * Triệt Lộ — based on year Can only (trường phái 1, phổ biến nhất).
- * Pairs of Can share the same Triệt positions.
+ * Triệt Lộ — based on year Can only (trường phái phổ biến nhất).
+ * Five Can-pairs share a Triệt zone; Triệt never falls on Tuất/Hợi.
+ * Khẩu quyết: "Giáp Kỷ → Thân Dậu; Ất Canh → Ngọ Mùi; Bính Tân → Thìn Tị;
+ *              Đinh Nhâm → Dần Mão; Mậu Quý → Tý Sửu."
+ * Nguồn: Tử Vi Đẩu Số Tân Biên (Vân Đằng Thái Thứ Lang); hocvienlyso.org,
+ *        vietdich (phép đếm). Pairing is (Giáp,Kỷ),(Ất,Canh),(Bính,Tân),
+ *        (Đinh,Nhâm),(Mậu,Quý) — NOT consecutive Can.
  */
 const TRIET_MAP: Record<string, [string, string]> = {
   'Giáp': ['Thân', 'Dậu'],
+  'Kỷ':   ['Thân', 'Dậu'],
   'Ất':   ['Ngọ', 'Mùi'],
+  'Canh': ['Ngọ', 'Mùi'],
   'Bính': ['Thìn', 'Tị'],
+  'Tân':  ['Thìn', 'Tị'],
   'Đinh': ['Dần', 'Mão'],
+  'Nhâm': ['Dần', 'Mão'],
   'Mậu':  ['Tý', 'Sửu'],
-  'Kỷ':   ['Tuất', 'Hợi'],
-  'Canh': ['Thân', 'Dậu'],
-  'Tân':  ['Ngọ', 'Mùi'],
-  'Nhâm': ['Thìn', 'Tị'],
-  'Quý':  ['Dần', 'Mão'],
+  'Quý':  ['Tý', 'Sửu'],
 };
 
 export function getTrietLo(yearCan: string): [string, string] {

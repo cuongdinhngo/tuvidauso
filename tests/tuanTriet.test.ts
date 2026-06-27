@@ -39,25 +39,36 @@ describe('Tuần Không', () => {
   });
 });
 
-describe('Triệt Lộ', () => {
-  it('Mậu → Tý-Sửu', () => {
-    expect(getTrietLo('Mậu')).toEqual(['Tý', 'Sửu']);
+// Khẩu quyết (Tử Vi Đẩu Số Tân Biên; hocvienlyso.org; vietdich):
+// Giáp Kỷ → Thân Dậu | Ất Canh → Ngọ Mùi | Bính Tân → Thìn Tị
+// Đinh Nhâm → Dần Mão | Mậu Quý → Tý Sửu. Triệt KHÔNG bao giờ ở Tuất/Hợi.
+describe('Triệt Lộ (theo khẩu quyết, không phải engine)', () => {
+  const expected: Record<string, [string, string]> = {
+    'Giáp': ['Thân', 'Dậu'], 'Kỷ': ['Thân', 'Dậu'],
+    'Ất': ['Ngọ', 'Mùi'], 'Canh': ['Ngọ', 'Mùi'],
+    'Bính': ['Thìn', 'Tị'], 'Tân': ['Thìn', 'Tị'],
+    'Đinh': ['Dần', 'Mão'], 'Nhâm': ['Dần', 'Mão'],
+    'Mậu': ['Tý', 'Sửu'], 'Quý': ['Tý', 'Sửu'],
+  };
+  for (const [can, pos] of Object.entries(expected)) {
+    it(`${can} → ${pos.join('-')}`, () => {
+      expect(getTrietLo(can)).toEqual(pos);
+    });
+  }
+
+  it('INVARIANT: Triệt never lands on Tuất or Hợi (any Can)', () => {
+    for (const can of Object.keys(expected)) {
+      expect(getTrietLo(can)).not.toContain('Tuất');
+      expect(getTrietLo(can)).not.toContain('Hợi');
+    }
   });
 
-  it('Giáp → Thân-Dậu', () => {
-    expect(getTrietLo('Giáp')).toEqual(['Thân', 'Dậu']);
-  });
-
-  it('Canh → Thân-Dậu (same as Giáp)', () => {
-    expect(getTrietLo('Canh')).toEqual(['Thân', 'Dậu']);
-  });
-
-  it('Ất → Ngọ-Mùi', () => {
-    expect(getTrietLo('Ất')).toEqual(['Ngọ', 'Mùi']);
-  });
-
-  it('Kỷ → Tuất-Hợi', () => {
-    expect(getTrietLo('Kỷ')).toEqual(['Tuất', 'Hợi']);
+  it('INVARIANT: paired Can share a Triệt zone', () => {
+    expect(getTrietLo('Giáp')).toEqual(getTrietLo('Kỷ'));
+    expect(getTrietLo('Ất')).toEqual(getTrietLo('Canh'));
+    expect(getTrietLo('Bính')).toEqual(getTrietLo('Tân'));
+    expect(getTrietLo('Đinh')).toEqual(getTrietLo('Nhâm'));
+    expect(getTrietLo('Mậu')).toEqual(getTrietLo('Quý'));
   });
 });
 

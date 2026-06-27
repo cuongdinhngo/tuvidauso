@@ -73,19 +73,24 @@ function getHongLoan(yearChi: string): string {
   return DIA_CHI[((chiIndex('Mão') - yearChiIdx) % 12 + 12) % 12];
 }
 
-// === NEW: Stars by year Chi ===
+// === Cô Thần / Quả Tú (by year Chi) ===
+// Cô Thần = tứ Sinh (Dần/Tị/Thân/Hợi) ngay SAU tam hợp mùa của tuổi;
+// Quả Tú = tứ Mộ (Thìn/Tuất/Sửu/Mùi) ngay TRƯỚC. Bộ "Cô Quả".
+// Hợi-Tý-Sửu → Cô Dần / Quả Tuất; Dần-Mão-Thìn → Cô Tị / Quả Sửu;
+// Tị-Ngọ-Mùi → Cô Thân / Quả Thìn; Thân-Dậu-Tuất → Cô Hợi / Quả Mùi.
+// Nguồn: tuvi.cohoc.net, tracuutuvi.com; TVĐS Tân Biên.
 const CO_THAN: Record<string, string> = {
-  'Dần': 'Dần', 'Mão': 'Dần', 'Thìn': 'Dần',
-  'Tị': 'Tị', 'Ngọ': 'Tị', 'Mùi': 'Tị',
-  'Thân': 'Thân', 'Dậu': 'Thân', 'Tuất': 'Thân',
-  'Hợi': 'Hợi', 'Tý': 'Hợi', 'Sửu': 'Hợi',
+  'Dần': 'Tị', 'Mão': 'Tị', 'Thìn': 'Tị',
+  'Tị': 'Thân', 'Ngọ': 'Thân', 'Mùi': 'Thân',
+  'Thân': 'Hợi', 'Dậu': 'Hợi', 'Tuất': 'Hợi',
+  'Hợi': 'Dần', 'Tý': 'Dần', 'Sửu': 'Dần',
 };
 
 const QUA_TU: Record<string, string> = {
-  'Dần': 'Tuất', 'Mão': 'Tuất', 'Thìn': 'Tuất',
-  'Tị': 'Sửu', 'Ngọ': 'Sửu', 'Mùi': 'Sửu',
-  'Thân': 'Thìn', 'Dậu': 'Thìn', 'Tuất': 'Thìn',
-  'Hợi': 'Mùi', 'Tý': 'Mùi', 'Sửu': 'Mùi',
+  'Dần': 'Sửu', 'Mão': 'Sửu', 'Thìn': 'Sửu',
+  'Tị': 'Thìn', 'Ngọ': 'Thìn', 'Mùi': 'Thìn',
+  'Thân': 'Mùi', 'Dậu': 'Mùi', 'Tuất': 'Mùi',
+  'Hợi': 'Tuất', 'Tý': 'Tuất', 'Sửu': 'Tuất',
 };
 
 const PHA_TOAI: Record<string, string> = {
