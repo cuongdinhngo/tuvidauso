@@ -93,15 +93,15 @@ export function placeMainStars(cucValue: number, lunarDay: number): StarPosition
   stars.push({ star: 'Thái Dương', position: offsetChi(tuViPos, -3), system: 'tuViHe' });
   stars.push({ star: 'Vũ Khúc', position: offsetChi(tuViPos, -4), system: 'tuViHe' });
   stars.push({ star: 'Thiên Đồng', position: offsetChi(tuViPos, -5), system: 'tuViHe' });
-  // Skip one position (-6 from Tu Vi), Liem Trinh at -7
-  stars.push({ star: 'Liêm Trinh', position: offsetChi(tuViPos, -7), system: 'tuViHe' });
+  // Skip two positions (-6, -7 from Tu Vi), Liem Trinh at -8
+  stars.push({ star: 'Liêm Trinh', position: offsetChi(tuViPos, -8), system: 'tuViHe' });
 
   // === Thien Phu position (mirror of Tu Vi) ===
   const thienPhuPos = THIEN_PHU_MIRROR[tuViPos];
 
   // === Thien Phu system (8 stars) - go clockwise from Thien Phu ===
   // Thien Phu -> (+1) Thai Am -> (+1) Tham Lang -> (+1) Cu Mon -> (+1) Thien Tuong
-  // -> (+1) Thien Luong -> (+1) That Sat -> (+2, skip 1) Pha Quan
+  // -> (+1) Thien Luong -> (+1) That Sat -> (+4, skip 3) Pha Quan
   stars.push({ star: 'Thiên Phủ', position: thienPhuPos, system: 'thienPhuHe' });
   stars.push({ star: 'Thái Âm', position: offsetChi(thienPhuPos, 1), system: 'thienPhuHe' });
   stars.push({ star: 'Tham Lang', position: offsetChi(thienPhuPos, 2), system: 'thienPhuHe' });
@@ -109,8 +109,8 @@ export function placeMainStars(cucValue: number, lunarDay: number): StarPosition
   stars.push({ star: 'Thiên Tướng', position: offsetChi(thienPhuPos, 4), system: 'thienPhuHe' });
   stars.push({ star: 'Thiên Lương', position: offsetChi(thienPhuPos, 5), system: 'thienPhuHe' });
   stars.push({ star: 'Thất Sát', position: offsetChi(thienPhuPos, 6), system: 'thienPhuHe' });
-  // Skip one, Pha Quan at +8
-  stars.push({ star: 'Phá Quân', position: offsetChi(thienPhuPos, 8), system: 'thienPhuHe' });
+  // Skip three (+7, +8, +9), Pha Quan at +10
+  stars.push({ star: 'Phá Quân', position: offsetChi(thienPhuPos, 10), system: 'thienPhuHe' });
 
   return stars;
 }
