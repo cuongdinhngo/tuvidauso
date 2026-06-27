@@ -77,36 +77,35 @@ export default function ComparePage() {
                 const ratingLabel = rel.result?.ratingLabel ?? '';
 
                 return (
-                  <div key={rel.id} className="bg-surface border border-white/10 rounded-lg p-3 flex items-center gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-ink font-medium text-sm truncate">{person.name}</span>
-                        <RelationBadge type={rel.relationType} />
-                      </div>
-                      <div className="text-xs text-ink-muted">
-                        {person.lunarDate.yearCan} {person.lunarDate.yearChi} &bull; {person.lunarDate.napAm}
-                      </div>
+                  <div key={rel.id} className="bg-surface border border-white/10 rounded-lg p-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-ink font-medium text-sm truncate">{person.name}</span>
+                      <RelationBadge type={rel.relationType} />
+                    </div>
+                    <div className="text-xs text-ink-muted mt-0.5">
+                      {person.lunarDate.yearCan} {person.lunarDate.yearChi} &bull; {person.lunarDate.napAm}
                     </div>
 
-                    <div className="text-right shrink-0">
-                      <div className="text-lg font-bold text-ink">{score}%</div>
-                      <div className="text-xs text-ink-muted">{ratingLabel}</div>
-                    </div>
-
-                    <div className="flex gap-1 shrink-0">
-                      <Link
-                        to={`/compare/result/${rel.id}`}
-                        className="px-2 py-1 text-xs bg-gold/50 text-gold rounded hover:bg-gold/50 transition-colors"
-                      >
-                        Xem
-                      </Link>
-                      <button
-                        onClick={() => removePerson(person.id)}
-                        className="p-1 text-ink-muted hover:text-bad transition-colors"
-                        title="Xóa"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                    <div className="flex items-center justify-between gap-3 mt-2">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-ink">{score}%</span>
+                        <span className="text-xs text-ink-muted">{ratingLabel}</span>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Link
+                          to={`/compare/result/${rel.id}`}
+                          className="inline-flex items-center justify-center min-h-[44px] px-4 text-sm bg-gold/50 text-gold rounded-md hover:bg-gold/60 transition-colors"
+                        >
+                          Xem
+                        </Link>
+                        <button
+                          onClick={() => removePerson(person.id)}
+                          className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] text-ink-muted hover:text-bad transition-colors"
+                          aria-label="Xóa"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
