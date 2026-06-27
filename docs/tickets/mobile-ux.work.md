@@ -193,6 +193,42 @@ All proofs sit at or above their AC's risk layer (real-DOM manual-recorded, not 
 
 - **Gate 2 status:** ✅ cleared (user "approve and process"; coverage-gap exclusion approved)
 
+## Phase 3 — Execute
+
+- **Branch:** `feat/mobile-ux`
+- **Commits (no AI co-author trailer):**
+  - `9aaa5ed` feat(header): collapse nav into hamburger menu below md — R1
+  - `b22973e` feat(tuvi): mobile bottom sheet for CungDetail + touch-safe chart — R2a/R2b/R2c, C5/C6
+  - `9701892` feat(tabs): scroll affordance + scroll active tab into view — R3
+  - `54178b3` fix(ui): responsive ResultPage header + 44px mobile tap targets — R4/R5
+  - `2f439d1` docs(mobile-ux): responsive & touch design contract + working doc — DESIGN.md contract
+- **Proving test added/run:** structural + visual at integration/runtime layer.
+  - Structural proxy: nav cluster now `hidden md:flex` (`Header.tsx:54`) + 44px hamburger `md:hidden` (`Header.tsx:72`) + close-on-route `useEffect` (`Header.tsx:14-16`). Pre-change the ungated inline nav overflowed at 375px; post-change only the hamburger renders below md → no overflow row.
+  - Visual (real DOM, Chrome headless): `home-375.png` → header = logo + ☰, no horizontal overflow (AC1 header ✅); `home-900.png` → full inline nav + Cài đặt AI, identical to pre-change (C4 ✅). Screenshots in scratchpad.
+  - Automated regression: `npm run build` → zero TS errors (AC5 ✅); `npm test` → **201/201 green** (no logic regression; C1/C2 ✅).
+- **Verification sweep:**
+  - zero stray references ✅ (build + tsc clean)
+  - diff ⊆ approved list ✅ — exactly 7 source files (Header, TuViChart, CungDetail, Tabs, StarFilterBar, ResultPage, index.css) + DESIGN.md + working doc; **no `src/core/**` or `tests/**`** touched (C1 ✅)
+  - each hunk maps to a row ✅ (see commit→row mapping above)
+  - C3 no new colors ✅ (backdrop `bg-base/70`, fades `from-base`; grep hits were a pre-existing `min-w-[180px]` and the `max-width:1023.98px` breakpoint media query, neither a new token)
+  - C6 4x4 preserved ✅ (`TuViChart.tsx:119` `grid-cols-4 grid-rows-4`)
+- **`Ph3/4 proven by` progress:** AC1(header)/AC5/C1/C2/C3/C6 ✅ automated+visual. AC1(nav reachable by tap), AC2/AC3/AC4/AC6, R5/M4 box-height → **manual-recorded pending** (approved coverage-gap exclusion; require app-state interaction not reachable from a static URL).
+- **Design-invalidation / re-gate:** none — approach implemented as designed.
+
+## Phase 4 — Review ✋ (stop only if not clean)
+
+- **reviewer verdict (round 1):** CHANGES REQUESTED, **no Critical**. 3 Important: F1 SHAPE-LOCK (`rounded-t-2xl`→ token), F2 M6 star-row hover/tap parity, F3 M9 safe-area on new fixed bottom sheet. Minors: hamburger `aria-controls`, close-button `aria-label`, redundant `lg:static`.
+- **challenger (ticket-blind, round 1):** **9 met, 0 not met**, 4 can't-tell (runtime @375 → recorded coverage-gap exclusion), 1 rubric gap (M9), DESIGN.md flagged as unrequested-but-benign doc.
+- **Fixes applied (commit `eefa82e`, execute loop-back):** F1 `rounded-t-lg`; F3 `.pb-safe` + `env(safe-area-inset-bottom)`; minors (`id`/`aria-controls`, `aria-label="Đóng"`, dropped `lg:static`). Re-verified: build clean, 201 tests green, no core/tests touched.
+- **F2 adjudication (defer, not a blocker):** challenger scored M6 **MET** — no info is hover-only on mobile (palace tap → CungDetail surfaces star detail). Hover handlers are pre-existing; star-row keyboard/AT semantics are beyond this presentation ticket (G1). → **follow-up**, not a scope expansion.
+- **Scope reconciliation:** diff = 7 source files + DESIGN.md (+ working doc); within approved Gate-2 list (DESIGN.md was an approved frontend-track artifact). No tier crossing. ✅
+- **Proving test result:** `npm run build` zero TS errors; `npm test` 201/201; header @375 structural+visual proof holds (would fail pre-change). ✅
+- **Layer-match re-confirmation:** runtime ACs (M2/M3/AC2/AC3/AC4/AC6, M4 box-height) carried by manual-recorded @375 (recorded human-approved coverage-gap exclusion) — no AC closed clean on a mismatched proof. ✅
+- **reviewer verdict (round 2):** **LGTM** — all 3 Important findings resolved in `eefa82e`; F2 + `rounded-full` deferrals confirmed pre-existing on `main` and accepted. No Critical/Important remain.
+- **Clean?** reviewer no Critical ✅ AND challenger 0 not-met (4 can't-tell = recorded coverage-gap exclusion) ✅ AND no layer-match ❌ unresolved ✅ AND k=N/exclusions approved ✅ AND proving test green ✅ → **YES, clean.**
+- **Reviewed at `eefa82e`** · reviewed files: `src/components/layout/Header.tsx`, `src/components/tuvi/TuViChart.tsx`, `src/components/tuvi/CungDetail.tsx`, `src/components/shared/Tabs.tsx`, `src/components/tuvi/StarFilterBar.tsx`, `src/pages/ResultPage.tsx`, `src/index.css`, `DESIGN.md`. (finalise refuses the PR if HEAD/diff moves beyond this set.)
+- **`Ph3/4 proven by`:** R1/R2a/R2b/R2c/R3/R4/R5 (N=2) confirmed by reviewer+challenger at path:line; AC5/C1/C2/C3/C6 automated; AC1(header)/C4 visual @375+900; AC1(nav reachable)/AC2/AC3/AC4/AC6 + M4 box-height → manual-recorded @375 (recorded exclusion). **Follow-up:** F2 star-row keyboard/AT semantics (pre-existing, out of scope).
+
 ## Decision log
 
 | When | Decision | Why |
@@ -205,7 +241,7 @@ All proofs sit at or above their AC's risk layer (real-DOM manual-recorded, not 
 
 ## Session status
 
-- **Last updated:** Phase 2 complete
-- **Current phase:** 2 — Design (awaiting Gate 2 approval)
-- **Next action:** User approves Gate 2 (incl. the coverage-gap exclusion) → execute on branch `feat/mobile-ux`
-- **Blocked on:** Gate 2 approval
+- **Last updated:** Phase 4 clean (LGTM at eefa82e)
+- **Current phase:** 5 — Finalise (final gate)
+- **Next action:** Draft PR body; request per-action approval (push, open PR); capture durable lesson
+- **Blocked on:** final-gate per-action approvals
