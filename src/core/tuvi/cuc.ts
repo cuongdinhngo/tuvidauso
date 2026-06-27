@@ -14,14 +14,18 @@ import { THIEN_CAN, DIA_CHI } from '../types';
  *               cols = 12 Dia Chi (Ty, Suu, Dan, ..., Hoi)
  */
 
-// CUC_TABLE[canPairIndex][chiIndex] = cuc value
+// CUC_TABLE[canPairIndex][chiIndex] = cuc value.
+// Cục = ngũ-hành nạp âm của Can-Chi cung Mệnh (Can lấy theo Ngũ Hổ Độn từ Can năm).
+// Vì nạp âm gán 1 hành cho mỗi cặp Can-Chi liền nhau, mỗi hàng gồm 6 cặp địa-chi
+// liền kề bằng nhau; riêng Tuất/Hợi lấy theo Dần/Mão ("Tuất Hợi... Cục tòng Dần Mão").
+// Nguồn: tuvi.cohoc.net (bảng lập cục, dạng text); tuvisaigon.vn bài 6 (khẩu quyết).
 const CUC_TABLE: number[][] = [
-  // Giap/Ky:  Ty  Suu Dan Mao Thin Ti  Ngo Mui Than Dau Tuat Hoi
-  /*Giáp/Kỷ*/ [2,  6,  3,  4,  5,  2,  6,  3,  4,   5,  2,   6],
-  /*Ất/Canh*/  [6,  2,  4,  3,  6,  5,  2,  4,  3,   6,  5,   2],
-  /*Bính/Tân*/ [3,  4,  5,  2,  6,  3,  4,  5,  2,   6,  3,   4],
-  /*Đinh/Nhâm*/[4,  3,  6,  5,  2,  4,  3,  6,  5,   2,  4,   3],
-  /*Mậu/Quý*/ [5,  5,  2,  6,  3,  5,  5,  2,  6,   3,  5,   5],
+  //            Tý Sửu Dần Mão Thìn Tị Ngọ Mùi Thân Dậu Tuất Hợi
+  /*Giáp/Kỷ*/  [ 2,  2,  6,  6,   3,  3,  5,   5,   4,  4,   6,   6],
+  /*Ất/Canh*/  [ 6,  6,  5,  5,   4,  4,  3,   3,   2,  2,   5,   5],
+  /*Bính/Tân*/ [ 5,  5,  3,  3,   2,  2,  4,   4,   6,  6,   3,   3],
+  /*Đinh/Nhâm*/[ 3,  3,  4,  4,   6,  6,  2,   2,   5,  5,   4,   4],
+  /*Mậu/Quý*/  [ 4,  4,  2,  2,   5,  5,  6,   6,   3,  3,   2,   2],
 ];
 
 const CUC_NAMES: Record<number, string> = {
