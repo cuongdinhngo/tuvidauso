@@ -34,7 +34,7 @@ function buildTestChart(solarYear: number, solarMonth: number, solarDay: number,
   const cuc = getCuc(lunarDate.yearCan, menh);
   const palacePositions = arrangePalaces(menh);
   const mainStars = placeMainStars(cuc.value, lunarDate.day);
-  const auxStars = placeAuxStars(lunarDate.yearCan, lunarDate.yearChi, lunarDate.month, lunarDate.day, hourIndex);
+  const auxStars = placeAuxStars(lunarDate.yearCan, lunarDate.yearChi, lunarDate.month, lunarDate.day, hourIndex, gender, menh);
 
   const palaces: Palace[] = palacePositions.map((pp) => {
     const stars: Star[] = [];

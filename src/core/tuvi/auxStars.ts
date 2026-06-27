@@ -1,4 +1,4 @@
-import { DIA_CHI } from '../types';
+import { DIA_CHI, THIEN_CAN } from '../types';
 
 export interface AuxStarPosition {
   star: string;
@@ -93,10 +93,12 @@ const QUA_TU: Record<string, string> = {
   'Hợi': 'Tuất', 'Tý': 'Tuất', 'Sửu': 'Tuất',
 };
 
+// Phá Toái — Tý/Ngọ/Mão/Dậu → Tị; Dần/Thân/Tị/Hợi → Dậu; Thìn/Tuất/Sửu/Mùi → Sửu.
+// Nguồn: tuvi.cohoc.net, tracuulasotuvi.com.
 const PHA_TOAI: Record<string, string> = {
-  'Tý': 'Dậu', 'Sửu': 'Dậu', 'Dần': 'Tị', 'Mão': 'Tị',
-  'Thìn': 'Sửu', 'Tị': 'Sửu', 'Ngọ': 'Dậu', 'Mùi': 'Dậu',
-  'Thân': 'Tị', 'Dậu': 'Tị', 'Tuất': 'Sửu', 'Hợi': 'Sửu',
+  'Tý': 'Tị', 'Ngọ': 'Tị', 'Mão': 'Tị', 'Dậu': 'Tị',
+  'Dần': 'Dậu', 'Thân': 'Dậu', 'Tị': 'Dậu', 'Hợi': 'Dậu',
+  'Thìn': 'Sửu', 'Tuất': 'Sửu', 'Sửu': 'Sửu', 'Mùi': 'Sửu',
 };
 
 const THIEN_KHONG_CHI: Record<string, string> = {
@@ -106,34 +108,40 @@ const THIEN_KHONG_CHI: Record<string, string> = {
 };
 
 // === NEW: Stars by year Can ===
+// Thiên Quan Quý Nhân (by year Can). Nguồn: tracuutuvi.com, tuvi.cohoc.net.
 const THIEN_QUAN: Record<string, string> = {
-  'Giáp': 'Mùi', 'Ất': 'Thìn', 'Bính': 'Tý', 'Đinh': 'Dậu',
-  'Mậu': 'Ngọ', 'Kỷ': 'Mão', 'Canh': 'Hợi', 'Tân': 'Thân',
-  'Nhâm': 'Tị', 'Quý': 'Dần',
+  'Giáp': 'Mùi', 'Ất': 'Mùi', 'Bính': 'Thìn', 'Đinh': 'Dần',
+  'Mậu': 'Mão', 'Kỷ': 'Dậu', 'Canh': 'Hợi', 'Tân': 'Dậu',
+  'Nhâm': 'Tuất', 'Quý': 'Ngọ',
 };
 
+// Thiên Phúc Quý Nhân (by year Can). Nguồn: tracuutuvi.com, tracuulasotuvi.com.
+// Lưu ý: can Bính theo trường phái (Tý vs Thân); giữ Tý — nguồn chưa thống nhất.
 const THIEN_PHUC: Record<string, string> = {
   'Giáp': 'Dậu', 'Ất': 'Thân', 'Bính': 'Tý', 'Đinh': 'Hợi',
   'Mậu': 'Mão', 'Kỷ': 'Dần', 'Canh': 'Ngọ', 'Tân': 'Tị',
-  'Nhâm': 'Dậu', 'Quý': 'Thân',
+  'Nhâm': 'Ngọ', 'Quý': 'Thân',
 };
 
+// Thiên Trù (by year Can). Nguồn: tracuutuvi.com, tracuulasotuvi.com.
 const THIEN_TRU: Record<string, string> = {
-  'Giáp': 'Tị', 'Ất': 'Ngọ', 'Bính': 'Tị', 'Đinh': 'Ngọ',
-  'Mậu': 'Mùi', 'Kỷ': 'Thân', 'Canh': 'Mùi', 'Tân': 'Thân',
+  'Giáp': 'Tị', 'Ất': 'Ngọ', 'Bính': 'Tý', 'Đinh': 'Tị',
+  'Mậu': 'Ngọ', 'Kỷ': 'Thân', 'Canh': 'Dần', 'Tân': 'Ngọ',
   'Nhâm': 'Dậu', 'Quý': 'Tuất',
 };
 
+// Quốc Ấn (by year Can). Nguồn: tracuutuvi.com, tuvi.cohoc.net.
 const QUOC_AN: Record<string, string> = {
   'Giáp': 'Tuất', 'Ất': 'Hợi', 'Bính': 'Sửu', 'Đinh': 'Dần',
   'Mậu': 'Sửu', 'Kỷ': 'Dần', 'Canh': 'Thìn', 'Tân': 'Tị',
-  'Nhâm': 'Thìn', 'Quý': 'Tị',
+  'Nhâm': 'Mùi', 'Quý': 'Thân',
 };
 
+// Đường Phù (by year Can) = Quốc Ấn − 3 (cặp bộ). Nguồn: tracuutuvi.com, tracuulasotuvi.com.
 const DUONG_PHU: Record<string, string> = {
-  'Giáp': 'Sửu', 'Ất': 'Dần', 'Bính': 'Thìn', 'Đinh': 'Tị',
-  'Mậu': 'Thìn', 'Kỷ': 'Tị', 'Canh': 'Mùi', 'Tân': 'Thân',
-  'Nhâm': 'Mùi', 'Quý': 'Thân',
+  'Giáp': 'Mùi', 'Ất': 'Thân', 'Bính': 'Tuất', 'Đinh': 'Hợi',
+  'Mậu': 'Tuất', 'Kỷ': 'Hợi', 'Canh': 'Sửu', 'Tân': 'Dần',
+  'Nhâm': 'Thìn', 'Quý': 'Tị',
 };
 
 // === NEW: Stars by lunar month ===
@@ -155,9 +163,16 @@ export function placeAuxStars(
   yearChi: string,
   lunarMonth: number,
   lunarDay: number,
-  hourIndex: number
+  hourIndex: number,
+  gender: 'male' | 'female',
+  menhCung: string
 ): AuxStarPosition[] {
   const stars: AuxStarPosition[] = [];
+
+  // Dương Nam / Âm Nữ predicate (year-Can parity × gender) — drives Hỏa/Linh & Song Hao direction.
+  // Dương Can = Giáp/Bính/Mậu/Canh/Nhâm (index chẵn). Same split as Đại Hạn direction.
+  const yangYear = THIEN_CAN.indexOf(yearCan as typeof THIEN_CAN[number]) % 2 === 0;
+  const dnan = (yangYear && gender === 'male') || (!yangYear && gender === 'female');
 
   // Group 1: Loc Ton
   const locTonPos = LOC_TON[yearCan];
@@ -169,8 +184,10 @@ export function placeAuxStars(
   stars.push({ star: 'Đà La', position: offsetChi(locTonIdx, -1), group: 'Tứ Sát' });
 
   // Group 3: Ta Phu & Huu Bat (by lunar month)
-  stars.push({ star: 'Tả Phụ', position: offsetChi(chiIndex('Thìn'), lunarMonth - 1), group: 'Lục Cát' });
-  stars.push({ star: 'Hữu Bật', position: offsetChi(chiIndex('Tuất'), -(lunarMonth - 1)), group: 'Lục Cát' });
+  const taPhuPos = offsetChi(chiIndex('Thìn'), lunarMonth - 1);
+  const huuBatPos = offsetChi(chiIndex('Tuất'), -(lunarMonth - 1));
+  stars.push({ star: 'Tả Phụ', position: taPhuPos, group: 'Lục Cát' });
+  stars.push({ star: 'Hữu Bật', position: huuBatPos, group: 'Lục Cát' });
 
   // Group 4: Van Xuong & Van Khuc (by hour)
   const vanXuongPos = offsetChi(chiIndex('Tuất'), -hourIndex);
@@ -182,10 +199,14 @@ export function placeAuxStars(
   stars.push({ star: 'Thiên Khôi', position: THIEN_KHOI[yearCan], group: 'Lục Cát' });
   stars.push({ star: 'Thiên Việt', position: THIEN_VIET[yearCan], group: 'Lục Cát' });
 
-  // Group 6: Hoa Tinh & Linh Tinh
+  // Group 6: Hoa Tinh & Linh Tinh — start by year-Chi group; direction by Dương Nam/Âm Nữ.
+  // Dương Nam/Âm Nữ: Hỏa thuận, Linh nghịch; Âm Nam/Dương Nữ: ngược lại (Hỏa & Linh luôn trái chiều).
+  // Nguồn: tracuutuvi.com, hoctuvi (trường phái Thái Thứ Lang).
   const group = getChiGroup(yearChi);
-  stars.push({ star: 'Hỏa Tinh', position: offsetChi(HOA_TINH_START[group], hourIndex), group: 'Tứ Sát' });
-  stars.push({ star: 'Linh Tinh', position: offsetChi(LINH_TINH_START[group], hourIndex), group: 'Tứ Sát' });
+  const hoaDir = dnan ? 1 : -1;
+  const linhDir = dnan ? -1 : 1;
+  stars.push({ star: 'Hỏa Tinh', position: offsetChi(HOA_TINH_START[group], hoaDir * hourIndex), group: 'Tứ Sát' });
+  stars.push({ star: 'Linh Tinh', position: offsetChi(LINH_TINH_START[group], linhDir * hourIndex), group: 'Tứ Sát' });
 
   // Group 7: Stars by year Chi (existing)
   stars.push({ star: 'Thiên Mã', position: THIEN_MA[yearChi], group: 'Phụ tinh' });
@@ -206,9 +227,12 @@ export function placeAuxStars(
   stars.push({ star: 'Quả Tú', position: QUA_TU[yearChi], group: 'Phụ tinh' });
   stars.push({ star: 'Phá Toái', position: PHA_TOAI[yearChi], group: 'Sát tinh' });
   stars.push({ star: 'Thiên Không', position: THIEN_KHONG_CHI[yearChi], group: 'Sát tinh' });
-  const yearChiIdx = chiIndex(yearChi);
-  stars.push({ star: 'Đại Hao', position: yearChi, group: 'Sát tinh' });
-  stars.push({ star: 'Tiểu Hao', position: offsetChi(yearChiIdx, 1), group: 'Sát tinh' });
+  // Đại Hao / Tiểu Hao — vòng Bác Sĩ, neo theo Lộc Tồn; chiều theo Dương Nam/Âm Nữ.
+  // Tiểu Hao = Lộc Tồn + 3·d (bước 3), Đại Hao = Lộc Tồn + 9·d (bước 9); luôn đối cung (bộ Song Hao).
+  // Nguồn: tuvi.cohoc.net (vòng Lộc Tồn), tracuutuvi.com.
+  const haoDir = dnan ? 1 : -1;
+  stars.push({ star: 'Đại Hao', position: offsetChi(locTonIdx, 9 * haoDir), group: 'Sát tinh' });
+  stars.push({ star: 'Tiểu Hao', position: offsetChi(locTonIdx, 3 * haoDir), group: 'Sát tinh' });
 
   // By year Can
   stars.push({ star: 'Thiên Quan', position: THIEN_QUAN[yearCan], group: 'Phụ tinh' });
@@ -221,17 +245,20 @@ export function placeAuxStars(
   stars.push({ star: 'Thiên Hình', position: THIEN_HINH_MONTH[lunarMonth - 1], group: 'Sát tinh' });
   stars.push({ star: 'Thiên Riêu', position: THIEN_RIEU_MONTH[lunarMonth - 1], group: 'Phụ tinh' });
 
-  // By lunar day
-  stars.push({ star: 'Tam Thai', position: DIA_CHI[(lunarDay - 1) % 12], group: 'Phụ tinh' });
-  stars.push({ star: 'Bát Tọa', position: DIA_CHI[(12 - (lunarDay - 1) % 12) % 12], group: 'Phụ tinh' });
+  // By lunar day — Tam Thai từ Tả Phụ đếm thuận (ngày−1); Bát Tọa từ Hữu Bật đếm nghịch (ngày−1).
+  // Nguồn: tracuutuvi.com, tuvi.cohoc.net, tracuulasotuvi.com.
+  stars.push({ star: 'Tam Thai', position: offsetChi(chiIndex(taPhuPos), lunarDay - 1), group: 'Phụ tinh' });
+  stars.push({ star: 'Bát Tọa', position: offsetChi(chiIndex(huuBatPos), -(lunarDay - 1)), group: 'Phụ tinh' });
 
   // Fixed positions
   stars.push({ star: 'Thiên La', position: 'Thìn', group: 'Sát tinh' });
   stars.push({ star: 'Địa Võng', position: 'Tuất', group: 'Sát tinh' });
 
-  // Derived (opposite of Văn Xương / Văn Khúc)
-  stars.push({ star: 'Thiên Thương', position: offsetChi(chiIndex(vanXuongPos), 6), group: 'Sát tinh' });
-  stars.push({ star: 'Thiên Sứ', position: offsetChi(chiIndex(vanKhucPos), 6), group: 'Sát tinh' });
+  // Thiên Thương luôn ở cung Nô Bộc (Mệnh−7), Thiên Sứ luôn ở cung Tật Ách (Mệnh−5);
+  // hai sao giáp cung Thiên Di (Mệnh−6). Nguồn: hocvienlyso.org, tracuutuvi.com.
+  const menhIdx = chiIndex(menhCung);
+  stars.push({ star: 'Thiên Thương', position: offsetChi(menhIdx, -7), group: 'Sát tinh' });
+  stars.push({ star: 'Thiên Sứ', position: offsetChi(menhIdx, -5), group: 'Sát tinh' });
 
   return stars;
 }
