@@ -136,7 +136,7 @@ src/
 ├── store/          # tuViStore, aiStore, calendarStore, compareStore
 └── App.tsx         # Router setup (8 routes)
 
-tests/              # 188 tests across 12 files (calendar, bát tự, tử vi,
+tests/              # 201 tests across 12 files (calendar, bát tự, tử vi,
                     # tuần triệt, palace relations, integration, astrology,
                     # numerology, compare, AI prompts, provider routing)
 ```
@@ -164,7 +164,7 @@ Ngoài ra có các trang riêng:
 |---|---|
 | `npm run dev` | Dev server (hot reload) |
 | `npm run build` | TypeScript check + Vite build |
-| `npm test` | Chạy 188 tests |
+| `npm test` | Chạy 201 tests |
 | `npm run preview` | Preview bản build |
 | `npm run deploy` | Build + deploy GitHub Pages |
 | `npm run lint` | ESLint |
