@@ -1,0 +1,57 @@
+{
+  "rulebook_path": "docs/ENGINEERING_RULES.md",
+  "standards_path": "docs/ENGINEERING_RULES.md",
+
+  "repos": [
+    { "name": "app", "root": "." }
+  ],
+
+  "test_command": "npm test",
+
+  "tickets_dir": "docs/tickets",
+  "work_dir": "docs/tickets",
+  "work_doc_mode": "auto",
+  "pr_checklist_path": null,
+  "stuck_threshold": 3,
+  "explore_fanout": true,
+
+  "track": "fullstack",
+  "breakpoints": [375, 768, 1280],
+  "design_doc_path": "DESIGN.md",
+  "cost_tier": "standard",
+  "update_check_url": null,
+  "branch_strategy": "feat|fix|chore/<slug>",
+  "lessons_path": "docs/LESSONS.md",
+  "pr_host": "gh pr create",
+
+  "docs_dir": null,
+  "code_map_cmd": null,
+  "db_kind": null,
+  "db_introspect_cmd": null,
+  "migrations_path": null,
+
+  "tracker": {
+    "base_url": "https://github.com/cuongdinhngo/tuvidauso",
+    "project_key": "tuvidauso",
+    "cli": "gh",
+    "read_mcp": null,
+    "fields": ["description", "type", "labels", "parent", "priority"]
+  },
+
+  "cause_taxonomy": [
+    "logic",
+    "data",
+    "config",
+    "integration",
+    "concurrency",
+    "validation",
+    "ui"
+  ],
+
+  "ticket_header_schema": {
+    "Constraint": "C",
+    "Requirement": "R",
+    "Goal": "G",
+    "Acceptance Criteria": "AC"
+  }
+}
