@@ -151,7 +151,23 @@ The corrected data broke two pre-existing tests; both were **tautological/brittl
 Core change = exactly the approved cuc.ts table + 2 new test groups + 15-chart provisional re-sync. The **2 extra test-file corrections** (tuvi/compare) are blast-radius from the corrected data, not new feature scope; SCOPE stays **M**, branch type `fix` correct. Surfaced here for the review gate.
 
 ### Session status
-- **Phase:** 3 COMPLETE → flowing to **Phase 4 (review)**
+- **Phase:** 4 (review) CLEAN → **Phase 5 (finalise)** pending final gate
+
+---
+
+## PHASE 4 — REVIEW (CLEAN)
+
+**Reviewer (Sonnet): LGTM** — all 60 cells satisfy the adjacent-pair invariant; anchors verified; referenceData re-sync surgical (only cucName/cucValue/mainStars across the 15 charts, all verified:false); blast-radius test edits correct (not masking); `src/core` pure; Vietnamese intact.
+
+**Challenger (ticket-blind): initial 7 met / 1 not-met / 1 can't-tell → after loop-back, 3/3 MET.**
+- First pass: AC-2 "not met" (Mậu/Dậu anchor coincidentally correct pre-fix) + R-2 "can't tell" (no per-row value pin beyond the structural invariant).
+- **Loop-back (commit `ff52fb3`):** added one grid-sourced anchor per Can-pair row (Bính/Tý, Nhâm/Tý, Mậu/Tý), each ALSO failing pre-fix; relabelled Giáp/Tý & Mậu/Dậu as correctness-only. Re-challenge: **R-2 MET** (all 5 rows pinned), **AC-2 MET** (every row has a pre-fix-failing anchor; invariant fails all 5 pre-fix rows).
+
+**Scope:** core diff = cuc.ts table + cucTable.test.ts; + surgical referenceData re-sync; + 2 blast-radius test corrections (tuvi/compare) surfaced and accepted. SCOPE M, branch `fix` — no drift.
+
+**Sweep:** `npm test` **1311 passed**; `npm run validate` 20/20; `npm run build` clean.
+
+**Reviewed at `ff52fb3`** — files: `src/core/tuvi/cuc.ts`, `tests/cucTable.test.ts`, `tests/validation/referenceData.ts`, `tests/tuvi.test.ts`, `tests/compare.test.ts`. (Reviewer LGTM covered production code at 56b52d2; only additive test anchors landed since → carried forward.)
 
 ---
 
