@@ -109,6 +109,24 @@ body {
   }
 }
 
+/* Bottom-sheet slide-up (mobile CungDetail, below lg). Transform-only; the
+   reduced-motion block above neutralises it, and at lg+ the rule is absent so
+   the sticky side panel never animates. */
+@media (prefers-reduced-motion: no-preference) and (max-width: 1023.98px) {
+  .animate-slide-up {
+    animation: slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* Safe-area padding for fixed bottom-edge elements (iOS home indicator). */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @media print {
   body { background: white; color: black; }
   .no-print { display: none !important; }

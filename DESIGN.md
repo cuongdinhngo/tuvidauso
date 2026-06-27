@@ -52,6 +52,28 @@ glow tiết chế). Lõi dữ liệu vẫn tĩnh, đối xứng, dễ đọc.
 Chỉ ở vỏ: page-load stagger nhẹ (CSS, transform/opacity), hover tinh tế.
 Vùng dữ liệu: tắt motion. Mọi motion tôn trọng prefers-reduced-motion.
 
+## Responsive & touch (các lựa chọn để chấm M1-M10)
+- **Breakpoints khai báo:** 375 / 768 / 1280 (mirror config.breakpoints). Tailwind: md=768, lg=1024
+  (ranh giới bottom sheet). Sàn reflow 320px luôn được kiểm tra. Trang KHÔNG bao giờ cuộn ngang;
+  vùng dữ liệu chỉ cuộn trong container có giới hạn của chính nó.
+- **Nav khi hẹp (< md):** primary nav gập vào disclosure menu (nút hamburger - icon Menu). Tap mở
+  panel chứa 4 link + nút Cài đặt AI; tự đóng khi đổi route. Desktop (md+) giữ nav inline như cũ.
+- **Hành vi từng vùng khi hẹp — collapse / reflow / scroll-in-container:**
+
+  | Vùng | Hành vi |
+  |------|---------|
+  | Header nav | collapse (hamburger disclosure) < md; inline md+ |
+  | CungDetail | off-canvas bottom sheet (fixed bottom) < lg; sticky side panel lg+ |
+  | TuViChart (lưới 4x4) | reflow chiều cao ô (min-h-[108px] → sm:140px); lưới 4x4 KHÓA, không bao giờ gập (yêu cầu văn hoá) |
+  | Tab bar (8 tab) | scroll-in-container (overflow-x) + fade trái/phải báo cuộn + scrollIntoView tab active |
+  | ResultPage header | reflow (flex-col < sm → flex-row sm+) |
+
+- **Thumb-zone:** nút hamburger + nút đóng (X) bottom sheet + bottom sheet neo đáy màn hình — nằm
+  trong tầm ngón cái khi cầm điện thoại.
+- **Motion:** bottom sheet trượt lên chỉ dùng `transform` (translateY), tôn trọng
+  `prefers-reduced-motion` (block reduce toàn cục ở index.css đã vô hiệu hoá animation). Vùng dữ
+  liệu không thêm motion nào khác.
+
 ## A11y (cổng cuối: skill web-design-guidelines / Vercel)
 Contrast >= 4.5:1; focus ring rõ (gold); touch target >= 44px; semantic HTML; reduced-motion.
 
